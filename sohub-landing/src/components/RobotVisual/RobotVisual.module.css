@@ -1,0 +1,16 @@
+.wrap {
+  position: relative;
+  width: min(42vmin, 420px);
+  height: min(52vmin, 520px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  filter: drop-shadow(0 24px 48px rgba(13, 17, 23, 0.12));
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}

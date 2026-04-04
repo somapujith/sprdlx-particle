@@ -1,0 +1,23 @@
+Audit this entire codebase for secrets, hardcoded values, and missing env config.
+
+SCAN FOR:
+  - Any string containing "http://" or "https://" hardcoded in source files
+  - Any API keys, tokens, passwords, or secrets hardcoded (even if fake/placeholder)
+  - Any port numbers hardcoded (localhost:3000, :8080, :5432)
+  - Any database connection strings
+  - Any third-party service IDs (Stripe publishable key, Firebase config, etc.)
+  - Any feature flags hardcoded as true/false that should be configurable
+
+FOR EACH VIOLATION:
+  - Move the value to .env as VITE_[NAME] (for Vite) or REACT_APP_[NAME] (for CRA)
+  - Replace the hardcoded value with import.meta.env.VITE_[NAME]
+  - Add the variable name (with empty value) to .env.example
+  - Add .env to .gitignore if not already there
+
+ALSO:
+  - Create .env.example if it doesn't exist
+  - Create .env if it doesn't exist (with actual dev values)
+  - Verify .gitignore has: .env, .env.local, .env.*.local
+
+NEVER put actual secret values in .env.example — only the variable names.
+Deliver the updated files + the final .env.example.

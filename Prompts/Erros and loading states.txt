@@ -1,0 +1,28 @@
+Every async operation and data-dependent UI in this project needs three states handled.
+Audit every component, section, and page and enforce
+
+THE THREE-STATE RULE
+  1. LOADING state show a spinner, skeleton, or placeholder
+  2. ERROR state show a human-readable message + retry option if applicable
+  3. EMPTY state show a helpful empty message (not just blank space)
+
+SCAN FOR VIOLATIONS
+  - Components that render data without a loading check (will flash undefined errors)
+  - Components that have no error handling (silent failures)
+  - Lists with no empty state (renders nothing when array is [])
+  - Forms with no submission loading state (can be double-submitted)
+  - Forms with no error display (API errors swallowed silently)
+
+FOR EACH VIOLATION
+  Add the missing state to the component.
+  Use the project's existing SpinnerSkeleton from componentscommon if available.
+  If no Spinner exists, create srccomponentscommonSpinner.jsx and use it.
+  Error messages should be user-friendly (Something went wrong. Please try again.)
+  not technical (Error 500 Internal Server Error).
+
+ALSO ENFORCE
+  - Buttons that trigger async actions must be disabled + show loading during submission
+  - Form inputs must show inline validation errors, not just alert()
+  - Data tables must show a No results row when empty, not an empty table
+
+Deliver the full updated file for every component changed.

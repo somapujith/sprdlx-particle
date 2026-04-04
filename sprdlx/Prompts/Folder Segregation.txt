@@ -1,0 +1,233 @@
+You are a senior frontend architect. Your job is to audit and completely restructure this codebase. Do not generate new features — only reorganize, deduplicate, and fix what exists.
+
+---
+
+## PHASE 1 — READ THE ENTIRE CODEBASE FIRST
+
+Before touching a single file:
+1. Recursively scan every file in this project.
+2. Identify every component, hook, utility, service, context, page, and page section.
+3. Build a mental map of:
+   - What each file does
+   - What it imports and exports
+   - Whether it has duplicates or near-duplicates elsewhere
+   - Whether it belongs to a specific feature, a specific page section, or is truly reusable
+4. Identify the framework (React/Next.js/Vue) and CSS approach (Tailwind/CSS Modules/plain CSS).
+
+Do NOT skip this step. Do NOT assume anything. Read first, plan second, move files third.
+
+---
+
+## PHASE 2 — DEFINE THE TARGET FOLDER STRUCTURE
+
+Apply this canonical structure exactly:
+
+src/
+├── main.jsx / index.js          ← entry point only
+├── App.jsx                      ← Router setup + root layout
+├── routes/
+│   └── index.jsx                ← ALL route definitions (single source of truth)
+├── pages/                       ← one file per route/screen (thin shell, composes sections)
+│   ├── Home.jsx
+│   ├── Dashboard.jsx
+│   └── NotFound.jsx
+├── sections/                    ← page-level sections, grouped by page
+│   ├── home/
+│   │   ├── HeroSection.jsx
+│   │   ├── FeaturesSection.jsx
+│   │   └── TestimonialsSection.jsx
+│   ├── dashboard/
+│   │   ├── StatsSection.jsx
+│   │   └── RecentActivitySection.jsx
+│   └── [pageName]/              ← one subfolder per page that has sections
+├── components/
+│   ├── common/                  ← generic, reused across 2+ features or sections
+│   │   ├── Button.jsx
+│   │   ├── Modal.jsx
+│   │   ├── Input.jsx
+│   │   ├── Badge.jsx
+│   │   └── Spinner.jsx
+│   ├── layout/                  ← structural shells
+│   │   ├── Navbar.jsx
+│   │   ├── Sidebar.jsx
+│   │   ├── Footer.jsx
+│   │   └── PageWrapper.jsx
+│   └── [feature]/               ← feature-specific reusable components
+│       └── (e.g. components/user/UserCard.jsx)
+├── hooks/                       ← all custom React hooks (use[Name].js)
+├── context/                     ← React Context providers
+├── services/                    ← all API calls and external integrations
+├── store/                       ← global state (Zustand / Redux slices)
+├── utils/                       ← pure helper functions, constants, formatters
+├── styles/                      ← global CSS, theme tokens
+└── types/                       ← TypeScript interfaces (if applicable)
+
+---
+
+## PHASE 3 — SECTIONS VS COMPONENTS — THE DECISION RULE
+
+Apply this rule strictly for every UI piece you encounter:
+
+GOES IN sections/[page]/       if ALL of these are true:
+  - It represents a full visual band or block of a specific page
+    (e.g. Hero, Features, Pricing, Stats, ActivityFeed, CTA banner)
+  - It is only used on ONE specific page
+  - It is too large or too page-specific to be a generic component
+  - It may fetch its own data or contain business logic for that page area
+
+GOES IN components/common/     if ALL of these are true:
+  - It has no business logic tied to a specific page
+  - It is (or could be) reused across 2+ pages or sections
+  - It accepts props rather than pulling from a page-specific context
+  - Examples: Button, Input, Modal, Tooltip, Badge, Spinner, Card, Avatar,
+    Dropdown, Table, Tabs, Alert, SectionWrapper, Heading
+
+GOES IN components/layout/     if:
+  - It wraps pages or sections structurally
+    (Navbar, Sidebar, Footer, PageWrapper, AuthLayout, DashboardLayout)
+
+GOES IN components/[feature]/  if:
+  - It is reusable within one feature/domain but not page-level
+    (e.g. UserCard used across user-related sections/pages)
+
+A page in pages/ should be a THIN SHELL — it imports and composes sections:
+
+  // pages/Home.jsx
+  import HeroSection from '@sections/home/HeroSection';
+  import FeaturesSection from '@sections/home/FeaturesSection';
+  import TestimonialsSection from '@sections/home/TestimonialsSection';
+
+  export default function Home() {
+    return (
+      <>
+        <HeroSection />
+        <FeaturesSection />
+        <TestimonialsSection />
+      </>
+    );
+  }
+
+If a section is used on more than one page, promote it to components/[feature]/ or components/common/.
+
+---
+
+## PHASE 4 — IDENTIFY COMMON COMPONENTS
+
+A component belongs in components/common/ if reused across 2+ places.
+If two components are near-identical, merge them into one with props for variation.
+Never keep duplicates.
+
+---
+
+## PHASE 5 — RULES FOR EVERY FILE MOVE
+
+When moving or creating any file, you MUST:
+
+1. Update every import path that references it across the entire codebase.
+2. Verify the new import path resolves correctly (use @/ aliases if supported).
+3. Ensure the moved component/section still renders correctly — props, context, hooks all intact.
+4. Register any new page in src/routes/index.jsx immediately.
+5. Never leave a dangling import or a broken reference.
+6. Never use placeholder JSX (no empty returns, no // TODO handlers).
+7. Consolidate any duplicate logic into a single source.
+
+---
+
+## PHASE 6 — FIX RENDERING & ARCHITECTURE ISSUES
+
+After reorganizing:
+- Every page must be reachable via the router (check routes/index.jsx).
+- Every page must compose its sections in the correct render order.
+- Every section must receive all required props — trace the chain: route → page → section → component.
+- Every API call must be in services/, called from a hook in hooks/, consumed by a section or page.
+- Side effects belong in hooks, not in component or section bodies.
+- Shared state belongs in context/ or store/, not drilled as props 3+ levels deep.
+- Remove any inline fetch() or axios calls inside component or section files.
+- Remove any hardcoded URLs — use environment variables (import.meta.env.VITE_* for Vite).
+
+---
+
+## PHASE 7 — PATH ALIASES (SET UP IF MISSING)
+
+Configure path aliases to eliminate ../../.. import chains.
+
+In vite.config.js:
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@sections': path.resolve(__dirname, './src/sections'),
+      '@pages': path.resolve(__dirname, './src/pages'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@services': path.resolve(__dirname, './src/services'),
+      '@utils': path.resolve(__dirname, './src/utils'),
+      '@store': path.resolve(__dirname, './src/store'),
+      '@context': path.resolve(__dirname, './src/context'),
+    }
+  }
+
+In jsconfig.json (for IDE IntelliSense):
+  {
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["src/*"],
+        "@components/*": ["src/components/*"],
+        "@sections/*": ["src/sections/*"],
+        "@pages/*": ["src/pages/*"],
+        "@hooks/*": ["src/hooks/*"],
+        "@services/*": ["src/services/*"],
+        "@utils/*": ["src/utils/*"],
+        "@store/*": ["src/store/*"],
+        "@context/*": ["src/context/*"]
+      }
+    }
+  }
+
+Update ALL existing imports to use aliases after setting this up.
+
+---
+
+## PHASE 8 — DELIVER A MIGRATION REPORT
+
+After completing all changes, produce this exact report:
+
+FILES MOVED:
+  [old path] → [new path]
+  (list every single file)
+
+SECTIONS IDENTIFIED (pages → sections/):
+  [page name]: [list of section files created]
+
+COMMON COMPONENTS IDENTIFIED (→ components/common/):
+  [list every component moved here and why]
+
+FILES MERGED / DEDUPLICATED:
+  [list merged files and what was consolidated]
+
+IMPORTS UPDATED:
+  [list every file where import paths were changed]
+
+ROUTE REGISTRATIONS:
+  [list any pages added or fixed in routes/index.jsx]
+
+ALIASES CONFIGURED:
+  [confirm vite.config.js and jsconfig.json were updated]
+
+ISSUES FOUND:
+  [any broken imports, missing props, orphaned components, or
+   architectural problems discovered during the audit]
+
+---
+
+## STRICT RULES — NEVER VIOLATE THESE
+
+- NEVER place API calls inside a component or section file
+- NEVER place a new page outside src/pages/
+- NEVER place a section used on only one page inside components/
+- NEVER keep duplicate components — merge with props
+- NEVER leave a broken import anywhere in the codebase
+- NEVER skip registering a page in the router
+- NEVER use ../../.. import chains — use @/ aliases
+- NEVER output incomplete files with // rest of file or ... placeholders
+- ALWAYS present complete, copy-pasteable file content

@@ -1,0 +1,34 @@
+Add documentation to this project so any developer can understand and run it.
+
+CREATE/UPDATE README.md with:
+  ## Project name + one-line description
+  ## Tech stack (framework, CSS approach, state management, backend)
+  ## Folder structure overview (brief — link to code)
+  ## Getting started:
+    - Prerequisites (Node version, package manager)
+    - Installation steps (git clone, npm install, env setup)
+    - Running locally (npm run dev)
+    - Building for production (npm run build)
+  ## Environment variables (list all from .env.example with descriptions)
+  ## Project conventions (naming, where files go, how to add a new page/section)
+
+CREATE/UPDATE .env.example:
+  Every env variable with a comment explaining what it's for.
+
+ADD JSDOC to:
+  - Every function in src/services/ (params, return type, what API it calls)
+  - Every custom hook in src/hooks/ (what it does, what it returns)
+  - Every utility function in src/utils/ (params, return, example usage)
+  - Complex business logic functions anywhere in the codebase
+
+FORMAT for JSDoc:
+  /**
+   * Fetches the list of orders for a given user.
+   * @param {string} userId - The user's UUID
+   * @param {object} [filters] - Optional filter params
+   * @returns {Promise<Order[]>} Array of order objects
+   */
+
+Do NOT add JSDoc to simple React components — the component name and props are self-explanatory.
+Do NOT write obvious comments like // increment i by 1.
+Write comments that explain WHY, not WHAT.
