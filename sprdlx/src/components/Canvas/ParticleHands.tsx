@@ -7,60 +7,98 @@ import gsap from 'gsap';
 
 extend({ UnrealBloomPass });
 
-const COUNT = 42000;
+const BODY = 26000;
+const STARS = 3200;
 
-/** Lewis-style rose: dense spiral bloom, ember core → gold edges (reference look). */
-function RoseParticles() {
-  const pointsRef = useRef<THREE.Points>(null);
+/** Surface of ellipsoid — one shell, avoids stacking thousands on the same ray (additive blow-out). */
+function fillEllipsoidSurface(
+  out: Float32Array,
+  start: number,
+  count: number,
+  cx: number,
+  cy: number,
+  cz: number,
+  rx: number,
+  ry: number,
+  rz: number
+) {
+  for (let i = 0; i < count; i++) {
+    let x = Math.random() * 2 - 1;
+    let y = Math.random() * 2 - 1;
+    let z = Math.random() * 2 - 1;
+    const len = Math.sqrt(x * x + y * y + z * z) || 1;
+    x /= len;
+    y /= len;
+    z /= len;
+    const j = (start + i) * 3;
+    out[j] = cx + x * rx;
+    out[j + 1] = cy + y * ry;
+    out[j + 2] = cz + z * rz;
+  }
+}
+
+/** Fibonacci sphere — evenly distributed points on sphere surface. */
+function fillSphere(out: Float32Array, start: number, count: number, cx: number, cy: number, cz: number, r: number) {
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < count; i++) {
+    const y = 1 - (i / (count - 1 || 1)) * 2;
+    const rad = Math.sqrt(Math.max(0, 1 - y * y));
+    const theta = golden * i;
+    const j = (start + i) * 3;
+    out[j] = cx + r * Math.cos(theta) * rad;
+    out[j + 1] = cy + r * y;
+    out[j + 2] = cz + r * Math.sin(theta) * rad;
+  }
+}
+
+function buildHumanoid(): { positions: Float32Array; randoms: Float32Array } {
+  const positions = new Float32Array(BODY * 3);
+  const randoms = new Float32Array(BODY);
+  for (let i = 0; i < BODY; i++) randoms[i] = Math.random();
+
+  let offset = 0;
+  const headN = 8000;
+  fillSphere(positions, offset, headN, 0, 1.45, 0, 0.52);
+  offset += headN;
+
+  const torsoN = 15000;
+  fillEllipsoidSurface(positions, offset, torsoN, 0, -0.25, 0, 0.82, 1.12, 0.4);
+  offset += torsoN;
+
+  const armN = 1500;
+  fillEllipsoidSurface(positions, offset, armN, -0.78, 0.12, 0, 0.28, 0.48, 0.2);
+  offset += armN;
+  fillEllipsoidSurface(positions, offset, armN, 0.78, 0.12, 0, 0.28, 0.48, 0.2);
+
+  return { positions, randoms };
+}
+
+function buildStars(): { positions: Float32Array; twinkle: Float32Array } {
+  const positions = new Float32Array(STARS * 3);
+  const twinkle = new Float32Array(STARS);
+  for (let i = 0; i < STARS; i++) {
+    const u = Math.random();
+    const v = Math.random();
+    const theta = u * Math.PI * 2;
+    const phi = Math.acos(2 * v - 1);
+    const rad = 55 + Math.random() * 75;
+    const j = i * 3;
+    positions[j] = rad * Math.sin(phi) * Math.cos(theta);
+    positions[j + 1] = rad * Math.sin(phi) * Math.sin(theta);
+    positions[j + 2] = rad * Math.cos(phi);
+    twinkle[i] = Math.random();
+  }
+  return { positions, twinkle };
+}
+
+/** Cosmic / tech humanoid: flow-field trails, white–blue–orange palette, starfield. */
+function CosmicHuman() {
+  const bodyRef = useRef<THREE.Points>(null);
+  const starsRef = useRef<THREE.Points>(null);
   const groupRef = useRef<THREE.Group>(null);
 
-  const particleData = useMemo(() => {
-    const positions = new Float32Array(COUNT * 3);
-    const colors = new Float32Array(COUNT * 3);
-    const randoms = new Float32Array(COUNT);
-    const colorObj = new THREE.Color();
-
-    const scale = 13.5;
-    const petals = 6;
-    const depth = 8.5;
-
-    for (let i = 0; i < COUNT; i++) {
-      const p = i / COUNT;
-      const angle = i * 2.399963229728653;
-      const radius = Math.sqrt(p) * scale;
-
-      const petalShape = Math.pow(Math.abs(Math.sin(angle * petals * 0.5)), 0.75);
-      const r = radius * (0.38 + 0.62 * petalShape);
-
-      const x = r * Math.cos(angle);
-      const y = r * Math.sin(angle);
-      const z = Math.sin(p * Math.PI) * depth - radius * 0.75;
-
-      positions[i * 3] = x;
-      positions[i * 3 + 1] = y;
-      positions[i * 3 + 2] = z;
-
-      const distXY = Math.sqrt(x * x + y * y);
-      const norm = Math.min(distXY / (scale * 1.05), 1);
-      const coreBoost = Math.max(0, 1 - distXY / (scale * 0.22));
-
-      // Ember core → warm gold rim (reference: red/orange center, amber edges)
-      const hue = 0.02 + norm * 0.095;
-      const sat = 0.92 - norm * 0.1;
-      let light = 0.94 * Math.pow(1 - norm, 1.35) + 0.2 * norm + coreBoost * 0.22;
-      light = Math.min(1, light);
-
-      colorObj.setHSL(hue, sat, light);
-
-      colors[i * 3] = colorObj.r;
-      colors[i * 3 + 1] = colorObj.g;
-      colors[i * 3 + 2] = colorObj.b;
-
-      randoms[i] = Math.random();
-    }
-
-    return { positions, colors, randoms };
-  }, []);
+  const bodyData = useMemo(() => buildHumanoid(), []);
+  const starData = useMemo(() => buildStars(), []);
 
   const uniforms = useMemo(
     () => ({
@@ -71,10 +109,12 @@ function RoseParticles() {
     []
   );
 
+  const starUniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
+
   useEffect(() => {
     gsap.to(uniforms.uProgress, {
       value: 1,
-      duration: 4.2,
+      duration: 3.8,
       ease: 'power2.out',
     });
   }, [uniforms]);
@@ -84,42 +124,80 @@ function RoseParticles() {
   const targetMouse = useMemo(() => new THREE.Vector3(9999, 9999, 9999), []);
   const rayHit = useMemo(() => new THREE.Vector3(), []);
 
+  const bodyGeom = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(bodyData.positions, 3));
+    g.setAttribute('aRandom', new THREE.BufferAttribute(bodyData.randoms, 1));
+    return g;
+  }, [bodyData]);
+
+  const starGeom = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(starData.positions, 3));
+    g.setAttribute('aTwinkle', new THREE.BufferAttribute(starData.twinkle, 1));
+    return g;
+  }, [starData]);
+
   useFrame((state) => {
-    if (!pointsRef.current || !groupRef.current) return;
-    const material = pointsRef.current.material as THREE.ShaderMaterial;
     const t = state.clock.elapsedTime;
-    material.uniforms.uTime.value = t;
-
-    // Cinematic hero: slow drift (reference: stable, not fast spin)
-    groupRef.current.rotation.z = t * 0.042;
-    groupRef.current.rotation.x = -0.28 + Math.sin(t * 0.11) * 0.04;
-    groupRef.current.rotation.y = Math.sin(t * 0.09) * 0.05;
-
-    targetMouse.set(9999, 9999, 9999);
-    if (state.pointer.x !== 0 || state.pointer.y !== 0) {
-      raycaster.setFromCamera(state.pointer, state.camera);
-      if (raycaster.ray.intersectPlane(plane, rayHit)) targetMouse.copy(rayHit);
+    if (groupRef.current) {
+      groupRef.current.rotation.y = Math.sin(t * 0.07) * 0.18 + t * 0.04;
+      groupRef.current.rotation.x = -0.08 + Math.sin(t * 0.05) * 0.04;
     }
-    material.uniforms.uMouse.value.lerp(targetMouse, 0.08);
+    if (bodyRef.current) {
+      const m = bodyRef.current.material as THREE.ShaderMaterial;
+      m.uniforms.uTime.value = t;
+      targetMouse.set(9999, 9999, 9999);
+      if (state.pointer.x !== 0 || state.pointer.y !== 0) {
+        raycaster.setFromCamera(state.pointer, state.camera);
+        if (raycaster.ray.intersectPlane(plane, rayHit)) targetMouse.copy(rayHit);
+      }
+      m.uniforms.uMouse.value.lerp(targetMouse, 0.07);
+    }
+    if (starsRef.current) {
+      (starsRef.current.material as THREE.ShaderMaterial).uniforms.uTime.value = t;
+      starsRef.current.rotation.y = t * 0.012;
+    }
   });
 
-  const geometry = useMemo(() => {
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.BufferAttribute(particleData.positions, 3));
-    g.setAttribute('color', new THREE.BufferAttribute(particleData.colors, 3));
-    g.setAttribute('aRandom', new THREE.BufferAttribute(particleData.randoms, 1));
-    return g;
-  }, [particleData]);
-
   return (
-    <group ref={groupRef} rotation={[-Math.PI / 5.2, 0.1, 0]}>
-        <points ref={pointsRef} renderOrder={0} geometry={geometry}>
+    <group ref={groupRef} rotation={[-0.1, 0.2, 0]}>
+      <points ref={starsRef} geometry={starGeom}>
         <shaderMaterial
           transparent
           depthWrite={false}
           toneMapped={false}
           blending={THREE.AdditiveBlending}
-          vertexColors
+          uniforms={starUniforms}
+          vertexShader={`
+            uniform float uTime;
+            attribute float aTwinkle;
+            varying float vA;
+            void main() {
+              vA = 0.12 + aTwinkle * 0.35 + 0.08 * sin(uTime * 2.0 + aTwinkle * 40.0);
+              vec4 mv = modelViewMatrix * vec4(position, 1.0);
+              gl_Position = projectionMatrix * mv;
+              gl_PointSize = (1.2 + aTwinkle * 2.0) * (18.0 / max(-mv.z, 0.25));
+            }
+          `}
+          fragmentShader={`
+            varying float vA;
+            void main() {
+              float d = length(gl_PointCoord - 0.5);
+              if (d > 0.5) discard;
+              float s = smoothstep(0.5, 0.1, d);
+              gl_FragColor = vec4(vec3(0.85, 0.9, 1.0), s * vA);
+            }
+          `}
+        />
+      </points>
+
+      <points ref={bodyRef} geometry={bodyGeom} renderOrder={1}>
+        <shaderMaterial
+          transparent
+          depthWrite={false}
+          toneMapped={false}
+          blending={THREE.AdditiveBlending}
           uniforms={uniforms}
           vertexShader={`
           uniform float uTime;
@@ -130,40 +208,44 @@ function RoseParticles() {
           varying float vAlpha;
           
           void main() {
-            vColor = color;
-            vec3 pos = position;
+            vec3 base = position;
+            float t = uTime;
+            float trail = smoothstep(1.1, -2.6, base.y);
             
-            float bloomOffset = length(pos) * 0.085;
-            float prog = clamp((uProgress - bloomOffset) * 2.0, 0.0, 1.0);
+            vec3 flow = vec3(
+              sin(base.y * 2.4 + t * 1.15) * cos(base.z * 1.9 + t * 0.3),
+              cos(base.x * 2.1 - t * 0.88) * sin(base.y * 1.65 + t * 0.4),
+              sin(base.x * 1.75 + base.y * 1.45 + t * 1.02)
+            );
+            vec3 pos = base + flow * (0.22 + trail * 0.85);
+            pos.x += trail * sin(base.y * 5.8 + t * 1.25) * 0.28;
+            pos.z += trail * cos(base.x * 4.8 + t * 0.95) * 0.22;
+            pos.y -= trail * 0.2 * sin(base.x * 3.0 + t);
             
-            float angle = (1.0 - prog) * 4.5 * aRandom;
-            float s = sin(angle);
-            float c = cos(angle);
-            vec3 tempPos = pos;
-            pos.x = tempPos.x * c - tempPos.y * s;
-            pos.y = tempPos.x * s + tempPos.y * c;
+            float pr = smoothstep(0.0, 1.0, uProgress);
+            pos *= mix(0.04, 1.0, pr);
             
-            pos *= prog;
-            pos.z -= (1.0 - prog) * 22.0;
-            
-            float breath = sin(length(pos) * 0.48 - uTime * 1.85) * 0.16;
-            pos.z += breath;
-            
-            float mouseDist = distance(pos, uMouse);
-            float maxDist = 3.2;
-            if (mouseDist < maxDist) {
+            float md = distance(pos, uMouse);
+            float mx = 3.8;
+            if (md < mx) {
               vec3 dir = normalize(pos - uMouse);
-              float force = smoothstep(maxDist, 0.0, mouseDist);
-              pos += dir * force * 1.65;
+              pos += dir * smoothstep(mx, 0.0, md) * 1.85;
             }
             
+            float headGlow = smoothstep(0.15, 2.0, base.y);
+            float core = smoothstep(0.8, 2.0, base.y) * (1.0 - trail);
+            vec3 c = mix(vec3(0.18, 0.42, 0.95), vec3(0.72, 0.78, 0.95), headGlow);
+            c = mix(c, vec3(0.95, 0.42, 0.18), trail * (0.45 + 0.35 * aRandom));
+            c = mix(c, vec3(0.55, 0.22, 0.85), (1.0 - headGlow) * 0.12 * sin(aRandom * 6.2831853 + base.y * 2.0));
+            c *= 0.55 + 0.25 * core + 0.2 * headGlow;
+            c = min(c, vec3(0.92));
+            
+            vColor = c;
             vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
             gl_Position = projectionMatrix * mvPosition;
-            
-            float sizeAtten = (1.1 + aRandom * 1.9) * (28.0 / -mvPosition.z) * prog;
-            gl_PointSize = sizeAtten;
-            
-            vAlpha = (0.28 + aRandom * 0.72) * prog;
+            float sizeAtten = (0.65 + aRandom * 1.15) * (11.0 / max(-mvPosition.z, 0.35)) * pr;
+            gl_PointSize = max(1.5, sizeAtten);
+            vAlpha = (0.09 + aRandom * 0.2) * pr;
           }
         `}
           fragmentShader={`
@@ -173,15 +255,12 @@ function RoseParticles() {
           void main() {
             float d = length(gl_PointCoord - vec2(0.5));
             if (d > 0.5) discard;
-            
-            float soft = smoothstep(0.5, 0.08, d);
+            float soft = smoothstep(0.5, 0.12, d);
             float alpha = soft * vAlpha;
-            
-            vec3 core = vec3(1.0) * smoothstep(0.22, 0.0, d) * 0.65;
-            vec3 rim = vec3(1.0, 0.92, 0.75) * smoothstep(0.45, 0.2, d) * 0.35;
-            vec3 finalColor = vColor + core + rim;
-            
-            gl_FragColor = vec4(finalColor, alpha);
+            vec3 core = vColor * smoothstep(0.35, 0.0, d) * 0.35;
+            vec3 rim = vec3(0.35, 0.55, 1.0) * smoothstep(0.5, 0.22, d) * 0.18;
+            vec3 finalColor = vColor * soft + core + rim;
+            gl_FragColor = vec4(min(finalColor, vec3(1.0)), alpha);
           }
         `}
         />
@@ -195,14 +274,14 @@ const bloomResolution = new THREE.Vector2(256, 256);
 export default function ParticleHands() {
   return (
     <Canvas
-      camera={{ position: [0, 0.35, 19.5], fov: 42 }}
+      camera={{ position: [0, 0.2, 17.5], fov: 42 }}
       dpr={[1, 2]}
       gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
     >
       <color attach="background" args={['#000000']} />
-      <RoseParticles />
+      <CosmicHuman />
       <Effects disableGamma>
-        <unrealBloomPass args={[bloomResolution, 0.85, 0.5, 0]} />
+        <unrealBloomPass args={[bloomResolution, 0.42, 0.35, 0.22]} />
       </Effects>
     </Canvas>
   );
