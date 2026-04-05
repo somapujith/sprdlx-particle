@@ -14,17 +14,78 @@ function EarthquakeParticles() {
   const { scene } = useGLTF(glbUrl);
   
   const particleData = useMemo(() => {
+    // Ensure world matrices are computed before we read/apply them.
+    scene.updateMatrixWorld(true);
+
+    const normalizedScalar = (value: number, array: ArrayLike<number>): number => {
+      // Map integer vertex attribute values into float ranges when the source accessor is normalized.
+      // See: glTF accessor.normalized and KHR_mesh_quantization.
+      if (array instanceof Int8Array) return Math.max(value / 127, -1);
+      if (array instanceof Uint8Array) return value / 255;
+      if (array instanceof Int16Array) return Math.max(value / 32767, -1);
+      if (array instanceof Uint16Array) return value / 65535;
+      if (array instanceof Int32Array) return Math.max(value / 2147483647, -1);
+      if (array instanceof Uint32Array) return value / 4294967295;
+      return value;
+    };
+
+    const toFloat32Attribute = (attr: THREE.BufferAttribute): THREE.BufferAttribute => {
+      const src = attr.array;
+      const out = new Float32Array(attr.count * attr.itemSize);
+
+      if (attr.normalized && !(src instanceof Float32Array)) {
+        for (let i = 0; i < attr.count; i++) {
+          const base = i * attr.itemSize;
+          out[base] = normalizedScalar(attr.getX(i), src);
+          if (attr.itemSize > 1) out[base + 1] = normalizedScalar(attr.getY(i), src);
+          if (attr.itemSize > 2) out[base + 2] = normalizedScalar(attr.getZ(i), src);
+          if (attr.itemSize > 3) out[base + 3] = normalizedScalar(attr.getW(i), src);
+        }
+      } else {
+        for (let i = 0; i < attr.count; i++) {
+          const base = i * attr.itemSize;
+          out[base] = attr.getX(i);
+          if (attr.itemSize > 1) out[base + 1] = attr.getY(i);
+          if (attr.itemSize > 2) out[base + 2] = attr.getZ(i);
+          if (attr.itemSize > 3) out[base + 3] = attr.getW(i);
+        }
+      }
+
+      return new THREE.BufferAttribute(out, attr.itemSize, false);
+    };
+
+    const dequantizeGeometry = (geometry: THREE.BufferGeometry): THREE.BufferGeometry => {
+      // Convert normalized integer attributes (e.g. i16_norm/u8_norm) into Float32 attributes.
+      // This is required because we do CPU-side merging, centering, and sampling.
+      const position = geometry.getAttribute('position') as THREE.BufferAttribute | undefined;
+      if (position && (position.normalized || !(position.array instanceof Float32Array))) {
+        geometry.setAttribute('position', toFloat32Attribute(position));
+      }
+
+      const color = geometry.getAttribute('color') as THREE.BufferAttribute | undefined;
+      if (color && (color.normalized || !(color.array instanceof Float32Array))) {
+        geometry.setAttribute('color', toFloat32Attribute(color));
+      }
+
+      const normal = geometry.getAttribute('normal') as THREE.BufferAttribute | undefined;
+      if (normal && (normal.normalized || !(normal.array instanceof Float32Array))) {
+        geometry.setAttribute('normal', toFloat32Attribute(normal));
+      }
+
+      return geometry;
+    };
+
     const geometries: THREE.BufferGeometry[] = [];
     
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-        const geom = mesh.geometry.clone();
+        const geom = dequantizeGeometry(mesh.geometry.clone());
         geom.applyMatrix4(mesh.matrixWorld);
         geometries.push(geom);
       } else if ((child as THREE.Points).isPoints) {
         const pt = child as THREE.Points;
-        const geom = pt.geometry.clone();
+        const geom = dequantizeGeometry(pt.geometry.clone());
         geom.applyMatrix4(pt.matrixWorld);
         geometries.push(geom);
       }
@@ -46,6 +107,9 @@ function EarthquakeParticles() {
     
     const posAttribute = merged.getAttribute('position');
     const colorAttr = merged.getAttribute('color');
+
+    // Hard cap to keep first-render work predictable (prevents main-thread stalls).
+    const MAX_POINTS = 150000;
     
     const points: number[] = [];
     const colors: number[] = [];
@@ -56,7 +120,7 @@ function EarthquakeParticles() {
         try {
             const tempMesh = new THREE.Mesh(merged, new THREE.MeshBasicMaterial());
             const sampler = new MeshSurfaceSampler(tempMesh).build();
-            const count = 150000;
+        const count = MAX_POINTS;
             const pos = new THREE.Vector3();
             const nor = new THREE.Vector3();
             const col = new THREE.Color();
@@ -83,7 +147,8 @@ function EarthquakeParticles() {
     
     function fallbackToVertices() {
         const normAttr = merged.getAttribute('normal');
-        for(let i=0; i<posAttribute.count; i++) {
+      const step = posAttribute.count > MAX_POINTS ? Math.ceil(posAttribute.count / MAX_POINTS) : 1;
+      for(let i=0; i<posAttribute.count; i+=step) {
            points.push(posAttribute.getX(i), posAttribute.getY(i), posAttribute.getZ(i));
            if (normAttr) {
                normals.push(normAttr.getX(i), normAttr.getY(i), normAttr.getZ(i));
