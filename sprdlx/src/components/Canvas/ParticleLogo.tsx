@@ -1,55 +1,12 @@
-import React, { useRef, useMemo, useEffect, useState } from 'react';
+import React, { useRef, useMemo, useEffect, useState, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
+import { OrbitControls, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
 import { SPRDLX_SVG } from './LogoSVG';
 import gsap from 'gsap';
-
-function Decorations({ fromAbout }: { fromAbout: boolean }) {
-  const [opacity, setOpacity] = useState(fromAbout ? 0 : 0.4);
-  const [floorOpacity, setFloorOpacity] = useState(fromAbout ? 0 : 0.3);
-
-  useEffect(() => {
-    if (fromAbout) {
-      gsap.to({ val: 0 }, {
-        val: 1,
-        duration: 1.5,
-        delay: 2.0, // Wait for the galaxy to assemble before showing shadows
-        onUpdate: function() {
-          setOpacity(this.targets()[0].val * 0.4);
-          setFloorOpacity(this.targets()[0].val * 0.3);
-        }
-      });
-    }
-  }, [fromAbout]);
-
-  return (
-    <>
-      <group position={[0, -3.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        {/* Outer Ring */}
-        <mesh>
-          <ringGeometry args={[4.8, 5, 64]} />
-          <meshBasicMaterial color="#a0a0a0" transparent opacity={floorOpacity} side={THREE.DoubleSide} />
-        </mesh>
-        {/* Inner Ring */}
-        <mesh>
-          <ringGeometry args={[3.8, 3.9, 64]} />
-          <meshBasicMaterial color="#a0a0a0" transparent opacity={floorOpacity * 0.5} side={THREE.DoubleSide} />
-        </mesh>
-      </group>
-      <ContactShadows 
-        position={[0, -3.49, 0]} 
-        opacity={opacity} 
-        scale={20} 
-        blur={2} 
-        far={4} 
-      />
-    </>
-  );
-}
 
 function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBlasting: boolean, fromAbout: boolean }) {
   const pointsRef = useRef<THREE.Points>(null);
@@ -129,21 +86,24 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
   }), [isSolid, fromAbout]);
 
   useEffect(() => {
-    if (geometry && particleData) {
-      if (fromAbout) {
-        gsap.to(uniforms.uImplode, {
-          value: 0,
-          duration: 3.0,
-          ease: "power3.out"
-        });
-      } else {
-        gsap.to(uniforms.uProgress, {
-          value: 1,
-          duration: 2.5,
-          ease: "power3.out"
-        });
-      }
+    if (!geometry || !particleData) return undefined;
+
+    if (fromAbout) {
+      const tw = gsap.to(uniforms.uImplode, {
+        value: 0,
+        duration: 3.0,
+        ease: 'power3.out',
+      });
+      return () => tw.kill();
     }
+
+    gsap.set(uniforms.uProgress, { value: 0.02 });
+    const tw = gsap.to(uniforms.uProgress, {
+      value: 1,
+      duration: 2.8,
+      ease: 'power3.inOut',
+    });
+    return () => tw.kill();
   }, [geometry, particleData, uniforms, fromAbout]);
 
   useEffect(() => {
@@ -229,10 +189,20 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
               void main() {
                 vec3 pos = position;
                 
-                // Entrance animation
+                // Entrance: dispersed in 3D → logo formation (eased via uProgress from JS)
                 if (uImplode == 0.0) {
-                  float yOffset = (1.0 - uProgress) * 10.0 * aRandom;
-                  pos.y += yOffset;
+                  float seed = aRandom * 311.717 + dot(position.xy, vec2(12.9898, 78.233));
+                  vec3 h = vec3(
+                    sin(seed) * 43758.5453,
+                    sin(seed + 1.234) * 43758.5453,
+                    sin(seed + 2.345) * 43758.5453
+                  );
+                  vec3 rnd = fract(sin(h) * 43758.5453) * 2.0 - 1.0;
+                  float rndLen = length(rnd);
+                  vec3 rndDir = rndLen > 1e-4 ? rnd / rndLen : vec3(1.0, 0.0, 0.0);
+                  float scatterR = 6.0 + aRandom * 20.0;
+                  vec3 scatterPos = position + rndDir * scatterR;
+                  pos = mix(scatterPos, position, uProgress);
                 }
                 
                 // Implode Entrance (From About)
@@ -297,7 +267,7 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
                 float energySize = baseSize + (uImplode * 5.0 * aRandom);
                 gl_PointSize = energySize * (15.0 / -mvPosition.z) * max(uProgress, 1.0 - uImplode);
                 
-                float currentAlpha = uImplode > 0.0 ? (1.0 - uImplode * 0.5) : uProgress;
+                float currentAlpha = uImplode > 0.0 ? (1.0 - uImplode * 0.5) : max(uProgress, 0.08);
                 vAlpha = (0.3 + aRandom * 0.5) * currentAlpha * (1.0 - uBlast);
               }
             `}
@@ -313,7 +283,7 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
                 // Soft edge
                 float alpha = smoothstep(0.5, 0.1, dist) * vAlpha;
                 
-                gl_FragColor = vec4(uColor, alpha * 0.8);
+                gl_FragColor = vec4(uColor * 1.08, alpha * 0.82);
               }
             `}
           />
@@ -384,25 +354,26 @@ export default function ParticleLogo({ isSolid, isBlasting = false, fromAbout = 
   const [controlsEnabled, setControlsEnabled] = useState(false);
 
   return (
-    <Canvas camera={{ position: [0, 10, 0.1], fov: 45 }} dpr={[1, 2]}>
-      <CameraAnimation setControlsEnabled={setControlsEnabled} fromAbout={fromAbout} />
-      <color attach="background" args={['#dcdcdc']} />
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
-      <Environment preset="city" />
-      
-      <Particles isSolid={isSolid} isBlasting={isBlasting} fromAbout={fromAbout} />
-      <Decorations fromAbout={fromAbout} />
-      
-      <OrbitControls 
-        enabled={controlsEnabled}
-        enablePan={false} 
-        enableZoom={false} 
-        minPolarAngle={Math.PI / 2.5} 
-        maxPolarAngle={Math.PI / 1.5} 
-        autoRotate={controlsEnabled}
-        autoRotateSpeed={0.5}
-      />
+    <Canvas className="h-full w-full touch-none" camera={{ position: [0, 10, 0.1], fov: 45 }} dpr={[1, 2]}>
+      <Suspense fallback={null}>
+        <CameraAnimation setControlsEnabled={setControlsEnabled} fromAbout={fromAbout} />
+        <color attach="background" args={['#dcdcdc']} />
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[10, 10, 5]} intensity={1} />
+        <Environment preset="city" />
+
+        <Particles isSolid={isSolid} isBlasting={isBlasting} fromAbout={fromAbout} />
+
+        <OrbitControls
+          enabled={controlsEnabled}
+          enablePan={false}
+          enableZoom={false}
+          minPolarAngle={Math.PI / 2.5}
+          maxPolarAngle={Math.PI / 1.5}
+          autoRotate={controlsEnabled}
+          autoRotateSpeed={0.5}
+        />
+      </Suspense>
     </Canvas>
   );
 }

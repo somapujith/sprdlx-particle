@@ -5,6 +5,7 @@ import Lenis from 'lenis';
 import Home from './pages/Home';
 import About from './pages/About';
 import LoadingScreen from './components/LoadingScreen';
+import { CustomCursor } from './components/ui/CustomCursor';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,6 +34,7 @@ export default function App() {
 
   return (
     <>
+      <CustomCursor />
       <AnimatePresence mode="wait">
         {isLoading && (
           <LoadingScreen key="app-loader" onComplete={() => setIsLoading(false)} />

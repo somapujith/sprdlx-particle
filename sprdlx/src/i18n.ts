@@ -9,6 +9,10 @@ const resources = {
         "about": "About",
         "contact": "Contact"
       },
+      "hero": {
+        "line1": "Digital experiences",
+        "line2": "Est. 2026"
+      },
       "ui": {
         "sound_on": "SOUND: ON",
         "sound_off": "SOUND: OFF",
