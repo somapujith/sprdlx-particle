@@ -16,112 +16,134 @@ export default function About() {
   };
 
   return (
-    <motion.div 
+    <motion.div
       animate={{ opacity: isExiting ? 0 : 1, filter: isExiting ? 'blur(10px)' : 'blur(0px)' }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="relative min-h-screen bg-black text-white font-sans overflow-hidden"
+      transition={{ duration: 0.8, ease: 'easeInOut' }}
+      className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden"
     >
-      {/* 3D Canvas Background */}
-      <div className="absolute inset-0 z-0">
-        <ParticleHands />
-      </div>
+      {/* 1 — Hero: Three.js / R3F particle scene */}
+      <section
+        id="about-hero"
+        aria-label="Hero"
+        className="relative z-0 flex min-h-screen h-screen w-full flex-col justify-between overflow-hidden"
+      >
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <ParticleHands />
+        </div>
 
-      {/* Hero Section - Exactly matching the reference */}
-      <div className="relative z-10 h-screen w-full flex flex-col justify-between pointer-events-none">
-        
-        {/* Header */}
-        <header className="flex justify-between items-center p-8 md:p-12 pointer-events-auto w-full">
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="cursor-pointer"
-            onClick={handleHomeClick}
+        <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-between pointer-events-none">
+          <header className="flex w-full items-center justify-between p-8 md:p-12 pointer-events-auto">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="cursor-pointer"
+              onClick={handleHomeClick}
+            >
+              <span className="font-serif text-3xl tracking-tight">Lewis.</span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.3 }}
+              className="flex cursor-pointer items-center gap-4 transition-opacity hover:opacity-70"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 5L6 9H2V15H6L11 19V5Z" fill="currentColor" />
+                <path d="M15.54 8.46A5 5 0 0 1 15.54 15.54" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+              <span className="font-serif text-2xl">Menu</span>
+            </motion.div>
+          </header>
+
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="pointer-events-auto absolute left-0 top-1/2 flex -translate-y-1/2 cursor-pointer flex-col items-center bg-white py-4 px-2 text-black"
           >
-            <span className="font-serif text-3xl tracking-tight">Lewis.</span>
+            <span className="mb-6 text-xl font-bold">W.</span>
+            <span
+              className="text-[10px] font-medium uppercase tracking-widest"
+              style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+            >
+              Honors
+            </span>
           </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="flex items-center gap-4 cursor-pointer hover:opacity-70 transition-opacity"
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="pointer-events-none absolute right-8 top-1/2 flex -translate-y-1/2 flex-col items-center gap-0"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M11 5L6 9H2V15H6L11 19V5Z" fill="currentColor"/>
-              <path d="M15.54 8.46A5 5 0 0 1 15.54 15.54" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-            <span className="font-serif text-2xl">Menu</span>
+            <div className="z-10 h-3 w-1 rounded-full bg-white" />
+            <div className="-mt-1 h-24 w-px bg-white/20" />
           </motion.div>
-        </header>
 
-        {/* Left Badge (Awwwards style) */}
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="absolute left-0 top-1/2 -translate-y-1/2 bg-white text-black flex flex-col items-center py-4 px-2 pointer-events-auto cursor-pointer"
-        >
-          <span className="font-bold text-xl mb-6">W.</span>
-          <span className="text-[10px] font-medium tracking-widest uppercase" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>Honors</span>
-        </motion.div>
+          <div className="flex flex-1 flex-col items-center justify-center px-8 pb-16 pt-8 md:px-12" />
+        </div>
+      </section>
 
-        {/* Right Scroll Indicator */}
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col items-center gap-0"
-        >
-          <div className="w-1 h-3 bg-white rounded-full z-10"></div>
-          <div className="w-[1px] h-24 bg-white/20 -mt-1"></div>
-        </motion.div>
-
-        {/* Bottom Content */}
-        <div className="w-full flex flex-col items-center relative pb-8 md:pb-12 px-8 md:px-12">
-          <motion.div 
+      {/* 2 — Heading */}
+      <section
+        id="about-heading"
+        aria-label="Heading"
+        className="relative z-10 border-t border-white/10 bg-black px-8 py-20 md:px-12 md:py-28"
+      >
+        <div className="mx-auto max-w-6xl">
+          <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
-            className="w-full flex justify-end mb-2 md:mb-4"
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1 }}
+            className="mb-4 flex w-full justify-end md:mb-6"
           >
-            <p className="text-lg md:text-2xl font-sans font-light tracking-wide text-gray-300">Innovation In Every Pixel</p>
+            <p className="font-sans text-lg font-light tracking-wide text-gray-300 md:text-2xl">
+              Innovation In Every Pixel
+            </p>
           </motion.div>
 
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="text-[10vw] font-serif font-light tracking-tighter leading-none whitespace-nowrap w-full text-center"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1, delay: 0.1 }}
+            className="w-full text-center font-serif text-[10vw] font-light leading-none tracking-tighter"
           >
             BUILDING YOUR DIGITAL VISION
           </motion.h1>
-          
-          {/* Bottom White Circle */}
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-32 h-32 bg-white rounded-full pointer-events-auto cursor-pointer"
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="mx-auto mt-12 h-32 w-32 cursor-pointer rounded-full bg-white md:mt-16"
           />
         </div>
-      </div>
+      </section>
 
-      {/* Scrollable Content Below Fold */}
-      <div className="relative z-10 bg-black min-h-screen p-8 md:p-12 pt-32">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-lg md:text-xl leading-relaxed font-light max-w-6xl mx-auto">
+      {/* 3 — Data */}
+      <section
+        id="about-data"
+        aria-label="Data"
+        className="relative z-10 border-t border-white/10 bg-black px-8 py-20 md:px-12 md:py-24"
+      >
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 text-lg font-light leading-relaxed md:grid-cols-2 md:text-xl">
           <div>
             <p className="mb-6">
-              We are SPRDLX — a Creative Web Studio. Throughout our journey, we've had the opportunity to create diverse websites and gain valuable experience. This allows us to collaborate with designers, translating their creative vision into functional implementations.
+              We are SPRDLX — a Creative Web Studio. Throughout our journey, we&apos;ve had the opportunity to create
+              diverse websites and gain valuable experience. This allows us to collaborate with designers, translating
+              their creative vision into functional implementations.
             </p>
-            <p>
-              We have a deep commitment to transforming concepts into polished, pixel-perfect realities.
-            </p>
+            <p>We have a deep commitment to transforming concepts into polished, pixel-perfect realities.</p>
           </div>
 
           <div className="flex flex-col justify-between">
             <div>
-              <h3 className="text-xs font-bold tracking-widest uppercase mb-4 opacity-40">Services</h3>
+              <h2 className="mb-4 text-xs font-bold uppercase tracking-widest opacity-40">Services</h2>
               <ul className="space-y-2">
                 <li>Creative Direction</li>
                 <li>3D WebGL Development</li>
@@ -131,7 +153,20 @@ export default function About() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* 4 — Footer */}
+      <footer
+        id="about-footer"
+        className="relative z-10 border-t border-white/10 bg-black px-8 py-16 md:px-12 md:py-20"
+      >
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-8 md:flex-row md:items-start">
+          <span className="font-serif text-2xl tracking-tight">Lewis.</span>
+          <p className="text-center text-sm text-white/50 md:text-right">
+            © {new Date().getFullYear()} SPRDLX. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </motion.div>
   );
 }
