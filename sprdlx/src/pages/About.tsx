@@ -73,7 +73,10 @@ export default function About() {
               transition={{ duration: 1, delay: 0.9 }}
               className="mb-3 w-full max-w-6xl md:mb-4"
             >
-              <p className="text-right font-sans text-base font-extralight tracking-wide text-white/90 md:text-2xl">
+              <p 
+                className="text-right text-base font-light tracking-wide text-white/90 md:text-2xl" 
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
                 Innovation In Every Pixel
               </p>
             </motion.div>
@@ -82,7 +85,8 @@ export default function About() {
               initial={{ opacity: 0, y: 36 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.45 }}
-              className="w-full text-center font-sans text-[clamp(1.75rem,8.5vw,6.5rem)] font-extralight leading-[0.95] tracking-[-0.03em] text-white"
+              className="w-full text-center text-[clamp(1.75rem,8.5vw,6.5rem)] font-light leading-[0.95] tracking-[-0.03em] text-white"
+              style={{ fontFamily: "'Inter', sans-serif" }}
             >
               BUILDING YOUR DIGITAL VISION
             </motion.h1>
@@ -90,32 +94,69 @@ export default function About() {
         </div>
       </section>
 
-      {/* Story + services (no duplicate hero headline) */}
+      {/* Company Info Section */}
       <section
         id="about-data"
         aria-label="About"
-        className="relative z-10 border-t border-white/10 bg-black px-8 py-20 md:px-12 md:py-28"
+        className="relative z-10 bg-black px-8 py-20 md:px-12 md:py-32"
       >
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 text-lg font-extralight leading-relaxed md:grid-cols-2 md:text-xl">
-          <div>
-            <p className="mb-6">
-              We are SPRDLX — a Creative Web Studio. Throughout our journey, we&apos;ve had the opportunity to create
-              diverse websites and gain valuable experience. This allows us to collaborate with designers, translating
-              their creative vision into functional implementations.
+        <div className="mx-auto flex max-w-7xl flex-col gap-16 md:flex-row md:items-center md:gap-24">
+          <div className="flex-1 font-sans">
+            <h2 className="text-2xl font-light leading-snug tracking-tight text-white md:text-3xl md:leading-relaxed lg:text-4xl lg:leading-snug">
+              At SPRDLX, we are dedicated to delivering cutting-edge digital solutions that seamlessly blend creativity, technology, and precision. As a modern and forward-driven company, we specialize in transforming ideas into powerful digital experiences, ranging from high-performance websites to scalable applications and intelligent systems. Our journey is built on a strong foundation of innovation, collaboration, and attention to detail, allowing us to work closely with clients and designers to translate creative concepts into functional, user-centric realities. We believe in crafting solutions that are not only visually compelling but also efficient, reliable, and future-ready. With a deep commitment to quality and continuous growth, SPRDLX constantly evolves alongside the digital landscape, ensuring that every project we deliver meets the highest standards of excellence and impact.
+            </h2>
+            <p className="mt-10 text-lg font-light text-white/50 md:mt-12 md:text-2xl hover:text-white/80 transition-colors cursor-default">
+              SPRDLX — Where Ideas Evolve into Intelligent Digital Realities.
             </p>
-            <p>We have a deep commitment to transforming concepts into polished, pixel-perfect realities.</p>
           </div>
-
-          <div className="flex flex-col justify-between">
-            <div>
-              <h2 className="mb-4 text-xs font-bold uppercase tracking-widest opacity-40">Services</h2>
-              <ul className="space-y-2">
-                <li>Creative Direction</li>
-                <li>3D WebGL Development</li>
-                <li>Brand Identity</li>
-                <li>Interactive Design</li>
-              </ul>
+          <div className="w-full md:w-2/5 lg:w-1/3">
+            <div className="aspect-[3/4] w-full overflow-hidden rounded-md bg-zinc-900 object-cover grayscale transition-all duration-700 hover:grayscale-0 ring-1 ring-white/10">
+              <img 
+                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" 
+                alt="SPRDLX Digital Solutions" 
+                className="h-full w-full object-cover transition-transform duration-[2s] hover:scale-105"
+              />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Recent Work Section */}
+      <section
+        id="recent-work"
+        aria-label="Recent Work"
+        className="relative z-10 bg-black px-8 py-10 pb-20 md:px-12 md:pb-32"
+      >
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-10 flex items-center justify-between border-b border-white/20 pb-6 md:mb-16">
+            <h3 className="font-sans text-sm font-semibold uppercase tracking-[0.2em] text-white/70 md:text-base">
+              Recent Work <span className="opacity-50">(01)</span>
+            </h3>
+          </div>
+          
+          <div className="group relative block cursor-pointer">
+             <div className="mb-8 flex flex-col items-start justify-between text-white md:flex-row md:items-end">
+                <h4 className="font-sans text-5xl font-extralight tracking-tighter transition-all duration-500 group-hover:italic md:text-7xl lg:text-[6rem]">
+                  PROTECIA SKINCARE
+                </h4>
+                <div className="mt-4 flex gap-6 font-sans text-sm font-light tracking-widest text-white/50 md:mt-0 md:text-base uppercase">
+                  <span>Ecommerce</span>
+                  <span>2022</span>
+                </div>
+             </div>
+             
+             {/* 3D Laptop Placeholder / Showcase Image */}
+             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-zinc-900/50 flex items-center justify-center ring-1 ring-white/10">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 pointer-events-none" />
+                <img 
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2000&auto=format&fit=crop" 
+                  alt="Protecia Skincare Case Study Showcase" 
+                  className="h-full w-full object-cover opacity-70 transition-all duration-1000 group-hover:scale-105 group-hover:opacity-100"
+                />
+                <div className="absolute bottom-8 left-8 z-20 overflow-hidden rounded-full bg-white/10 px-6 py-2 backdrop-blur-md transition-all group-hover:bg-white/20">
+                  <span className="font-sans text-sm font-medium tracking-wide text-white">View Project</span>
+                </div>
+             </div>
           </div>
         </div>
       </section>
@@ -125,7 +166,7 @@ export default function About() {
         className="relative z-10 border-t border-white/10 bg-black px-8 py-16 md:px-12 md:py-20"
       >
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-8 md:flex-row md:items-start">
-          <span className="font-serif text-2xl tracking-tight">Lewis.</span>
+          <span className="font-serif text-2xl tracking-tight">SPRDLX.</span>
           <p className="text-center text-sm text-white/50 md:text-right">
             © {new Date().getFullYear()} SPRDLX. All rights reserved.
           </p>
