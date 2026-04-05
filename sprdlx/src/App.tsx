@@ -33,8 +33,10 @@ export default function App() {
 
   return (
     <>
-      <AnimatePresence>
-        {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <LoadingScreen key="app-loader" onComplete={() => setIsLoading(false)} />
+        )}
       </AnimatePresence>
       <Router>
         <Routes>

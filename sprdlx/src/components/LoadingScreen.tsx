@@ -1,205 +1,89 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
-const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+/** Lewis-style spaced digits: e.g. 71 → "0 7 1", 100 → "1 0 0" */
+function formatSpacedPercent(progress: number): string {
+  if (progress < 10) return `0 0 ${progress}`;
+  if (progress < 100) return `0 ${progress.toString().split('').join(' ')}`;
+  return '1 0 0';
+}
 
-const title = 'SPRDLX';
-const subtitle = 'Creative Studio';
+const FADE_MS = 1150;
+const FADE_EASE: [number, number, number, number] = [0.22, 0.61, 0.36, 1];
 
 export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState<'loading' | 'expanding'>('loading');
+  const [phase, setPhase] = useState<'loading' | 'fadeOut'>('loading');
   const completeRef = useRef(onComplete);
   completeRef.current = onComplete;
-  const rafRef = useRef<number>(0);
-  const startRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const loadMs = 2800;
+    const duration = 3200;
+    const interval = 30;
+    const steps = duration / interval;
+    let currentStep = 0;
 
-    const tick = (now: number) => {
-      if (startRef.current === null) startRef.current = now;
-      const elapsed = now - startRef.current;
-      const t = Math.min(elapsed / loadMs, 1);
-      setProgress(Math.round(easeOutCubic(t) * 100));
+    const timer = setInterval(() => {
+      currentStep++;
+      const newProgress = Math.min(Math.round((currentStep / steps) * 100), 100);
+      setProgress(newProgress);
 
-      if (t >= 1) {
-        setPhase('expanding');
-        window.setTimeout(() => completeRef.current(), 950);
-        return;
+      if (currentStep >= steps) {
+        clearInterval(timer);
+        setPhase('fadeOut');
       }
-      rafRef.current = requestAnimationFrame(tick);
-    };
+    }, interval);
 
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
+    return () => clearInterval(timer);
   }, []);
 
-  const circumference = 2 * Math.PI * 42;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
+  useEffect(() => {
+    if (phase !== 'fadeOut') return;
+    const id = window.setTimeout(() => completeRef.current(), FADE_MS);
+    return () => window.clearTimeout(id);
+  }, [phase]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#dcdcdc] text-gray-900"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-white text-neutral-900"
       initial={{ opacity: 1 }}
+      animate={{ opacity: phase === 'fadeOut' ? 0 : 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: FADE_MS / 1000, ease: FADE_EASE }}
+      style={{ willChange: 'opacity' }}
     >
-      {/* Subtle grain + vignette */}
+      {/* Reference: large black circle — bottom-right, partially off-canvas */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.35]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background: 'radial-gradient(circle at 50% 45%, transparent 0%, rgba(0,0,0,0.12) 100%)',
-        }}
+        className="pointer-events-none absolute -bottom-24 -right-24 h-[22rem] w-[22rem] rounded-full bg-black md:-bottom-28 md:-right-28 md:h-[26rem] md:w-[26rem]"
+        aria-hidden
       />
 
-      {/* Ambient orbit — slow drift */}
       <motion.div
-        className="pointer-events-none absolute left-1/2 top-[38%] h-[11rem] w-[11rem] -translate-x-1/2 -translate-y-1/2 md:h-[13rem] md:w-[13rem]"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 32, repeat: Infinity, ease: 'linear' }}
+        className="relative z-10 flex max-w-[90vw] flex-col items-center px-6 text-center font-serif"
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.85, ease: FADE_EASE }}
       >
-        {[0, 72, 144, 216, 288].map((deg) => (
-          <span
-            key={deg}
-            className="absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-black/20"
-            style={{
-              transform: `translate(-50%, -50%) rotate(${deg}deg) translateY(-5.25rem)`,
-            }}
-          />
-        ))}
+        <h1 className="flex flex-wrap items-baseline justify-center gap-x-3 gap-y-1 text-[clamp(1.25rem,4vw,2.75rem)] leading-tight">
+          <span className="font-semibold tracking-tight">SPRDLX</span>
+          <span className="select-none font-light text-neutral-300" aria-hidden>
+            |
+          </span>
+          <span className="font-normal text-neutral-500">Creative Studio</span>
+          <span className="ml-0.5 font-light text-neutral-800 md:ml-1" aria-hidden>
+            ✶
+          </span>
+        </h1>
       </motion.div>
 
-      {/* Morphing core + soft echo */}
-      <motion.div
-        className="absolute left-1/2 top-[38%] h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/10 blur-xl md:h-24 md:w-24"
-        animate={
-          phase === 'expanding'
-            ? { scale: 55, opacity: 0, transition: { duration: 0.95, ease: [0.65, 0, 0.35, 1] } }
-            : {
-                scale: [1, 1.08, 0.96, 1.05, 1],
-                opacity: [0.35, 0.55, 0.4, 0.5, 0.35],
-              }
-        }
-        transition={
-          phase === 'expanding'
-            ? {}
-            : { duration: 5, repeat: Infinity, ease: 'easeInOut' }
-        }
-      />
-      <motion.div
-        className="absolute left-1/2 top-[38%] h-16 w-16 -translate-x-1/2 -translate-y-1/2 bg-black md:h-[4.5rem] md:w-[4.5rem]"
-        animate={
-          phase === 'expanding'
-            ? {
-                scale: 48,
-                borderRadius: '50%',
-                transition: { duration: 0.95, ease: [0.65, 0, 0.35, 1] },
-              }
-            : {
-                borderRadius: [
-                  '50%',
-                  '45% 55% 52% 48% / 48% 45% 55% 52%',
-                  '52% 48% 45% 55% / 55% 52% 48% 45%',
-                  '50%',
-                ],
-                rotate: [0, 120, 240, 360],
-              }
-        }
-        transition={
-          phase === 'expanding'
-            ? {}
-            : { duration: 6, repeat: Infinity, ease: 'linear' }
-        }
-      />
-
-      {/* Foreground copy */}
-      <motion.div
-        className="relative z-10 flex min-h-[50vh] w-full max-w-4xl flex-col items-center justify-between px-6 pb-16 pt-12 md:px-12"
-        animate={{ opacity: phase === 'expanding' ? 0 : 1, y: phase === 'expanding' ? -12 : 0 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      <motion.p
+        className="font-serif absolute bottom-[clamp(5rem,12vh,8rem)] text-[clamp(1.125rem,2.5vw,1.75rem)] font-light tabular-nums tracking-[0.35em] text-neutral-400"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.95 }}
+        transition={{ delay: 0.15, duration: 0.6, ease: FADE_EASE }}
       >
-        <div className="flex flex-col items-center gap-3 md:gap-4 [perspective:900px]">
-          <div className="flex items-center justify-center gap-1 md:gap-1.5">
-            {title.split('').map((char, i) => (
-              <motion.span
-                key={`${char}-${i}`}
-                className="inline-block origin-bottom font-semibold tracking-tight text-3xl md:text-5xl"
-                initial={{ opacity: 0, y: 28, rotateX: -55, filter: 'blur(8px)' }}
-                animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
-                transition={{
-                  delay: 0.06 + i * 0.05,
-                  duration: 0.75,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </div>
-
-          <motion.div
-            className="flex items-center gap-3 text-sm font-light tracking-[0.35em] text-gray-600 md:text-base"
-            initial={{ opacity: 0, letterSpacing: '0.5em' }}
-            animate={{ opacity: 1, letterSpacing: '0.35em' }}
-            transition={{ delay: 0.55, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span className="h-px w-8 bg-black/20" />
-            {subtitle}
-            <span className="h-px w-8 bg-black/20" />
-          </motion.div>
-        </div>
-
-        {/* Progress ring + shimmer track */}
-        <div className="flex flex-col items-center gap-5">
-          <div className="relative h-28 w-28 md:h-32 md:w-32">
-            <svg className="-rotate-90" viewBox="0 0 100 100" aria-hidden>
-              <circle
-                cx="50"
-                cy="50"
-                r="42"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                className="text-black/10"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="42"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                className="text-black transition-[stroke-dashoffset] duration-100 ease-out"
-                strokeDasharray={circumference}
-                strokeDashoffset={strokeDashoffset}
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-mono text-lg tabular-nums tracking-tight text-gray-800 md:text-xl">
-                {progress}
-                <span className="text-sm text-gray-500">%</span>
-              </span>
-            </div>
-          </div>
-
-          <div className="h-[2px] w-52 overflow-hidden rounded-full bg-black/[0.08] md:w-72">
-            <motion.div
-              className="h-full w-full origin-left bg-gradient-to-r from-black/30 via-black/80 to-black/40"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: progress / 100 }}
-              transition={{ type: 'spring', stiffness: 100, damping: 28 }}
-            />
-          </div>
-        </div>
-      </motion.div>
+        {formatSpacedPercent(progress)} %
+      </motion.p>
     </motion.div>
   );
 }
