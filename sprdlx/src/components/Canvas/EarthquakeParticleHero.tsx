@@ -10,7 +10,8 @@ extend({ UnrealBloomPass });
 
 function EarthquakeParticles() {
   // Load the GLB file
-  const { scene } = useGLTF('/earthquakes_-_2000_to_2019.glb');
+  const glbUrl = `${import.meta.env.BASE_URL}earthquakes_-_2000_to_2019.optimized.glb`;
+  const { scene } = useGLTF(glbUrl);
   
   const particleData = useMemo(() => {
     const geometries: THREE.BufferGeometry[] = [];
@@ -169,11 +170,11 @@ function EarthquakeParticles() {
   return (
     <points ref={pointsRef}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={particleData.positions.length / 3} array={particleData.positions} itemSize={3} />
-        <bufferAttribute attach="attributes-color" count={particleData.colorsArray.length / 3} array={particleData.colorsArray} itemSize={3} />
-        <bufferAttribute attach="attributes-normal" count={particleData.normalsArray.length / 3} array={particleData.normalsArray} itemSize={3} />
-        <bufferAttribute attach="attributes-aRandom" count={particleData.randoms.length} array={particleData.randoms} itemSize={1} />
-        <bufferAttribute attach="attributes-aSize" count={particleData.sizes.length} array={particleData.sizes} itemSize={1} />
+        <bufferAttribute attach="attributes-position" args={[particleData.positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[particleData.colorsArray, 3]} />
+        <bufferAttribute attach="attributes-normal" args={[particleData.normalsArray, 3]} />
+        <bufferAttribute attach="attributes-aRandom" args={[particleData.randoms, 1]} />
+        <bufferAttribute attach="attributes-aSize" args={[particleData.sizes, 1]} />
       </bufferGeometry>
       <shaderMaterial
         transparent
@@ -289,7 +290,7 @@ export default function EarthquakeParticleHero() {
         <EarthquakeParticles />
       </Suspense>
       <Effects disableGamma>
-        <unrealBloomPass args={[undefined, 0.5, 0.8, 0.3]} />
+        <unrealBloomPass args={[new THREE.Vector2(256, 256), 0.5, 0.8, 0.3]} />
       </Effects>
     </Canvas>
   );
