@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, Suspense } from 'react';
+import React, { useEffect, useMemo, useRef, Suspense } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { useGLTF, Effects, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
@@ -168,6 +168,9 @@ function EarthquakeParticles() {
     const normalsArray = new Float32Array(normals);
     const randoms = new Float32Array(positions.length / 3);
     const sizes = new Float32Array(positions.length / 3);
+    const hots = new Float32Array(positions.length / 3);
+
+    const tmpColor = new THREE.Color();
     
     for(let i=0; i<randoms.length; i++) {
         randoms[i] = Math.random();
@@ -177,55 +180,104 @@ function EarthquakeParticles() {
         const r = colorsArray[i*3];
         const g = colorsArray[i*3 + 1];
         const b = colorsArray[i*3 + 2];
-        const isHot = (r > 0.5 && b < 0.3) ? 1.0 : 0.0;
+      const isHot = (r > 0.5 && b < 0.3) ? 1.0 : 0.0;
+      hots[i] = isHot;
+
+      const px = positions[i * 3];
+      const py = positions[i * 3 + 1];
+      const pz = positions[i * 3 + 2];
+      const len = Math.max(1e-6, Math.sqrt(px * px + py * py + pz * pz));
+      const lon = Math.atan2(pz, px); // [-pi, pi]
+      const lon01 = (lon / (Math.PI * 2) + 1) % 1; // [0, 1)
+      const lat = Math.asin(Math.max(-1, Math.min(1, py / len))); // [-pi/2, pi/2]
+      const lat01 = lat / Math.PI + 0.5; // [0, 1]
         
-        // Make non-hot points (the continents/ocean) look like an ethereal holographic grid
-        if (isHot === 0.0) {
-            // slightly dim the base globe
-            colorsArray[i*3] = 0.02;
-            colorsArray[i*3+1] = 0.08 + randoms[i]*0.1;
-            colorsArray[i*3+2] = 0.25 + randoms[i]*0.2;
-        } else {
-            // Emphasize the earthquake points
-            colorsArray[i*3] = Math.min(r * 0.8, 1.0);
-            colorsArray[i*3+1] = Math.min(g * 0.6, 1.0);
-            sizes[i] = 1.2; // Moderated size
-        }
+      // Vibrant palette: aurora gradient by latitude/longitude.
+      // Keep hot points as neon highlights.
+      if (isHot === 0.0) {
+        const hue = (0.55 + lon01 * 0.55 + lat01 * 0.12 + randoms[i] * 0.03) % 1;
+        const sat = 0.92;
+        const light = Math.min(0.62, 0.18 + 0.28 * Math.sin(lat01 * Math.PI) + randoms[i] * 0.08);
+        tmpColor.setHSL(hue, sat, Math.max(0.12, light));
+        colorsArray[i * 3] = tmpColor.r;
+        colorsArray[i * 3 + 1] = tmpColor.g;
+        colorsArray[i * 3 + 2] = tmpColor.b;
+
+        sizes[i] = 0.8 + randoms[i] * 0.6;
+      } else {
+        const hue = 0.03 + randoms[i] * 0.04; // orange → red
+        tmpColor.setHSL(hue, 1.0, 0.62);
+        colorsArray[i * 3] = tmpColor.r;
+        colorsArray[i * 3 + 1] = tmpColor.g;
+        colorsArray[i * 3 + 2] = tmpColor.b;
+
+        sizes[i] = 1.35;
+      }
     }
     
-    return { positions, colorsArray, normalsArray, randoms, sizes };
+    return { positions, colorsArray, normalsArray, randoms, sizes, hots };
   }, [scene]);
 
   const pointsRef = useRef<THREE.Points>(null);
+  const scrollTarget = useRef(0);
+  const scrollSmoothed = useRef(0);
+
+  useEffect(() => {
+    const readScroll = () => {
+      const doc = document.documentElement;
+      const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+      scrollTarget.current = Math.min(1, Math.max(0, window.scrollY / max));
+    };
+
+    readScroll();
+    window.addEventListener('scroll', readScroll, { passive: true });
+    window.addEventListener('resize', readScroll);
+    return () => {
+      window.removeEventListener('scroll', readScroll);
+      window.removeEventListener('resize', readScroll);
+    };
+  }, []);
   
   const uniforms = useMemo(() => ({
     uTime: { value: 0 },
     uMouse: { value: new THREE.Vector3(9999, 9999, 9999) }
   }), []);
 
-  const plane = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const raycaster = useMemo(() => new THREE.Raycaster(), []);
   const targetMouse = useMemo(() => new THREE.Vector3(9999, 9999, 9999), []);
+  const invWorldMatrix = useMemo(() => new THREE.Matrix4(), []);
+  const localRay = useMemo(() => new THREE.Ray(), []);
+  const localHit = useMemo(() => new THREE.Vector3(), []);
+  const localSphere = useMemo(() => new THREE.Sphere(new THREE.Vector3(0, 0, 0), 3.5), []);
 
   useFrame((state) => {
     if (pointsRef.current) {
         const t = state.clock.elapsedTime;
-        pointsRef.current.rotation.y = t * 0.08;
-        pointsRef.current.rotation.z = Math.sin(t * 0.05) * 0.1;
-        pointsRef.current.rotation.x = 0.2 + Math.sin(t * 0.08) * 0.1;
+        // Subtle scroll parallax: smooth, small tilt/rotation.
+        scrollSmoothed.current += (scrollTarget.current - scrollSmoothed.current) * 0.08;
+        const s = scrollSmoothed.current;
+
+        pointsRef.current.rotation.y = t * 0.08 + s * 0.35;
+        pointsRef.current.rotation.z = Math.sin(t * 0.05) * 0.1 + s * 0.05;
+        pointsRef.current.rotation.x = 0.2 + Math.sin(t * 0.08) * 0.1 - s * 0.18;
+        pointsRef.current.position.y = -s * 0.25;
         
         const mat = pointsRef.current.material as THREE.ShaderMaterial;
         if (mat.uniforms) mat.uniforms.uTime.value = t;
 
         // Interaction
         targetMouse.set(9999, 9999, 9999);
-        if (state.pointer.x !== 0 || state.pointer.y !== 0) {
-            raycaster.setFromCamera(state.pointer, state.camera);
-            const hit = new THREE.Vector3();
-            if (raycaster.ray.intersectPlane(plane, hit)) {
-                targetMouse.copy(hit);
-            }
+        raycaster.setFromCamera(state.pointer, state.camera);
+
+        // Convert the world-space ray into the particle system's local space,
+        // then intersect a sphere around the globe. This keeps uMouse in the
+        // same coordinate space as the shader's `position`.
+        invWorldMatrix.copy(pointsRef.current.matrixWorld).invert();
+        localRay.copy(raycaster.ray).applyMatrix4(invWorldMatrix);
+        if (localRay.intersectSphere(localSphere, localHit)) {
+          targetMouse.copy(localHit);
         }
+
         mat.uniforms.uMouse.value.lerp(targetMouse, 0.05);
     }
   });
@@ -240,6 +292,7 @@ function EarthquakeParticles() {
         <bufferAttribute attach="attributes-normal" args={[particleData.normalsArray, 3]} />
         <bufferAttribute attach="attributes-aRandom" args={[particleData.randoms, 1]} />
         <bufferAttribute attach="attributes-aSize" args={[particleData.sizes, 1]} />
+        <bufferAttribute attach="attributes-aHot" args={[particleData.hots, 1]} />
       </bufferGeometry>
       <shaderMaterial
         transparent
@@ -252,6 +305,7 @@ function EarthquakeParticles() {
           attribute vec3 color;
           attribute float aRandom;
           attribute float aSize;
+          attribute float aHot;
           varying vec3 vColor;
           varying float vAlpha;
           
@@ -286,8 +340,7 @@ function EarthquakeParticles() {
              vColor = color;
              vec3 pos = position;
              
-             // Detect "hot" spots (high red)
-             float isHot = step(0.6, color.r) * step(color.b, 0.4);
+             float isHot = aHot;
              
              // Fluid surface noise
              float noise = snoise(vec2(pos.x * 2.0 + uTime * 0.2, pos.y * 2.0 + uTime * 0.2));
@@ -321,7 +374,7 @@ function EarthquakeParticles() {
              float hotSizeMultiplier = 1.0 + (isHot * 1.5 * pulse);
              gl_PointSize = baseSize * hotSizeMultiplier * (5.0 / -mvPosition.z);
              
-             vAlpha = mix(0.05 + aRandom * 0.1, 0.3 + pulse * 0.3, isHot);
+             vAlpha = mix(0.1 + aRandom * 0.18, 0.35 + pulse * 0.35, isHot);
              if (d < 2.0) vAlpha += smoothstep(2.0, 0.0, d) * 0.5;
           }
         `}
