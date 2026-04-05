@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 
 const CURSOR_SIZE = 8;
@@ -7,6 +8,8 @@ const CURSOR_SIZE = 8;
  * Smooth GSAP-follow cursor; scales on [data-cursor-hover] targets.
  */
 export function CustomCursor() {
+  const location = useLocation();
+  const isAbout = location.pathname === '/about';
   const dotRef = useRef<HTMLDivElement>(null);
   const xTo = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
   const yTo = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
@@ -64,7 +67,7 @@ export function CustomCursor() {
         marginLeft: -CURSOR_SIZE / 2,
         marginTop: -CURSOR_SIZE / 2,
         borderRadius: '50%',
-        background: '#0a0a0a',
+        background: isAbout ? '#ffffff' : '#0a0a0a',
         willChange: 'transform',
       }}
       aria-hidden

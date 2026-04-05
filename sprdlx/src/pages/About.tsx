@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import ParticleHands from '../components/Canvas/ParticleHands';
+import EarthquakeParticleHero from '../components/Canvas/EarthquakeParticleHero';
 
 export default function About() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function About() {
         className="relative z-0 flex min-h-screen min-h-[100dvh] h-screen w-full flex-col justify-between overflow-x-hidden overflow-y-visible bg-black"
       >
         <div className="absolute inset-0 z-0">
-          <ParticleHands />
+          <EarthquakeParticleHero />
         </div>
 
         <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-between pointer-events-none">

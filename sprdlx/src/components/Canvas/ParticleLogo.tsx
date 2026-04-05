@@ -94,7 +94,7 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
         duration: 3.0,
         ease: 'power3.out',
       });
-      return () => tw.kill();
+      return () => { tw.kill(); };
     }
 
     gsap.set(uniforms.uProgress, { value: 0.02 });
@@ -103,7 +103,7 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
       duration: 2.8,
       ease: 'power3.inOut',
     });
-    return () => tw.kill();
+    return () => { tw.kill(); };
   }, [geometry, particleData, uniforms, fromAbout]);
 
   useEffect(() => {

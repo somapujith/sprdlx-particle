@@ -36,13 +36,13 @@ export default function App() {
 
   return (
     <>
-      <CustomCursor />
       <AnimatePresence mode="wait">
         {isLoading && (
           <LoadingScreen key="app-loader" onComplete={() => setIsLoading(false)} />
         )}
       </AnimatePresence>
       <Router>
+        <CustomCursor />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
