@@ -54,6 +54,8 @@ export default function About() {
   const textContainerRef = useRef<HTMLHeadingElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroTaglineRef = useRef<HTMLParagraphElement>(null);
+  const bottomWrapperRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -104,6 +106,21 @@ export default function About() {
             },
           }
         );
+      }
+
+      // Butter-Smooth Background Color Blend Transition
+      if (bottomWrapperRef.current && footerRef.current) {
+        gsap.to(bottomWrapperRef.current, {
+          backgroundColor: '#ffffff',
+          color: '#000000',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: 'top bottom', // Start blending when Footer just enters the viewport
+            end: 'top center',   // Finish blending when Footer reaches the center of the viewport
+            scrub: true,
+          }
+        });
       }
     });
 
@@ -341,18 +358,91 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── Footer ────────────────────────────────────────────────────────────────── */}
-      <footer
-        id="about-footer"
-        className="relative z-10 border-t border-white/10 bg-black px-8 py-16 md:px-12 md:py-20"
-      >
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-8 md:flex-row md:items-start">
-          <span className="font-serif text-2xl tracking-tight">SPRDLX.</span>
-          <p className="text-center text-sm text-white/50 md:text-right">
-            © {new Date().getFullYear()} SPRDLX. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      {/* ── Blended Bottom Section ────────────────────────────────────────────────── */}
+      <div ref={bottomWrapperRef} className="relative z-10 w-full bg-black text-white">
+
+        {/* ── CTA Section ───────────────────────────────────────────────────────────── */}
+        <section className="relative w-full min-h-[90vh] px-6 flex flex-col items-center justify-center text-center border-t border-white/5">
+          <div className="flex flex-col items-center w-full max-w-4xl">
+            {/* Header block */}
+            <div className="flex flex-col items-center md:items-start mb-14 md:mb-16">
+              <h2 className="font-serif text-[clamp(2.5rem,7vw,5.5rem)] font-extralight tracking-tight m-0 text-center md:text-left">
+                Let's work together
+              </h2>
+            </div>
+
+            {/* Subtitle */}
+            <p className="font-sans text-lg md:text-[22px] font-light opacity-90 mb-14 tracking-wide max-w-2xl leading-relaxed">
+              I'm here to help you make your next big idea a reality. Contact me now.
+            </p>
+
+            {/* Button */}
+            <button className="group flex items-center justify-center gap-3 rounded-[32px] border border-current px-8 py-3.5 hover:opacity-60">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#A5DCA3]"></span>
+              <span className="font-sans text-sm md:text-[15px] font-normal tracking-wide">Connect With Me</span>
+            </button>
+          </div>
+        </section>
+
+        {/* ── Elaborate Minimal Footer ──────────────────────────────────────────────────────── */}
+        <footer ref={footerRef} className="relative w-full px-6 py-12 md:px-16 md:py-20 lg:pt-32 lg:pb-16 text-left">
+          <div className="mx-auto max-w-[1500px] flex flex-col h-full">
+
+            {/* Top Row */}
+            <div className="flex justify-between items-start mb-24 md:mb-40">
+              <h3 className="font-serif text-3xl md:text-5xl font-extralight tracking-tight max-w-[15ch]">
+                Creative & Digital Experiences
+              </h3>
+              <div className="w-12 h-12 md:w-16 md:h-16 border border-current flex items-center justify-center text-lg md:text-2xl font-serif">
+                S.
+              </div>
+            </div>
+
+            {/* Middle Row */}
+            <div className="flex justify-between items-end mb-20 md:mb-32">
+              <div className="flex gap-16 md:gap-32 font-sans text-lg md:text-[20px] font-light tracking-wide">
+                <ul className="flex flex-col gap-5">
+                  <li><a href="#" className="hover:opacity-50 transition-opacity">Twitter/X</a></li>
+                  <li><a href="#" className="hover:opacity-50 transition-opacity">Linkedin</a></li>
+                  <li><a href="#" className="hover:opacity-50 transition-opacity">Github</a></li>
+                  <li><a href="#" className="hover:opacity-50 transition-opacity">Email</a></li>
+                </ul>
+                <ul className="flex flex-col gap-5">
+                  <li><a href="#" className="hover:opacity-50 transition-opacity">Home</a></li>
+                  <li><a href="#" className="hover:opacity-50 transition-opacity">Work</a></li>
+                  <li><a href="#" className="hover:opacity-50 transition-opacity">Contact</a></li>
+                </ul>
+              </div>
+              
+              {/* Back to Top Arrow */}
+              <button 
+                onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
+                className="group pb-4 cursor-pointer"
+                aria-label="Back to top"
+              >
+                <svg 
+                  width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                  strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
+                  className="transition-transform duration-500 group-hover:-translate-y-3 md:w-[64px] md:h-[64px]"
+                >
+                  <path d="M12 21V3M5 10l7-7 7 7"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* Bottom Row */}
+            <div className="flex flex-col md:flex-row justify-between items-end gap-6 mt-16 pb-4">
+              <span className="font-serif text-4xl md:text-5xl font-medium tracking-tight">
+                SPRDLX.
+              </span>
+              <span className="font-serif text-xs md:text-[14px] tracking-wide opacity-80 pb-1">
+                ©{new Date().getFullYear()} Somapujith. Creative Developer
+              </span>
+            </div>
+
+          </div>
+        </footer>
+      </div>
     </motion.div>
   );
 }
