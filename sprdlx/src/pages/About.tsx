@@ -1,11 +1,79 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { Canvas } from '@react-three/fiber';
+import { Environment, ContactShadows, useTexture, Float, PresentationControls } from '@react-three/drei';
+import * as THREE from 'three';
+import { SRGBColorSpace } from 'three';
 import EarthquakeParticleHero from '../components/Canvas/EarthquakeParticleHero';
+import MacbookModel from '../components/Canvas/MacbookModel';
 
+// ─── Floating & Interactive MacBook ──────────────────────────────────────────────
+function FloatingInteractiveMacbook({
+  textureUrl,
+  scale,
+  position,
+}: {
+  textureUrl: string;
+  scale: number;
+  position: [number, number, number];
+}) {
+  const texture = useTexture(textureUrl) as THREE.Texture;
+
+  useEffect(() => {
+    texture.colorSpace = SRGBColorSpace;
+    texture.needsUpdate = true;
+  }, [texture]);
+
+  return (
+    <PresentationControls
+      global={false}
+      cursor={true}
+      snap={true}
+      speed={1.5}
+      zoom={1}
+      rotation={[0.1, 0.2, 0]}
+      polar={[-Math.PI / 5, Math.PI / 5]}
+      azimuth={[-Math.PI / 3, Math.PI / 3]}
+    >
+      <Float rotationIntensity={0.6} floatIntensity={1.5} speed={2.5}>
+        <MacbookModel texture={texture} position={position} scale={scale} />
+      </Float>
+    </PresentationControls>
+  );
+}
+
+// ─── Main component ────────────────────────────────────────────────────────────
 export default function About() {
   const navigate = useNavigate();
   const [isExiting, setIsExiting] = useState(false);
+
+  const workItems = useMemo(
+    () => [
+      {
+        title: 'PROTECIA SKINCARE',
+        category: 'Ecommerce',
+        year: '2022',
+        textureUrl:
+          'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2000&auto=format&fit=crop',
+      },
+      {
+        title: 'SPRDLX STUDIO',
+        category: 'Web Experience',
+        year: '2024',
+        textureUrl:
+          'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=2000&auto=format&fit=crop',
+      },
+      {
+        title: 'INTELLIGENT SYSTEMS',
+        category: 'Product',
+        year: '2025',
+        textureUrl:
+          'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000&auto=format&fit=crop',
+      },
+    ],
+    [],
+  );
 
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -15,13 +83,15 @@ export default function About() {
     }, 800);
   };
 
+  const activeItem = workItems[0]; // Statically show the first project
+
   return (
     <motion.div
       animate={{ opacity: isExiting ? 0 : 1, filter: isExiting ? 'blur(10px)' : 'blur(0px)' }}
       transition={{ duration: 0.8, ease: 'easeInOut' }}
       className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden"
     >
-      {/* Hero — full-bleed WebGL rose (reference layout) */}
+      {/* ── Hero ───────────────────────────────────────────────────────────────── */}
       <section
         id="about-hero"
         aria-label="Hero"
@@ -65,7 +135,6 @@ export default function About() {
             <div className="-mt-1 h-32 w-px bg-white/25" />
           </motion.div>
 
-          {/* Bottom typography — thin sans headline, subtitle right (reference) */}
           <div className="relative w-full flex flex-col items-center px-6 pb-10 pt-8 md:px-12 md:pb-14">
             <motion.div
               initial={{ opacity: 0 }}
@@ -73,8 +142,8 @@ export default function About() {
               transition={{ duration: 1, delay: 0.9 }}
               className="mb-3 w-full max-w-6xl md:mb-4"
             >
-              <p 
-                className="text-right text-base font-light tracking-wide text-white/90 md:text-2xl" 
+              <p
+                className="text-right text-base font-light tracking-wide text-white/90 md:text-2xl"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Innovation In Every Pixel
@@ -94,7 +163,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Company Info Section */}
+      {/* ── Company Info ────────────────────────────────────────────────────────── */}
       <section
         id="about-data"
         aria-label="About"
@@ -111,9 +180,9 @@ export default function About() {
           </div>
           <div className="w-full md:w-2/5 lg:w-1/3">
             <div className="aspect-[3/4] w-full overflow-hidden rounded-md bg-zinc-900 object-cover grayscale transition-all duration-700 hover:grayscale-0 ring-1 ring-white/10">
-              <img 
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" 
-                alt="SPRDLX Digital Solutions" 
+              <img
+                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
+                alt="SPRDLX Digital Solutions"
                 className="h-full w-full object-cover transition-transform duration-[2s] hover:scale-105"
               />
             </div>
@@ -121,46 +190,85 @@ export default function About() {
         </div>
       </section>
 
-      {/* Recent Work Section */}
+      {/* ── Recent Work — static showcase ────────────────────────────────────────── */}
       <section
         id="recent-work"
         aria-label="Recent Work"
-        className="relative z-10 bg-black px-8 py-10 pb-20 md:px-12 md:pb-32"
+        className="relative z-10 flex h-screen w-full flex-col bg-black overflow-hidden"
       >
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10 flex items-center justify-between border-b border-white/20 pb-6 md:mb-16">
-            <h3 className="font-sans text-sm font-semibold uppercase tracking-[0.2em] text-white/70 md:text-base">
-              Recent Work <span className="opacity-50">(01)</span>
-            </h3>
+        {/* ── Top bar ── */}
+        <div className="flex items-center justify-between border-b border-white/10 px-8 py-5 md:px-12">
+          <h3 className="font-sans text-sm font-semibold uppercase tracking-[0.25em] text-white/60 md:text-base">
+            Recent Work
+          </h3>
+        </div>
+
+        {/* ── Main content — title + macbook ── */}
+        <div className="relative flex flex-1 flex-col overflow-hidden">
+          {/* Project title + meta */}
+          <div className="relative z-20 flex items-end justify-between px-8 pt-8 pb-4 md:px-12 md:pt-10">
+            <h4
+              className="font-sans text-[clamp(2rem,6vw,5.5rem)] font-extralight tracking-tighter text-white leading-none"
+            >
+              {activeItem?.title}
+            </h4>
+
+            <div className="flex flex-col items-end gap-1 text-right font-sans text-xs uppercase tracking-widest text-white/40 md:text-sm">
+              <span>
+                {activeItem?.category}
+              </span>
+              <span>
+                {activeItem?.year}
+              </span>
+            </div>
           </div>
-          
-          <div className="group relative block cursor-pointer">
-             <div className="mb-8 flex flex-col items-start justify-between text-white md:flex-row md:items-end">
-                <h4 className="font-sans text-5xl font-extralight tracking-tighter transition-all duration-500 group-hover:italic md:text-7xl lg:text-[6rem]">
-                  PROTECIA SKINCARE
-                </h4>
-                <div className="mt-4 flex gap-6 font-sans text-sm font-light tracking-widest text-white/50 md:mt-0 md:text-base uppercase">
-                  <span>Ecommerce</span>
-                  <span>2022</span>
-                </div>
-             </div>
-             
-             {/* 3D Laptop Placeholder / Showcase Image */}
-             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-zinc-900/50 flex items-center justify-center ring-1 ring-white/10">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 pointer-events-none" />
-                <img 
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2000&auto=format&fit=crop" 
-                  alt="Protecia Skincare Case Study Showcase" 
-                  className="h-full w-full object-cover opacity-70 transition-all duration-1000 group-hover:scale-105 group-hover:opacity-100"
-                />
-                <div className="absolute bottom-8 left-8 z-20 overflow-hidden rounded-full bg-white/10 px-6 py-2 backdrop-blur-md transition-all group-hover:bg-white/20">
-                  <span className="font-sans text-sm font-medium tracking-wide text-white">View Project</span>
-                </div>
-             </div>
+
+          {/* MacBook 3-D canvas — full-bleed */}
+          <div className="relative flex-1 w-full overflow-visible">
+            {/* top fade */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-black to-transparent" />
+            {/* bottom fade */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-black to-transparent" />
+
+            <Canvas
+              camera={{ position: [0, 0, 7.5], fov: 45 }}
+              gl={{ alpha: true, antialias: true }}
+              style={{ width: '100%', height: '100%', background: 'transparent' }}
+              onCreated={({ gl }) => {
+                gl.setClearColor(0x000000, 0);
+              }}
+            >
+              <ambientLight intensity={0.7} />
+              <Environment preset="city" />
+
+              <FloatingInteractiveMacbook
+                textureUrl={activeItem?.textureUrl ?? ''}
+                position={[0, -0.7, 0]}
+                scale={0.19}
+              />
+
+              <ContactShadows
+                position={[0, -1.05, 0]}
+                opacity={0.4}
+                scale={28}
+                blur={2.5}
+                far={5}
+              />
+            </Canvas>
+          </div>
+
+          {/* View project pill */}
+          <div className="absolute bottom-5 left-8 z-20 md:bottom-7 md:left-12">
+            <div className="overflow-hidden rounded-full bg-white/8 px-5 py-2 backdrop-blur-md ring-1 ring-white/15 transition-all hover:bg-white/15">
+              <span className="font-sans text-sm font-medium tracking-wide text-white">
+                View Project
+              </span>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* ── Footer ────────────────────────────────────────────────────────────────── */}
       <footer
         id="about-footer"
         className="relative z-10 border-t border-white/10 bg-black px-8 py-16 md:px-12 md:py-20"
