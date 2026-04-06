@@ -51,11 +51,10 @@ export default function About() {
   const workItems = useMemo(
     () => [
       {
-        title: 'PROTECIA SKINCARE',
-        category: 'Ecommerce',
-        year: '2022',
-        textureUrl:
-          'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2000&auto=format&fit=crop',
+        title: 'Anthill Ventures',
+        category: 'Next-Gen Technology',
+        year: '2026',
+        textureUrl: '/anthill-rocket.png',
       },
       {
         title: 'SPRDLX STUDIO',

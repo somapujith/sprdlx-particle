@@ -54,7 +54,7 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
       const tempMesh = new THREE.Mesh(mergedGeo, new THREE.MeshBasicMaterial());
       const sampler = new MeshSurfaceSampler(tempMesh).build();
       
-      const particleCount = 80000;
+      const particleCount = 50000;
       const positions = new Float32Array(particleCount * 3);
       const normals = new Float32Array(particleCount * 3);
       const randoms = new Float32Array(particleCount);
@@ -354,7 +354,7 @@ export default function ParticleLogo({ isSolid, isBlasting = false, fromAbout = 
   const [controlsEnabled, setControlsEnabled] = useState(false);
 
   return (
-    <Canvas className="h-full w-full touch-none" camera={{ position: [0, 10, 0.1], fov: 45 }} dpr={[1, 2]}>
+    <Canvas className="h-full w-full touch-none" camera={{ position: [0, 10, 0.1], fov: 45 }} dpr={[1, 1.5]}>
       <Suspense fallback={null}>
         <CameraAnimation setControlsEnabled={setControlsEnabled} fromAbout={fromAbout} />
         <color attach="background" args={['#dcdcdc']} />

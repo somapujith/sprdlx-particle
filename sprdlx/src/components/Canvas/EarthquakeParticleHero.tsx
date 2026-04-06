@@ -279,7 +279,7 @@ function EarthquakeParticles() {
     const posAttribute = merged.getAttribute('position');
     const colorAttr = merged.getAttribute('color');
 
-    const MAX_POINTS = 150000;
+    const MAX_POINTS = 80000;
 
     const points: number[] = [];
     const colors: number[] = [];
@@ -627,7 +627,7 @@ export default function EarthquakeParticleHero() {
   return (
     <Canvas
       camera={{ position: [0, 0, 7.5], fov: 60 }}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}
     >
       <color attach="background" args={['#000000']} />
@@ -636,7 +636,7 @@ export default function EarthquakeParticleHero() {
         <EarthquakeParticles />
       </Suspense>
       <Effects disableGamma>
-        <unrealBloomPass args={[new THREE.Vector2(256, 256), 0.5, 0.8, 0.3]} />
+        <unrealBloomPass args={[new THREE.Vector2(128, 128), 0.4, 0.8, 0.35]} />
       </Effects>
     </Canvas>
   );
