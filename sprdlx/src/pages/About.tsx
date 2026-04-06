@@ -11,6 +11,8 @@ import * as THREE from 'three';
 import { SRGBColorSpace } from 'three';
 import EarthquakeParticleHero from '../components/Canvas/EarthquakeParticleHero';
 import MacbookModel from '../components/Canvas/MacbookModel';
+import sprdlxTextLogo from '../../sprdlx.svg';
+
 // ─── Floating & Interactive MacBook ──────────────────────────────────────────────
 function FloatingInteractiveMacbook({
   textureUrl,
@@ -389,7 +391,7 @@ export default function About() {
 
             {/* Top Row */}
             <div className="flex justify-between items-start mb-24 md:mb-40">
-              <h3 className="font-serif text-3xl md:text-5xl font-extralight tracking-tight max-w-[25ch] leading-[1.15]">
+              <h3 className="font-sf text-3xl md:text-5xl font-extralight tracking-tight max-w-[25ch] leading-[1.15]">
                 Power AI-driven Innovation<br />
                 Build Intelligent Futures.
               </h3>
@@ -434,11 +436,14 @@ export default function About() {
 
             {/* Bottom Row */}
             <div className="flex flex-col md:flex-row justify-between items-end gap-6 mt-16 pb-4">
-              <span className="font-serif text-4xl md:text-5xl font-medium tracking-tight">
-                SPRDLX.
-              </span>
+              <img 
+                src={sprdlxTextLogo} 
+                alt="SPRDLX." 
+                className="h-10 md:h-12 w-auto object-contain" 
+                style={{ filter: 'invert(1)' }}
+              />
               <span className="font-serif text-xs md:text-[14px] tracking-wide opacity-80 pb-1">
-                ©{new Date().getFullYear()} Somapujith. Creative Developer
+                ©{new Date().getFullYear()} SPRDLX.
               </span>
             </div>
 
