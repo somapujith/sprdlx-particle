@@ -67,7 +67,8 @@ export function CustomCursor() {
         marginLeft: -CURSOR_SIZE / 2,
         marginTop: -CURSOR_SIZE / 2,
         borderRadius: '50%',
-        background: isAbout ? '#ffffff' : '#0a0a0a',
+        background: '#ffffff', // Always white so it works optimally with difference blending
+        mixBlendMode: 'difference', // Mathematically guarantees perfect optical contrast everywhere
         willChange: 'transform',
       }}
       aria-hidden

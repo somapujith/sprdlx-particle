@@ -11,7 +11,6 @@ import * as THREE from 'three';
 import { SRGBColorSpace } from 'three';
 import EarthquakeParticleHero from '../components/Canvas/EarthquakeParticleHero';
 import MacbookModel from '../components/Canvas/MacbookModel';
-
 // ─── Floating & Interactive MacBook ──────────────────────────────────────────────
 function FloatingInteractiveMacbook({
   textureUrl,
@@ -317,7 +316,7 @@ export default function About() {
               dpr={[1, 1.5]}
               gl={{ 
                 alpha: true, 
-                antialias: false,
+                antialias: true, // MSAA enabled for crisp edges
                 powerPreference: 'high-performance',
                 stencil: false,
                 depth: true
@@ -390,12 +389,15 @@ export default function About() {
 
             {/* Top Row */}
             <div className="flex justify-between items-start mb-24 md:mb-40">
-              <h3 className="font-serif text-3xl md:text-5xl font-extralight tracking-tight max-w-[15ch]">
-                Creative & Digital Experiences
+              <h3 className="font-serif text-3xl md:text-5xl font-extralight tracking-tight max-w-[25ch] leading-[1.15]">
+                Power AI-driven Innovation<br />
+                Build Intelligent Futures.
               </h3>
-              <div className="w-12 h-12 md:w-16 md:h-16 border border-current flex items-center justify-center text-lg md:text-2xl font-serif">
-                S.
-              </div>
+              <img 
+                src="/favicon.svg" 
+                alt="SPRDLX Logo" 
+                className="w-12 h-12 md:w-16 md:h-16 object-contain brightness-0"
+              />
             </div>
 
             {/* Middle Row */}
