@@ -279,7 +279,8 @@ function EarthquakeParticles() {
     const posAttribute = merged.getAttribute('position');
     const colorAttr = merged.getAttribute('color');
 
-    const MAX_POINTS = 80000;
+    // Optimization: Reduced to 20k since points are now much larger and highly visible
+    const MAX_POINTS = 20000;
 
     const points: number[] = [];
     const colors: number[] = [];
@@ -573,11 +574,11 @@ function EarthquakeParticles() {
               // Chromatic shift varies by depth and randomness
               vChromaticShift = (depthParallax + aRandom * 0.3) * uChromaticAberration;
               
-              float baseSize = mix(0.4, 1.2, aRandom);
-              float hotSizeMultiplier = 1.0 + (isHot * 1.5 * pulse);
-              gl_PointSize = baseSize * hotSizeMultiplier * (5.0 / -mvPosition.z);
+              float baseSize = mix(1.0, 3.0, aRandom);
+              float hotSizeMultiplier = 1.0 + (isHot * 2.0 * pulse);
+              gl_PointSize = baseSize * hotSizeMultiplier * (15.0 / -mvPosition.z);
               
-              vAlpha = mix(0.1 + aRandom * 0.18, 0.35 + pulse * 0.35, isHot);
+              vAlpha = mix(0.3 + aRandom * 0.4, 0.7 + pulse * 0.3, isHot);
               if (d < 2.0 && uHoverState > 0.01) {
                  float force = smoothstep(2.0, 0.0, d) * uHoverState;
                  vAlpha += force * 0.5;
@@ -611,14 +612,12 @@ function EarthquakeParticles() {
                 aberratedColor = vec3(r, g, b);
               }
               
-              gl_FragColor = vec4(aberratedColor * (soft + core * 0.5), soft * vAlpha);
+              gl_FragColor = vec4(aberratedColor * 1.5, soft * vAlpha * 1.5);
             }
           `}
         />
       </points>
 
-      {/* ENHANCEMENT 2: Dynamic linking network */}
-      {particleData && <ParticleLinkingNetwork positions={particleData.positions} hots={particleData.hots} />}
     </group>
   );
 }
@@ -635,9 +634,6 @@ export default function EarthquakeParticleHero() {
       <Suspense fallback={null}>
         <EarthquakeParticles />
       </Suspense>
-      <Effects disableGamma>
-        <unrealBloomPass args={[new THREE.Vector2(128, 128), 0.4, 0.8, 0.35]} />
-      </Effects>
     </Canvas>
   );
 }
