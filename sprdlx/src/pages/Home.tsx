@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
 import gsap from 'gsap';
 import { useTranslation } from 'react-i18next';
 import { Volume2, VolumeX } from 'lucide-react';
@@ -7,6 +7,7 @@ import ParticleLogo from '../components/Canvas/ParticleLogo';
 import { MagneticLink } from '../components/ui/MagneticLink';
 
 export default function Home() {
+  useEffect(() => { document.title = 'SPRDLX — Creative Digital Studio'; }, []);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();

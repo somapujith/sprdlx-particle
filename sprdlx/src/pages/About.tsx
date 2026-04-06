@@ -54,6 +54,8 @@ export default function About() {
   const [isExiting, setIsExiting] = useState(false);
   const textContainerRef = useRef<HTMLHeadingElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => { document.title = 'About — SPRDLX'; }, []);
   const heroTaglineRef = useRef<HTMLParagraphElement>(null);
   const bottomWrapperRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
