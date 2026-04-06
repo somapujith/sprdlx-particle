@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 import { Canvas } from '@react-three/fiber';
 import { Environment, ContactShadows, useTexture, Float, PresentationControls } from '@react-three/drei';
 import * as THREE from 'three';
@@ -47,6 +51,64 @@ function FloatingInteractiveMacbook({
 export default function About() {
   const navigate = useNavigate();
   const [isExiting, setIsExiting] = useState(false);
+  const textContainerRef = useRef<HTMLHeadingElement>(null);
+  const heroTitleRef = useRef<HTMLHeadingElement>(null);
+  const heroTaglineRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Hero Title Reveal
+      if (heroTitleRef.current) {
+        const titleWords = heroTitleRef.current.querySelectorAll('.hero-reveal-word');
+        gsap.fromTo(
+          titleWords,
+          { y: '120%', opacity: 0, rotateZ: 2 },
+          {
+            y: '0%',
+            opacity: 1,
+            rotateZ: 0,
+            duration: 1.5,
+            delay: 0.5,
+            ease: 'power4.out',
+            stagger: 0.04,
+          }
+        );
+      }
+
+      // Hero Tagline Reveal
+      if (heroTaglineRef.current) {
+        gsap.fromTo(
+          heroTaglineRef.current,
+          { opacity: 0, x: -30 },
+          { opacity: 1, x: 0, duration: 1.5, delay: 1.2, ease: 'power3.out' }
+        );
+      }
+
+      // About Data Text Reveal (Scroll Triggered)
+      if (textContainerRef.current) {
+        const words = textContainerRef.current.querySelectorAll('.reveal-word');
+        gsap.fromTo(
+          words,
+          { y: '120%', opacity: 0, rotateZ: 3 },
+          {
+            y: '0%',
+            opacity: 1,
+            rotateZ: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+            stagger: 0.015,
+            scrollTrigger: {
+              trigger: textContainerRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+      }
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   const workItems = useMemo(
     () => [
@@ -135,29 +197,29 @@ export default function About() {
           </motion.div>
 
           <div className="relative w-full flex flex-col items-center px-6 pb-10 pt-8 md:px-12 md:pb-14">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.9 }}
-              className="mb-3 w-full max-w-6xl md:mb-4"
-            >
+            <div className="mb-3 w-full max-w-6xl md:mb-4">
               <p
+                ref={heroTaglineRef}
                 className="text-right text-base font-light tracking-wide text-white/90 md:text-2xl"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Innovation In Every Pixel
               </p>
-            </motion.div>
+            </div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 36 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.45 }}
-              className="w-full text-center text-[clamp(1.75rem,8.5vw,6.5rem)] font-light leading-[0.95] tracking-[-0.03em] text-white"
+            <h1
+              ref={heroTitleRef}
+              className="w-full text-center text-[clamp(1.75rem,8.5vw,6.5rem)] font-light leading-[0.95] tracking-[-0.03em] text-white flex flex-wrap justify-center overflow-hidden"
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
-              BUILDING YOUR DIGITAL VISION
-            </motion.h1>
+              {"BUILDING YOUR DIGITAL VISION".split(' ').map((word, idx) => (
+                <span key={idx} className="inline-block overflow-hidden mr-[0.25em] py-2 -my-2">
+                  <span className="hero-reveal-word inline-block origin-top-left translate-y-[120%] opacity-0">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </h1>
           </div>
         </div>
       </section>
@@ -170,8 +232,16 @@ export default function About() {
       >
         <div className="mx-auto flex max-w-7xl flex-col gap-16 md:flex-row md:items-center md:gap-24">
           <div className="flex-1 font-sans">
-            <h2 className="text-2xl font-light leading-snug tracking-tight text-white md:text-3xl md:leading-relaxed lg:text-4xl lg:leading-snug">
-              At SPRDLX, we are dedicated to delivering cutting-edge digital solutions that seamlessly blend creativity, technology, and precision. As a modern and forward-driven company, we specialize in transforming ideas into powerful digital experiences, ranging from high-performance websites to scalable applications and intelligent systems. Our journey is built on a strong foundation of innovation, collaboration, and attention to detail, allowing us to work closely with clients and designers to translate creative concepts into functional, user-centric realities. We believe in crafting solutions that are not only visually compelling but also efficient, reliable, and future-ready. With a deep commitment to quality and continuous growth, SPRDLX constantly evolves alongside the digital landscape, ensuring that every project we deliver meets the highest standards of excellence and impact.
+            <h2 ref={textContainerRef} className="text-2xl font-light leading-snug tracking-tight text-white md:text-3xl md:leading-relaxed lg:text-4xl lg:leading-snug flex flex-wrap">
+              {"At SPRDLX, we are dedicated to delivering cutting-edge digital solutions that seamlessly blend creativity, technology, and precision. As a modern and forward-driven company, we specialize in transforming ideas into powerful digital experiences, ranging from high-performance websites to scalable applications and intelligent systems. Our journey is built on a strong foundation of innovation, collaboration, and attention to detail, allowing us to work closely with clients and designers to translate creative concepts into functional, user-centric realities. We believe in crafting solutions that are not only visually compelling but also efficient, reliable, and future-ready. With a deep commitment to quality and continuous growth, SPRDLX constantly evolves alongside the digital landscape, ensuring that every project we deliver meets the highest standards of excellence and impact."
+                .split(' ')
+                .map((word, index) => (
+                  <span key={index} className="inline-block overflow-hidden pb-2 -mb-2 mr-[0.25em] align-top">
+                    <span className="reveal-word inline-block origin-top-left translate-y-[120%] opacity-0">
+                      {word}
+                    </span>
+                  </span>
+                ))}
             </h2>
             <p className="mt-10 text-lg font-light text-white/50 md:mt-12 md:text-2xl hover:text-white/80 transition-colors cursor-default">
               SPRDLX — Where Ideas Evolve into Intelligent Digital Realities.
@@ -222,16 +292,19 @@ export default function About() {
             </div>
           </div>
 
-          {/* MacBook 3-D canvas — full-bleed */}
-          <div className="relative flex-1 w-full overflow-visible">
-            {/* top fade */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-black to-transparent" />
-            {/* bottom fade */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-black to-transparent" />
+            {/* MacBook 3-D canvas — full-bleed */}
+            <div className="relative flex-1 w-full overflow-visible">
 
             <Canvas
               camera={{ position: [0, 0, 7.5], fov: 45 }}
-              gl={{ alpha: true, antialias: true }}
+              dpr={[1, 1.5]}
+              gl={{ 
+                alpha: true, 
+                antialias: false,
+                powerPreference: 'high-performance',
+                stencil: false,
+                depth: true
+              }}
               style={{ width: '100%', height: '100%', background: 'transparent' }}
               onCreated={({ gl }) => {
                 gl.setClearColor(0x000000, 0);
@@ -247,11 +320,12 @@ export default function About() {
               />
 
               <ContactShadows
-                position={[0, -1.05, 0]}
-                opacity={0.4}
+                position={[0, -1.8, 0]}
+                opacity={0.6}
                 scale={28}
-                blur={2.5}
+                blur={2.4}
                 far={5}
+                resolution={256}
               />
             </Canvas>
           </div>

@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import LoadingScreen from './components/LoadingScreen';
 import { CustomCursor } from './components/ui/CustomCursor';
+import ScrollToTop from './components/ScrollToTop';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -47,6 +48,7 @@ export default function App() {
         )}
       </AnimatePresence>
       <Router>
+        <ScrollToTop />
         <CustomCursor />
         <Routes>
           <Route path="/" element={<Home />} />
