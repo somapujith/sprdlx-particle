@@ -52,11 +52,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
       transition={{ duration: FADE_MS / 1000, ease: FADE_EASE }}
       style={{ willChange: 'opacity' }}
     >
-      {/* Reference: large black circle — bottom-right, partially off-canvas */}
-      <div
-        className="pointer-events-none absolute -bottom-24 -right-24 h-[22rem] w-[22rem] rounded-full bg-black md:-bottom-28 md:-right-28 md:h-[26rem] md:w-[26rem]"
-        aria-hidden
-      />
+
 
       <motion.div
         className="relative z-10 flex max-w-[90vw] flex-col items-center px-6 text-center font-serif"
@@ -77,7 +73,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
       </motion.div>
 
       <motion.p
-        className="font-serif absolute bottom-[clamp(5rem,12vh,8rem)] text-[clamp(1.125rem,2.5vw,1.75rem)] font-light tabular-nums tracking-[0.35em] text-neutral-400"
+        className="font-sf absolute bottom-[clamp(5rem,12vh,8rem)] text-[clamp(1.125rem,2.5vw,1.75rem)] font-extralight tabular-nums tracking-[0.35em] text-neutral-400"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.95 }}
         transition={{ delay: 0.15, duration: 0.6, ease: FADE_EASE }}
