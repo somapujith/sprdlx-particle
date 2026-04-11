@@ -79,32 +79,11 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
     uTime: { value: 0 },
     uColor: { value: new THREE.Color('#1a1a1a') },
     uIsSolid: { value: isSolid ? 1 : 0 },
-    uProgress: { value: fromAbout ? 1 : 0 },
+    uProgress: { value: 1.0 },
     uMouse: { value: new THREE.Vector3(9999, 9999, 9999) },
     uBlast: { value: 0 },
-    uImplode: { value: fromAbout ? 1 : 0 }
-  }), [isSolid, fromAbout]);
-
-  useEffect(() => {
-    if (!geometry || !particleData) return undefined;
-
-    if (fromAbout) {
-      const tw = gsap.to(uniforms.uImplode, {
-        value: 0,
-        duration: 3.0,
-        ease: 'power3.out',
-      });
-      return () => { tw.kill(); };
-    }
-
-    gsap.set(uniforms.uProgress, { value: 0.02 });
-    const tw = gsap.to(uniforms.uProgress, {
-      value: 1,
-      duration: 2.8,
-      ease: 'power3.inOut',
-    });
-    return () => { tw.kill(); };
-  }, [geometry, particleData, uniforms, fromAbout]);
+    uImplode: { value: 0.0 }
+  }), [isSolid]);
 
   useEffect(() => {
     if (isBlasting) {

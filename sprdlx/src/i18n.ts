@@ -11,7 +11,7 @@ const resources = {
       },
       "hero": {
         "line1": "Digital experiences",
-        "line2": "Est. 2026"
+        "line2": "Est. 2025"
       },
       "ui": {
         "sound_on": "SOUND: ON",

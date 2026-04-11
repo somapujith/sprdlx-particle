@@ -7,7 +7,7 @@
 
 ## 1. What Is This Project?
 
-**SPRDLX** is an **Awwwards-caliber creative studio portfolio website** for a digital agency called "SPRDLX" (Super Delux). It showcases the studio's identity, capabilities, and recent work through immersive 3D visuals, particle effects, cinematic animations, and premium typography.
+**SPRDLX** is an **Awwwards-caliber AI venture studio portfolio website** for a digital agency called "SPRDLX" (Super Delux). It showcases the studio's identity, capabilities, and recent work through immersive 3D visuals, particle effects, cinematic animations, and premium typography.
 
 The site was originally scaffolded via **Google AI Studio** (App ID: `9dc67a42-21fa-433e-99cb-9d841412010a`) but has been heavily customized.
 
@@ -99,7 +99,7 @@ sprdlx/
 
 ### 4.1 Loading Screen
 - Shows on initial visit (`App.tsx` → `isLoading` state).
-- Displays "SPRDLX | Creative Studio ✶" with a percentage counter (0→100 over 3.2s).
+- Displays "SPRDLX | AI Venture Studio ✶" with a percentage counter (0→100 over 3.2s).
 - White background with large decorative black circle.
 - Fades out via Framer Motion `AnimatePresence`.
 

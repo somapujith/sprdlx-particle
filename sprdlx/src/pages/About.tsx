@@ -12,6 +12,7 @@ import { SRGBColorSpace } from 'three';
 import EarthquakeParticleHero from '../components/Canvas/EarthquakeParticleHero';
 import MacbookModel from '../components/Canvas/MacbookModel';
 import sprdlxTextLogo from '../../sprdlx.svg';
+import sprdlxMarkLogo from '../../favicon.svg';
 
 // ─── Floating & Interactive MacBook ──────────────────────────────────────────────
 function FloatingInteractiveMacbook({
@@ -398,8 +399,12 @@ export default function About() {
                 Build Intelligent Futures.
               </h3>
               <img 
-                src="/favicon.svg" 
+                src={sprdlxMarkLogo}
                 alt="SPRDLX Logo" 
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = sprdlxTextLogo;
+                }}
                 className="w-12 h-12 md:w-16 md:h-16 object-contain brightness-0"
               />
             </div>

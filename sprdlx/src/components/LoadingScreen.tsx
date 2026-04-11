@@ -65,7 +65,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
           <span className="select-none font-light text-neutral-300" aria-hidden>
             |
           </span>
-          <span className="font-normal text-neutral-500">Creative Studio</span>
+          <span className="font-normal text-neutral-500">AI Venture Studio</span>
           <span className="ml-0.5 font-light text-neutral-800 md:ml-1" aria-hidden>
             ✶
           </span>
