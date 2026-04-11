@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import sprdlxTextLogo from '../../sprdlx.svg';
 
 /** Lewis-style spaced digits: e.g. 71 → "0 7 1", 100 → "1 0 0" */
 function formatSpacedPercent(progress: number): string {
@@ -60,8 +61,8 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.85, ease: FADE_EASE }}
       >
-        <h1 className="flex flex-wrap items-baseline justify-center gap-x-3 gap-y-1 text-[clamp(1.25rem,4vw,2.75rem)] leading-tight">
-          <span className="font-semibold tracking-tight">SPRDLX</span>
+        <h1 className="flex flex-wrap items-center justify-center gap-x-4 md:gap-x-6 gap-y-2 text-[clamp(1.25rem,4vw,2.75rem)] leading-tight">
+          <img src={sprdlxTextLogo} alt="SPRDLX" className="h-10 md:h-16 lg:h-20 w-auto object-contain" />
           <span className="select-none font-light text-neutral-300" aria-hidden>
             |
           </span>
