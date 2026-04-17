@@ -13,24 +13,33 @@ export default function Home() {
   const handleAboutClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
 
-    // Crazy transition: scale + rotate + blur out
-    gsap.to('body', {
-      background: '#0a0a0a',
-      duration: 0.6,
+    // Smooth fade-blur blend transition
+    const splineContainer = document.querySelector('.absolute.inset-0.z-0');
+    const uiOverlay = document.querySelector('[data-home-reveal]')?.parentElement;
+
+    gsap.to(splineContainer, {
+      opacity: 0,
+      filter: 'blur(10px)',
+      duration: 0.9,
+      ease: 'power2.inOut',
     });
 
-    gsap.to(document.querySelector('.absolute.inset-0.z-0'), {
+    gsap.to(uiOverlay, {
       opacity: 0,
-      scale: 0.5,
-      rotation: 360,
-      duration: 0.8,
-      ease: 'back.in',
+      duration: 0.7,
+      ease: 'power2.inOut',
+    });
+
+    gsap.to('body', {
+      backgroundColor: '#0a0a0a',
+      duration: 0.9,
+      ease: 'power2.inOut',
     });
 
     (window as any).lenisInstance?.stop();
     setTimeout(() => {
       navigate('/about', { state: { fromAbout: true } });
-    }, 800);
+    }, 900);
   };
 
 
