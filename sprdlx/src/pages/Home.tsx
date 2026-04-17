@@ -56,7 +56,7 @@ export default function Home() {
     <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[#0a0a0a] font-sans text-[#f0f0f0] pointer-coarse:cursor-auto">
       <AsciiCanvas active={showAscii} />
       <div className="absolute inset-0 z-0 min-h-full min-w-full">
-        <SplineHero sceneUrl="https://prod.spline.design/YOUR_SCENE_ID/scene.splinecode" />
+        <SplineHero sceneUrl="https://prod.spline.design/3-lMEnYXiIUpQC2s/scene.splinecode" />
         {/* Film grain (replaces fragile WebGL post-processing stack) */}
         <div
           className="pointer-events-none absolute inset-0 z-[1] opacity-[0.07] mix-blend-overlay"
