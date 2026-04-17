@@ -23,7 +23,6 @@ export default function Home() {
 
   const handleAboutClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    setIsBlasting(true);
     (window as any).lenisInstance?.stop();
     setTimeout(() => {
       navigate('/about');
