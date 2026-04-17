@@ -48,7 +48,7 @@ function FloatingInteractiveMacbook({
 }
 
 // ─── Main component ────────────────────────────────────────────────────────────
-export default function About() {
+function About() {
   const navigate = useNavigate();
   const [isExiting, setIsExiting] = useState(false);
   const textContainerRef = useRef<HTMLHeadingElement>(null);
@@ -446,3 +446,5 @@ export default function About() {
     </motion.div>
   );
 }
+
+export default About;
