@@ -77,7 +77,7 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
 
   const uniforms = useMemo(() => ({
     uTime: { value: 0 },
-    uColor: { value: new THREE.Color('#1a1a1a') },
+    uColor: { value: new THREE.Color('#f0f0f0') },
     uIsSolid: { value: isSolid ? 1 : 0 },
     uProgress: { value: 1.0 },
     uMouse: { value: new THREE.Vector3(9999, 9999, 9999) },
@@ -271,8 +271,8 @@ function Particles({ isSolid, isBlasting, fromAbout }: { isSolid: boolean, isBla
 
       {isSolid && (
         <mesh ref={solidMeshRef} geometry={geometry}>
-          <meshStandardMaterial 
-            color="#1a1a1a" 
+          <meshStandardMaterial
+            color="#f0f0f0" 
             roughness={0.2} 
             metalness={0.8} 
             envMapIntensity={1}
@@ -336,7 +336,7 @@ export default function ParticleLogo({ isSolid, isBlasting = false, fromAbout = 
     <Canvas className="h-full w-full touch-none" camera={{ position: [0, 10, 0.1], fov: 45 }} dpr={[1, 1.5]}>
       <Suspense fallback={null}>
         <CameraAnimation setControlsEnabled={setControlsEnabled} fromAbout={fromAbout} />
-        <color attach="background" args={['#dcdcdc']} />
+        <color attach="background" args={['#0a0a0a']} />
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
         <Environment preset="city" />

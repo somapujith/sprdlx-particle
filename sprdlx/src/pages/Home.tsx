@@ -49,7 +49,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[#dcdcdc] font-sans text-gray-900 pointer-coarse:cursor-auto">
+    <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[#0a0a0a] font-sans text-[#f0f0f0] pointer-coarse:cursor-auto">
       <div className="absolute inset-0 z-0 min-h-full min-w-full">
         <ParticleLogo isSolid={isSolid} isBlasting={isBlasting} fromAbout={fromAbout} />
         {/* Film grain (replaces fragile WebGL post-processing stack) */}
@@ -65,7 +65,7 @@ export default function Home() {
       <div
         className="pointer-events-none absolute inset-0 z-[2]"
         style={{
-          background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%)',
+          background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%)',
         }}
       />
 
@@ -78,7 +78,7 @@ export default function Home() {
             <a
               href="/about"
               onClick={handleAboutClick}
-              className="text-gray-500 transition-opacity hover:opacity-70"
+              className="text-[#888888] transition-opacity hover:opacity-70"
             >
               {t('nav.about')}
             </a>
@@ -91,9 +91,9 @@ export default function Home() {
           >
             <button type="button" onClick={() => setIsSolid(!isSolid)} className="flex items-center gap-2 uppercase">
               <span className={!isSolid ? 'opacity-100' : 'opacity-40'}>{t('ui.particles')}</span>
-              <div className="relative flex h-4 w-8 items-center rounded-full bg-gray-300 px-1">
+              <div className="relative flex h-4 w-8 items-center rounded-full bg-[#222222] px-1">
                 <span
-                  className="inline-block h-2 w-2 rounded-full bg-black transition-transform duration-300 ease-out"
+                  className="inline-block h-2 w-2 rounded-full bg-[#f0f0f0] transition-transform duration-300 ease-out"
                   style={{ transform: `translateX(${isSolid ? 16 : 0}px)` }}
                 />
               </div>
@@ -106,10 +106,10 @@ export default function Home() {
           data-home-reveal
           className="pointer-events-none absolute left-6 top-1/2 max-w-[min(22rem,42vw)] -translate-y-1/2 md:left-12"
         >
-          <p className="text-[10px] font-medium uppercase leading-relaxed tracking-[0.28em] text-gray-600 md:text-xs">
+          <p className="text-[10px] font-medium uppercase leading-relaxed tracking-[0.28em] text-[#888888] md:text-xs">
             {t('hero.line1')}
             <span className="mx-2 inline-block opacity-40">/</span>
-            <span className="block pt-2 text-[10px] tracking-[0.35em] text-gray-500 opacity-80 md:inline md:pt-0">
+            <span className="block pt-2 text-[10px] tracking-[0.35em] text-[#888888] opacity-80 md:inline md:pt-0">
               {t('hero.line2')}
             </span>
           </p>
@@ -134,7 +134,7 @@ export default function Home() {
             <MagneticLink
               href="#"
               onClick={(e) => e.preventDefault()}
-              className="text-black hover:opacity-80"
+              className="text-[#f0f0f0] hover:opacity-80"
             >
               SPRDLX
             </MagneticLink>
@@ -142,7 +142,7 @@ export default function Home() {
             <MagneticLink
               href="/about"
               onClick={handleAboutClick}
-              className="text-gray-500 hover:opacity-80"
+              className="text-[#888888] hover:opacity-80"
             >
               ABOUT
             </MagneticLink>
@@ -150,7 +150,7 @@ export default function Home() {
             <MagneticLink
               href="#"
               onClick={(e) => e.preventDefault()}
-              className="text-gray-500 opacity-70 hover:opacity-80"
+              className="text-[#888888] opacity-70 hover:opacity-80"
             >
               CONTACT
             </MagneticLink>

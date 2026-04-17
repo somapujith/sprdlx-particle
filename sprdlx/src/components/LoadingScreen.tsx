@@ -46,7 +46,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-white text-neutral-900"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a] text-[#f0f0f0]"
       initial={{ opacity: 1 }}
       animate={{ opacity: phase === 'fadeOut' ? 0 : 1 }}
       exit={{ opacity: 0 }}
@@ -62,19 +62,19 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         transition={{ duration: 0.85, ease: FADE_EASE }}
       >
         <h1 className="flex flex-wrap items-center justify-center gap-x-4 md:gap-x-6 gap-y-2 text-[clamp(1.25rem,4vw,2.75rem)] leading-tight">
-          <img src={sprdlxTextLogo} alt="SPRDLX" className="h-10 md:h-16 lg:h-20 w-auto object-contain" />
-          <span className="select-none font-light text-neutral-300" aria-hidden>
+          <img src={sprdlxTextLogo} alt="SPRDLX" className="h-10 md:h-16 lg:h-20 w-auto object-contain brightness-0 invert" />
+          <span className="select-none font-light text-[#444444]" aria-hidden>
             |
           </span>
-          <span className="font-normal text-neutral-500">AI Venture Studio</span>
-          <span className="ml-0.5 font-light text-neutral-800 md:ml-1" aria-hidden>
+          <span className="font-normal text-[#888888]">AI Venture Studio</span>
+          <span className="ml-0.5 font-light text-[#f0f0f0] md:ml-1" aria-hidden>
             ✶
           </span>
         </h1>
       </motion.div>
 
       <motion.p
-        className="font-sf absolute bottom-[clamp(5rem,12vh,8rem)] text-[clamp(1.125rem,2.5vw,1.75rem)] font-extralight tabular-nums tracking-[0.35em] text-neutral-400"
+        className="font-sf absolute bottom-[clamp(5rem,12vh,8rem)] text-[clamp(1.125rem,2.5vw,1.75rem)] font-extralight tabular-nums tracking-[0.35em] text-[#888888]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.95 }}
         transition={{ delay: 0.15, duration: 0.6, ease: FADE_EASE }}
