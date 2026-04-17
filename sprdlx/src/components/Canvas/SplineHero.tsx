@@ -8,6 +8,14 @@ export default function SplineHero({ sceneUrl }: SplineHeroProps) {
   return (
     <div className="absolute inset-0 w-full h-full">
       <Spline scene={sceneUrl} />
+      <style>{`
+        iframe {
+          border: none !important;
+        }
+        [class*="watermark"], [class*="branding"], [class*="logo"] {
+          display: none !important;
+        }
+      `}</style>
     </div>
   );
 }
