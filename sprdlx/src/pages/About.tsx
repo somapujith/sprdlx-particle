@@ -61,6 +61,10 @@ export default function About() {
   const bottomWrapperRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
 
+  use3DDepthScroll(bottomWrapperRef.current);
+  useScrollGlitch([2000, 3500]);
+  usePageLoad();
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Hero Title Reveal
@@ -160,6 +164,7 @@ export default function About() {
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsExiting(true);
+    (window as any).lenisInstance?.stop();
     setTimeout(() => {
       navigate('/', { state: { fromAbout: true } });
     }, 800);

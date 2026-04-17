@@ -333,7 +333,12 @@ export default function ParticleLogo({ isSolid, isBlasting = false, fromAbout = 
   const [controlsEnabled, setControlsEnabled] = useState(false);
 
   return (
-    <Canvas className="h-full w-full touch-none" camera={{ position: [0, 10, 0.1], fov: 45 }} dpr={[1, 1.5]}>
+    <Canvas
+      className="h-full w-full touch-none"
+      camera={{ position: [0, 10, 0.1], fov: 45 }}
+      dpr={[1, 1.5]}
+      style={{ willChange: 'contents' }}
+    >
       <Suspense fallback={null}>
         <CameraAnimation setControlsEnabled={setControlsEnabled} fromAbout={fromAbout} />
         <color attach="background" args={['#0a0a0a']} />
