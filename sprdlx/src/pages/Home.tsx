@@ -1,12 +1,37 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, type MouseEvent } from 'react';
 import gsap from 'gsap';
+import { useNavigate } from 'react-router-dom';
 import SplineHero from '../components/Canvas/SplineHero';
 import { MagneticLink } from '../components/ui/MagneticLink';
 
 export default function Home() {
   useEffect(() => { document.title = 'SPRDLX — Creative Digital Studio'; }, []);
+  const navigate = useNavigate();
 
   const uiRootRef = useRef<HTMLDivElement>(null);
+
+  const handleAboutClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+
+    // Crazy transition: scale + rotate + blur out
+    gsap.to('body', {
+      background: '#0a0a0a',
+      duration: 0.6,
+    });
+
+    gsap.to(document.querySelector('.absolute.inset-0.z-0'), {
+      opacity: 0,
+      scale: 0.5,
+      rotation: 360,
+      duration: 0.8,
+      ease: 'back.in',
+    });
+
+    (window as any).lenisInstance?.stop();
+    setTimeout(() => {
+      navigate('/about', { state: { fromAbout: true } });
+    }, 800);
+  };
 
 
   useLayoutEffect(() => {
@@ -70,6 +95,14 @@ export default function Home() {
               className="text-[#f0f0f0] hover:opacity-80"
             >
               SPRDLX
+            </MagneticLink>
+            <span className="select-none opacity-40">•</span>
+            <MagneticLink
+              href="/about"
+              onClick={handleAboutClick}
+              className="text-[#888888] hover:opacity-80"
+            >
+              ABOUT
             </MagneticLink>
             <span className="select-none opacity-40">•</span>
             <MagneticLink
