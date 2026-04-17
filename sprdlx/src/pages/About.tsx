@@ -11,8 +11,6 @@ import * as THREE from 'three';
 import { SRGBColorSpace } from 'three';
 import EarthquakeParticleHero from '../components/Canvas/EarthquakeParticleHero';
 import MacbookModel from '../components/Canvas/MacbookModel';
-import sprdlxTextLogo from '../../sprdlx.svg';
-import sprdlxMarkLogo from '../../favicon.svg';
 
 // ─── Floating & Interactive MacBook ──────────────────────────────────────────────
 function FloatingInteractiveMacbook({
@@ -55,15 +53,9 @@ export default function About() {
   const [isExiting, setIsExiting] = useState(false);
   const textContainerRef = useRef<HTMLHeadingElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => { document.title = 'About — SPRDLX'; }, []);
   const heroTaglineRef = useRef<HTMLParagraphElement>(null);
   const bottomWrapperRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
-
-  use3DDepthScroll(bottomWrapperRef.current);
-  useScrollGlitch([2000, 3500]);
-  usePageLoad();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -119,8 +111,8 @@ export default function About() {
       // Butter-Smooth Background Color Blend Transition
       if (bottomWrapperRef.current && footerRef.current) {
         gsap.to(bottomWrapperRef.current, {
-          backgroundColor: '#111111',
-          color: '#f0f0f0',
+          backgroundColor: '#ffffff',
+          color: '#000000',
           ease: 'none',
           scrollTrigger: {
             trigger: footerRef.current,
@@ -164,7 +156,6 @@ export default function About() {
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsExiting(true);
-    (window as any).lenisInstance?.stop();
     setTimeout(() => {
       navigate('/', { state: { fromAbout: true } });
     }, 800);
@@ -176,13 +167,13 @@ export default function About() {
     <motion.div
       animate={{ opacity: isExiting ? 0 : 1, filter: isExiting ? 'blur(10px)' : 'blur(0px)' }}
       transition={{ duration: 0.8, ease: 'easeInOut' }}
-      className="relative min-h-screen bg-[#0a0a0a] text-[#f0f0f0] font-sans overflow-x-hidden"
+      className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden"
     >
       {/* ── Hero ───────────────────────────────────────────────────────────────── */}
       <section
         id="about-hero"
         aria-label="Hero"
-        className="relative z-0 flex min-h-screen min-h-[100dvh] h-screen w-full flex-col justify-between overflow-x-hidden overflow-y-visible bg-[#0a0a0a]"
+        className="relative z-0 flex min-h-screen min-h-[100dvh] h-screen w-full flex-col justify-between overflow-x-hidden overflow-y-visible bg-black"
       >
         <div className="absolute inset-0 z-0">
           <EarthquakeParticleHero />
@@ -218,15 +209,15 @@ export default function About() {
             transition={{ duration: 1, delay: 0.5 }}
             className="pointer-events-none absolute right-8 top-1/2 flex -translate-y-1/2 flex-col items-center"
           >
-            <div className="z-10 h-3 w-1 rounded-full bg-[#f0f0f0]" />
-            <div className="-mt-1 h-32 w-px bg-[#888888]/25" />
+            <div className="z-10 h-3 w-1 rounded-full bg-white" />
+            <div className="-mt-1 h-32 w-px bg-white/25" />
           </motion.div>
 
           <div className="relative w-full flex flex-col items-center px-6 pb-10 pt-8 md:px-12 md:pb-14">
             <div className="mb-3 w-full max-w-6xl md:mb-4">
               <p
                 ref={heroTaglineRef}
-                className="text-right text-base font-light tracking-wide text-[#f0f0f0]/90 md:text-2xl"
+                className="text-right text-base font-light tracking-wide text-white/90 md:text-2xl"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Innovation In Every Pixel
@@ -235,7 +226,7 @@ export default function About() {
 
             <h1
               ref={heroTitleRef}
-              className="w-full text-center text-[clamp(1.75rem,8.5vw,6.5rem)] font-light leading-[0.95] tracking-[-0.03em] text-[#f0f0f0] flex flex-wrap justify-center overflow-hidden"
+              className="w-full text-center text-[clamp(1.75rem,8.5vw,6.5rem)] font-light leading-[0.95] tracking-[-0.03em] text-white flex flex-wrap justify-center overflow-hidden"
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
               {"BUILDING YOUR DIGITAL VISION".split(' ').map((word, idx) => (
@@ -254,11 +245,11 @@ export default function About() {
       <section
         id="about-data"
         aria-label="About"
-        className="relative z-10 bg-[#0a0a0a] px-8 py-20 md:px-12 md:py-32"
+        className="relative z-10 bg-black px-8 py-20 md:px-12 md:py-32"
       >
         <div className="mx-auto flex max-w-7xl flex-col gap-16 md:flex-row md:items-center md:gap-24">
           <div className="flex-1 font-sans">
-            <h2 ref={textContainerRef} className="text-2xl font-light leading-snug tracking-tight text-[#f0f0f0] md:text-3xl md:leading-relaxed lg:text-4xl lg:leading-snug flex flex-wrap">
+            <h2 ref={textContainerRef} className="text-2xl font-light leading-snug tracking-tight text-white md:text-3xl md:leading-relaxed lg:text-4xl lg:leading-snug flex flex-wrap">
               {"At SPRDLX, we are dedicated to delivering cutting-edge digital solutions that seamlessly blend creativity, technology, and precision. As a modern and forward-driven company, we specialize in transforming ideas into powerful digital experiences, ranging from high-performance websites to scalable applications and intelligent systems. Our journey is built on a strong foundation of innovation, collaboration, and attention to detail, allowing us to work closely with clients and designers to translate creative concepts into functional, user-centric realities. We believe in crafting solutions that are not only visually compelling but also efficient, reliable, and future-ready. With a deep commitment to quality and continuous growth, SPRDLX constantly evolves alongside the digital landscape, ensuring that every project we deliver meets the highest standards of excellence and impact."
                 .split(' ')
                 .map((word, index) => (
@@ -269,12 +260,12 @@ export default function About() {
                   </span>
                 ))}
             </h2>
-            <p className="mt-10 text-lg font-light text-[#888888]/50 md:mt-12 md:text-2xl hover:text-[#f0f0f0]/80 transition-colors cursor-default">
+            <p className="mt-10 text-lg font-light text-white/50 md:mt-12 md:text-2xl hover:text-white/80 transition-colors cursor-default">
               SPRDLX — Where Ideas Evolve into Intelligent Digital Realities.
             </p>
           </div>
           <div className="w-full md:w-2/5 lg:w-1/3">
-            <div className="aspect-[3/4] w-full overflow-hidden rounded-md bg-[#111111] object-cover grayscale transition-all duration-700 hover:grayscale-0 ring-1 ring-[#222222]">
+            <div className="aspect-[3/4] w-full overflow-hidden rounded-md bg-zinc-900 object-cover grayscale transition-all duration-700 hover:grayscale-0 ring-1 ring-white/10">
               <img
                 src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
                 alt="SPRDLX Digital Solutions"
@@ -289,11 +280,11 @@ export default function About() {
       <section
         id="recent-work"
         aria-label="Recent Work"
-        className="relative z-10 flex h-screen w-full flex-col bg-[#0a0a0a] overflow-hidden"
+        className="relative z-10 flex h-screen w-full flex-col bg-black overflow-hidden"
       >
         {/* ── Top bar ── */}
-        <div className="flex items-center justify-between border-b border-[#222222] px-8 py-5 md:px-12">
-          <h3 className="font-sans text-sm font-semibold uppercase tracking-[0.25em] text-[#888888] md:text-base">
+        <div className="flex items-center justify-between border-b border-white/10 px-8 py-5 md:px-12">
+          <h3 className="font-sans text-sm font-semibold uppercase tracking-[0.25em] text-white/60 md:text-base">
             Recent Work
           </h3>
         </div>
@@ -303,12 +294,12 @@ export default function About() {
           {/* Project title + meta */}
           <div className="relative z-20 flex items-end justify-between px-8 pt-8 pb-4 md:px-12 md:pt-10">
             <h4
-              className="font-sans text-[clamp(2rem,6vw,5.5rem)] font-extralight tracking-tighter text-[#f0f0f0] leading-none"
+              className="font-sans text-[clamp(2rem,6vw,5.5rem)] font-extralight tracking-tighter text-white leading-none"
             >
               {activeItem?.title}
             </h4>
 
-            <div className="flex flex-col items-end gap-1 text-right font-sans text-xs uppercase tracking-widest text-[#888888]/40 md:text-sm">
+            <div className="flex flex-col items-end gap-1 text-right font-sans text-xs uppercase tracking-widest text-white/40 md:text-sm">
               <span>
                 {activeItem?.category}
               </span>
@@ -326,7 +317,7 @@ export default function About() {
               dpr={[1, 1.5]}
               gl={{ 
                 alpha: true, 
-                antialias: true, // MSAA enabled for crisp edges
+                antialias: false,
                 powerPreference: 'high-performance',
                 stencil: false,
                 depth: true
@@ -358,8 +349,8 @@ export default function About() {
 
           {/* View project pill */}
           <div className="absolute bottom-5 left-8 z-20 md:bottom-7 md:left-12">
-            <div className="overflow-hidden rounded-full bg-[#222222]/30 px-5 py-2 backdrop-blur-md ring-1 ring-[#444444] transition-all hover:bg-[#222222]/50">
-              <span className="font-sans text-sm font-medium tracking-wide text-[#f0f0f0]">
+            <div className="overflow-hidden rounded-full bg-white/8 px-5 py-2 backdrop-blur-md ring-1 ring-white/15 transition-all hover:bg-white/15">
+              <span className="font-sans text-sm font-medium tracking-wide text-white">
                 View Project
               </span>
             </div>
@@ -368,10 +359,10 @@ export default function About() {
       </section>
 
       {/* ── Blended Bottom Section ────────────────────────────────────────────────── */}
-      <div ref={bottomWrapperRef} className="relative z-10 w-full bg-[#0a0a0a] text-[#f0f0f0]">
+      <div ref={bottomWrapperRef} className="relative z-10 w-full bg-black text-white">
 
         {/* ── CTA Section ───────────────────────────────────────────────────────────── */}
-        <section className="relative w-full min-h-[90vh] px-6 flex flex-col items-center justify-center text-center border-t border-[#222222]/50">
+        <section className="relative w-full min-h-[90vh] px-6 flex flex-col items-center justify-center text-center border-t border-white/5">
           <div className="flex flex-col items-center w-full max-w-4xl">
             {/* Header block */}
             <div className="flex flex-col items-center md:items-start mb-14 md:mb-16">
@@ -381,13 +372,13 @@ export default function About() {
             </div>
 
             {/* Subtitle */}
-            <p className="font-sans text-lg md:text-[22px] font-light opacity-90 mb-14 tracking-wide max-w-2xl leading-relaxed text-[#f0f0f0]">
+            <p className="font-sans text-lg md:text-[22px] font-light opacity-90 mb-14 tracking-wide max-w-2xl leading-relaxed">
               I'm here to help you make your next big idea a reality. Contact me now.
             </p>
 
             {/* Button */}
             <button className="group flex items-center justify-center gap-3 rounded-[32px] border border-current px-8 py-3.5 hover:opacity-60">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#f0f0f0]"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#A5DCA3]"></span>
               <span className="font-sans text-sm md:text-[15px] font-normal tracking-wide">Connect With Me</span>
             </button>
           </div>
@@ -399,19 +390,12 @@ export default function About() {
 
             {/* Top Row */}
             <div className="flex justify-between items-start mb-24 md:mb-40">
-              <h3 className="font-sf text-3xl md:text-5xl font-extralight tracking-tight max-w-[25ch] leading-[1.15]">
-                Power AI-driven Innovation<br />
-                Build Intelligent Futures.
+              <h3 className="font-serif text-3xl md:text-5xl font-extralight tracking-tight max-w-[15ch]">
+                Creative & Digital Experiences
               </h3>
-              <img
-                src={sprdlxMarkLogo}
-                alt="SPRDLX Logo"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = sprdlxTextLogo;
-                }}
-                className="w-12 h-12 md:w-16 md:h-16 object-contain invert"
-              />
+              <div className="w-12 h-12 md:w-16 md:h-16 border border-current flex items-center justify-center text-lg md:text-2xl font-serif">
+                S.
+              </div>
             </div>
 
             {/* Middle Row */}
@@ -448,14 +432,11 @@ export default function About() {
 
             {/* Bottom Row */}
             <div className="flex flex-col md:flex-row justify-between items-end gap-6 mt-16 pb-4">
-              <img 
-                src={sprdlxTextLogo} 
-                alt="SPRDLX." 
-                className="h-10 md:h-12 w-auto object-contain" 
-                style={{ filter: 'invert(1)' }}
-              />
-              <span className="font-serif text-xs md:text-[14px] tracking-wide opacity-80 pb-1 text-[#f0f0f0]">
-                ©{new Date().getFullYear()} SPRDLX.
+              <span className="font-serif text-4xl md:text-5xl font-medium tracking-tight">
+                SPRDLX.
+              </span>
+              <span className="font-serif text-xs md:text-[14px] tracking-wide opacity-80 pb-1">
+                ©{new Date().getFullYear()} Somapujith. Creative Developer
               </span>
             </div>
 
