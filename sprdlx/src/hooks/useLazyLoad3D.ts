@@ -20,7 +20,7 @@ export function useLazyLoad3D(options?: IntersectionObserverInit) {
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [options]);
+  }, []);
 
   return { ref, isVisible };
 }
