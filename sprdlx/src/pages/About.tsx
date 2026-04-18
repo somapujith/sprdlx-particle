@@ -156,17 +156,19 @@ function About() {
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsExiting(true);
+    (window as any).lenisInstance?.stop();
     setTimeout(() => {
       navigate('/', { state: { fromAbout: true } });
-    }, 800);
+    }, 1200);
   };
 
   const activeItem = workItems[0]; // Statically show the first project
 
   return (
     <motion.div
-      animate={{ opacity: isExiting ? 0 : 1, filter: isExiting ? 'blur(10px)' : 'blur(0px)' }}
-      transition={{ duration: 0.8, ease: 'easeInOut' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isExiting ? 0 : 1 }}
+      transition={{ duration: 1.2, ease: 'easeInOut' }}
       className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden"
     >
       {/* ── Hero ───────────────────────────────────────────────────────────────── */}
