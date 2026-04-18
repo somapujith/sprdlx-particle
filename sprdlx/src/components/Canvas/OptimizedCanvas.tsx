@@ -41,13 +41,17 @@ export function OptimizedCanvas({ children, onCreated }: OptimizedCanvasProps) {
 
         // Frame rate limiter
         const originalSetAnimationLoop = state.gl.setAnimationLoop.bind(state.gl);
-        state.gl.setAnimationLoop = (callback: FrameRequestCallback) => {
+        state.gl.setAnimationLoop = (callback: XRFrameRequestCallback | null) => {
+          if (!callback) {
+            return originalSetAnimationLoop(null);
+          }
+
           const fps = Math.min(maxFPS, 60);
           const frameTime = 1000 / fps;
 
-          return originalSetAnimationLoop((now: number) => {
+          return originalSetAnimationLoop((now: number, frame?: XRFrame) => {
             if (now - lastFrameTime.current >= frameTime) {
-              callback(now);
+              callback(now, frame);
               lastFrameTime.current = now;
             }
           });
