@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -165,14 +164,13 @@ function About() {
   const activeItem = workItems[0]; // Statically show the first project
 
   return (
-    <motion.div
-      initial={{ opacity: 0, backgroundColor: '#000000' }}
-      animate={{
-        opacity: isExiting ? 0 : 1,
-        backgroundColor: isExiting ? '#000000' : '#000000'
-      }}
-      transition={{ duration: 1.2, ease: 'easeInOut' }}
+    <div
       className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden"
+      style={{
+        opacity: isExiting ? 0 : 1,
+        transition: 'opacity 1.2s ease-in-out',
+        backgroundColor: '#000000',
+      }}
     >
       {/* ── Hero ───────────────────────────────────────────────────────────────── */}
       <section
@@ -448,7 +446,7 @@ function About() {
           </div>
         </footer>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
