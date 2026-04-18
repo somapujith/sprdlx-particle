@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 100" width="900" height="100">
+  <text
+    x="450" y="85"
+    text-anchor="middle"
+    font-family="Manrope, sans-serif"
+    font-size="90"
+    font-weight="900"
+    letter-spacing="-5"
+    fill="none"
+    stroke="#3a3a3a"
+    stroke-width="1"
+  >WHAT I DO</text>
+</svg>

@@ -8,6 +8,8 @@ import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUti
 
 extend({ UnrealBloomPass });
 
+const EARTH_GLB_URL = `${import.meta.env.BASE_URL}earthquakes_-_2000_to_2019.optimized.glb`;
+
 // ============================================================================
 // ENHANCEMENT 1: VOLUMETRIC ATMOSPHERE - Rayleigh Scattering Halo
 // ============================================================================
@@ -186,9 +188,9 @@ function ParticleLinkingNetwork({ positions, hots }: LinkingNetworkProps) {
 // ============================================================================
 // MAIN COMPONENT: ENHANCED EARTHQUAKE PARTICLES
 // ============================================================================
-function EarthquakeParticles() {
-  const glbUrl = `${import.meta.env.BASE_URL}earthquakes_-_2000_to_2019.optimized.glb`;
-  const { scene } = useGLTF(glbUrl);
+function EarthquakeParticles({ onReady }: { onReady?: () => void }) {
+  const { scene } = useGLTF(EARTH_GLB_URL);
+  const hasSignaledReadyRef = useRef(false);
 
   const particleData = useMemo(() => {
     scene.updateMatrixWorld(true);
@@ -419,6 +421,19 @@ function EarthquakeParticles() {
   const localHit = useMemo(() => new THREE.Vector3(), []);
   const localSphere = useMemo(() => new THREE.Sphere(new THREE.Vector3(0, 0, 0), 3.5), []);
 
+  useEffect(() => {
+    if (!particleData || hasSignaledReadyRef.current) return;
+
+    hasSignaledReadyRef.current = true;
+    const timer = window.setTimeout(() => {
+      onReady?.();
+    }, 120);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [particleData, onReady]);
+
   useFrame((state) => {
     if (groupRef.current) {
       const t = state.clock.elapsedTime;
@@ -622,7 +637,7 @@ function EarthquakeParticles() {
   );
 }
 
-export default function EarthquakeParticleHero() {
+export default function EarthquakeParticleHero({ onReady }: { onReady?: () => void }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 7.5], fov: 60 }}
@@ -632,8 +647,10 @@ export default function EarthquakeParticleHero() {
       <color attach="background" args={['#000000']} />
       <ambientLight intensity={0.5} />
       <Suspense fallback={null}>
-        <EarthquakeParticles />
+        <EarthquakeParticles onReady={onReady} />
       </Suspense>
     </Canvas>
   );
 }
+
+useGLTF.preload(EARTH_GLB_URL);

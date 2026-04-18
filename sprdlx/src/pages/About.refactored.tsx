@@ -2,69 +2,33 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Suspense } from 'react';
+import EarthquakeParticleHero from '../components/Canvas/EarthquakeParticleHero';
+import { OptimizedMacbookScene } from '../components/Canvas/OptimizedMacbookScene';
+import { useLazyLoad3D } from '../hooks/useLazyLoad3D';
 
 gsap.registerPlugin(ScrollTrigger);
-import { Canvas } from '@react-three/fiber';
-import { Environment, ContactShadows, useTexture, Float, PresentationControls } from '@react-three/drei';
-import * as THREE from 'three';
-import { SRGBColorSpace } from 'three';
-import EarthquakeParticleHero from '../components/Canvas/EarthquakeParticleHero';
-import MacbookModel from '../components/Canvas/MacbookModel';
 
-// ─── Floating & Interactive MacBook ──────────────────────────────────────────────
-function FloatingInteractiveMacbook({
-  textureUrl,
-  scale,
-  position,
-}: {
-  textureUrl: string;
-  scale: number;
-  position: [number, number, number];
-}) {
-  const texture = useTexture(textureUrl) as THREE.Texture;
-
-  useEffect(() => {
-    texture.colorSpace = SRGBColorSpace;
-    texture.needsUpdate = true;
-  }, [texture]);
-
-  return (
-    <PresentationControls
-      global={false}
-      cursor={true}
-      snap={true}
-      speed={1.5}
-      zoom={1}
-      rotation={[0.1, 0.2, 0]}
-      polar={[-Math.PI / 5, Math.PI / 5]}
-      azimuth={[-Math.PI / 3, Math.PI / 3]}
-    >
-      <Float rotationIntensity={0.6} floatIntensity={1.5} speed={2.5}>
-        <MacbookModel texture={texture} position={position} scale={scale} />
-      </Float>
-    </PresentationControls>
-  );
-}
-
-// ─── Main component ────────────────────────────────────────────────────────────
 function About() {
   const navigate = useNavigate();
   const [isExiting, setIsExiting] = useState(false);
-  const [canRevealEntry, setCanRevealEntry] = useState(false);
-  const [isHeroReady, setIsHeroReady] = useState(false);
-  const [forceReveal, setForceReveal] = useState(false);
+  const [isEntering, setIsEntering] = useState(true);
   const textContainerRef = useRef<HTMLHeadingElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroTaglineRef = useRef<HTMLParagraphElement>(null);
   const bottomWrapperRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
 
+  // Lazy load 3D scene
+  const { ref: macbookRef, isVisible: isMacbookVisible } = useLazyLoad3D({
+    threshold: 0.1,
+    rootMargin: '100px',
+  });
+
   useEffect(() => {
-    const minCoverTimer = window.setTimeout(() => setCanRevealEntry(true), 450);
-    const failSafeTimer = window.setTimeout(() => setForceReveal(true), 2800);
+    const enterTimer = window.setTimeout(() => setIsEntering(false), 50);
 
     const ctx = gsap.context(() => {
-      // Hero Title Reveal
       if (heroTitleRef.current) {
         const titleWords = heroTitleRef.current.querySelectorAll('.hero-reveal-word');
         gsap.fromTo(
@@ -82,7 +46,6 @@ function About() {
         );
       }
 
-      // Hero Tagline Reveal
       if (heroTaglineRef.current) {
         gsap.fromTo(
           heroTaglineRef.current,
@@ -91,7 +54,6 @@ function About() {
         );
       }
 
-      // About Data Text Reveal (Scroll Triggered)
       if (textContainerRef.current) {
         const words = textContainerRef.current.querySelectorAll('.reveal-word');
         gsap.fromTo(
@@ -113,7 +75,6 @@ function About() {
         );
       }
 
-      // Butter-Smooth Background Color Blend Transition
       if (bottomWrapperRef.current && footerRef.current) {
         gsap.to(bottomWrapperRef.current, {
           backgroundColor: '#ffffff',
@@ -121,8 +82,8 @@ function About() {
           ease: 'none',
           scrollTrigger: {
             trigger: footerRef.current,
-            start: 'top bottom', // Start blending when Footer just enters the viewport
-            end: 'top center',   // Finish blending when Footer reaches the center of the viewport
+            start: 'top bottom',
+            end: 'top center',
             scrub: true,
           }
         });
@@ -130,13 +91,10 @@ function About() {
     });
 
     return () => {
-      window.clearTimeout(minCoverTimer);
-      window.clearTimeout(failSafeTimer);
+      window.clearTimeout(enterTimer);
       ctx.revert();
     };
   }, []);
-
-  const isEntryBlocking = !forceReveal && (!canRevealEntry || !isHeroReady);
 
   const workItems = useMemo(
     () => [
@@ -173,7 +131,7 @@ function About() {
     }, 1200);
   };
 
-  const activeItem = workItems[0]; // Statically show the first project
+  const activeItem = workItems[0];
 
   return (
     <div
@@ -182,14 +140,13 @@ function About() {
         backgroundColor: '#000000',
       }}
     >
-      {/* ── Hero ───────────────────────────────────────────────────────────────── */}
       <section
         id="about-hero"
         aria-label="Hero"
         className="relative z-0 flex min-h-screen min-h-[100dvh] h-screen w-full flex-col justify-between overflow-x-hidden overflow-y-visible bg-black"
       >
         <div className="absolute inset-0 z-0">
-          <EarthquakeParticleHero onReady={() => setIsHeroReady(true)} />
+          <EarthquakeParticleHero />
         </div>
 
         <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-between pointer-events-none">
@@ -258,7 +215,6 @@ function About() {
         </div>
       </section>
 
-      {/* ── Company Info ────────────────────────────────────────────────────────── */}
       <section
         id="about-data"
         aria-label="About"
@@ -287,28 +243,25 @@ function About() {
                 src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
                 alt="SPRDLX Digital Solutions"
                 className="h-full w-full object-cover transition-transform duration-[2s] hover:scale-105"
+                loading="lazy"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Recent Work — static showcase ────────────────────────────────────────── */}
       <section
         id="recent-work"
         aria-label="Recent Work"
         className="relative z-10 flex h-screen w-full flex-col bg-black overflow-hidden"
       >
-        {/* ── Top bar ── */}
         <div className="flex items-center justify-between border-b border-white/10 px-8 py-5 md:px-12">
           <h3 className="font-sans text-sm font-semibold uppercase tracking-[0.25em] text-white/60 md:text-base">
             Recent Work
           </h3>
         </div>
 
-        {/* ── Main content — title + macbook ── */}
         <div className="relative flex flex-1 flex-col overflow-hidden">
-          {/* Project title + meta */}
           <div className="relative z-20 flex items-end justify-between px-8 pt-8 pb-4 md:px-12 md:pt-10">
             <h4
               className="font-sans text-[clamp(2rem,6vw,5.5rem)] font-extralight tracking-tighter text-white leading-none"
@@ -326,45 +279,20 @@ function About() {
             </div>
           </div>
 
-            {/* MacBook 3-D canvas — full-bleed */}
-            <div className="relative flex-1 w-full overflow-visible">
-
-            <Canvas
-              camera={{ position: [0, 0, 7.5], fov: 45 }}
-              dpr={[1, 1.5]}
-              gl={{ 
-                alpha: true, 
-                antialias: false,
-                powerPreference: 'high-performance',
-                stencil: false,
-                depth: true
-              }}
-              style={{ width: '100%', height: '100%', background: 'transparent' }}
-              onCreated={({ gl }) => {
-                gl.setClearColor(0x000000, 0);
-              }}
-            >
-              <ambientLight intensity={0.7} />
-              <Environment preset="city" />
-
-              <FloatingInteractiveMacbook
-                textureUrl={activeItem?.textureUrl ?? ''}
-                position={[0, -0.7, 0]}
-                scale={0.19}
-              />
-
-              <ContactShadows
-                position={[0, -1.8, 0]}
-                opacity={0.6}
-                scale={28}
-                blur={2.4}
-                far={5}
-                resolution={256}
-              />
-            </Canvas>
+          <div ref={macbookRef} className="relative flex-1 w-full overflow-visible">
+            {isMacbookVisible ? (
+              <Suspense fallback={<div className="absolute inset-0 bg-black" />}>
+                <OptimizedMacbookScene
+                  textureUrl={activeItem?.textureUrl ?? ''}
+                  position={[0, -0.7, 0]}
+                  scale={0.19}
+                />
+              </Suspense>
+            ) : (
+              <div className="absolute inset-0 bg-black" />
+            )}
           </div>
 
-          {/* View project pill */}
           <div className="absolute bottom-5 left-8 z-20 md:bottom-7 md:left-12">
             <div className="overflow-hidden rounded-full bg-white/8 px-5 py-2 backdrop-blur-md ring-1 ring-white/15 transition-all hover:bg-white/15">
               <span className="font-sans text-sm font-medium tracking-wide text-white">
@@ -375,25 +303,20 @@ function About() {
         </div>
       </section>
 
-      {/* ── Blended Bottom Section ────────────────────────────────────────────────── */}
       <div ref={bottomWrapperRef} className="relative z-10 w-full bg-black text-white">
 
-        {/* ── CTA Section ───────────────────────────────────────────────────────────── */}
         <section className="relative w-full min-h-[90vh] px-6 flex flex-col items-center justify-center text-center border-t border-white/5">
           <div className="flex flex-col items-center w-full max-w-4xl">
-            {/* Header block */}
             <div className="flex flex-col items-center md:items-start mb-14 md:mb-16">
               <h2 className="font-serif text-[clamp(2.5rem,7vw,5.5rem)] font-extralight tracking-tight m-0 text-center md:text-left">
                 Let's work together
               </h2>
             </div>
 
-            {/* Subtitle */}
             <p className="font-sans text-lg md:text-[22px] font-light opacity-90 mb-14 tracking-wide max-w-2xl leading-relaxed">
               I'm here to help you make your next big idea a reality. Contact me now.
             </p>
 
-            {/* Button */}
             <button className="group flex items-center justify-center gap-3 rounded-[32px] border border-current px-8 py-3.5 hover:opacity-60">
               <span className="w-2.5 h-2.5 rounded-full bg-[#A5DCA3]"></span>
               <span className="font-sans text-sm md:text-[15px] font-normal tracking-wide">Connect With Me</span>
@@ -401,11 +324,9 @@ function About() {
           </div>
         </section>
 
-        {/* ── Elaborate Minimal Footer ──────────────────────────────────────────────────────── */}
         <footer ref={footerRef} className="relative w-full px-6 py-12 md:px-16 md:py-20 lg:pt-32 lg:pb-16 text-left">
           <div className="mx-auto max-w-[1500px] flex flex-col h-full">
 
-            {/* Top Row */}
             <div className="flex justify-between items-start mb-24 md:mb-40">
               <h3 className="font-serif text-3xl md:text-5xl font-extralight tracking-tight max-w-[15ch]">
                 Creative & Digital Experiences
@@ -415,7 +336,6 @@ function About() {
               </div>
             </div>
 
-            {/* Middle Row */}
             <div className="flex justify-between items-end mb-20 md:mb-32">
               <div className="flex gap-16 md:gap-32 font-sans text-lg md:text-[20px] font-light tracking-wide">
                 <ul className="flex flex-col gap-5">
@@ -430,15 +350,14 @@ function About() {
                   <li><a href="#" className="hover:opacity-50 transition-opacity">Contact</a></li>
                 </ul>
               </div>
-              
-              {/* Back to Top Arrow */}
-              <button 
+
+              <button
                 onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
                 className="group pb-4 cursor-pointer"
                 aria-label="Back to top"
               >
-                <svg 
-                  width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                <svg
+                  width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
                   className="transition-transform duration-500 group-hover:-translate-y-3 md:w-[64px] md:h-[64px]"
                 >
@@ -447,7 +366,6 @@ function About() {
               </button>
             </div>
 
-            {/* Bottom Row */}
             <div className="flex flex-col md:flex-row justify-between items-end gap-6 mt-16 pb-4">
               <span className="font-serif text-4xl md:text-5xl font-medium tracking-tight">
                 SPRDLX.
@@ -463,7 +381,7 @@ function About() {
 
       <div
         className="pointer-events-none fixed inset-0 z-[9999] bg-black transition-opacity duration-[1200ms] ease-in-out"
-        style={{ opacity: isExiting || isEntryBlocking ? 1 : 0 }}
+        style={{ opacity: isExiting || isEntering ? 1 : 0 }}
         aria-hidden
       />
     </div>
