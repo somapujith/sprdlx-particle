@@ -1,12 +1,9 @@
-import React, { useEffect, useMemo, useRef, Suspense } from 'react';
-import { Canvas, useFrame, extend } from '@react-three/fiber';
-import { useGLTF, Effects, OrbitControls } from '@react-three/drei';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-import { UnrealBloomPass } from 'three-stdlib';
+import { useDevicePerformance } from '../../hooks/useDevicePerformance';
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
-import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-
-extend({ UnrealBloomPass });
 
 const EARTH_GLB_URL = `${import.meta.env.BASE_URL}earthquakes_-_2000_to_2019.optimized.glb`;
 
@@ -182,6 +179,7 @@ function ParticleLinkingNetwork({ positions, hots }: LinkingNetworkProps) {
 // ============================================================================
 function EarthquakeParticles({ onReady }: { onReady?: () => void }) {
   const { scene } = useGLTF(EARTH_GLB_URL);
+  const { isLowEnd, isMobile } = useDevicePerformance();
   const hasSignaledReadyRef = useRef(false);
 
   const particleData = useMemo(() => {
@@ -273,8 +271,8 @@ function EarthquakeParticles({ onReady }: { onReady?: () => void }) {
     const posAttribute = merged.getAttribute('position');
     const colorAttr = merged.getAttribute('color');
 
-    // Optimization: Reduced to 12k for smooth 60fps on low-end devices
-    const MAX_POINTS = 12000;
+    // Device-aware particle reduction (target 60fps on all devices)
+    const MAX_POINTS = isLowEnd ? 3000 : isMobile ? 6000 : 12000;
 
     const points: number[] = [];
     const colors: number[] = [];

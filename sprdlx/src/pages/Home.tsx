@@ -1,13 +1,19 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, lazy, Suspense } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
-import SplineHero from '../components/Canvas/SplineHero';
+import { useLazyLoad3D } from '../hooks/useLazyLoad3D';
 import { MagneticLink } from '../components/ui/MagneticLink';
+
+const SplineHero = lazy(() => import('../components/Canvas/SplineHero'));
 
 export default function Home() {
   useEffect(() => { document.title = 'SPRDLX — Creative Digital Studio'; }, []);
   const navigate = useNavigate();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const { ref: splineRef, isVisible: isSplineVisible } = useLazyLoad3D({
+    threshold: 0.1,
+    rootMargin: '100px',
+  });
 
   const uiRootRef = useRef<HTMLDivElement>(null);
 
@@ -48,8 +54,14 @@ export default function Home() {
 
   return (
     <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[#0a0a0a] font-sans text-[#f0f0f0] pointer-coarse:cursor-auto">
-      <div className="absolute inset-0 z-0 min-h-full min-w-full">
-        <SplineHero sceneUrl="https://my.spline.design/themuseum-iFL1LUqdGUQuIkXQY9gvK8Lp/scene.splinecode" />
+      <div ref={splineRef} className="absolute inset-0 z-0 min-h-full min-w-full">
+        {isSplineVisible ? (
+          <Suspense fallback={<div className="absolute inset-0 bg-[#0a0a0a]" />}>
+            <SplineHero sceneUrl="https://my.spline.design/themuseum-iFL1LUqdGUQuIkXQY9gvK8Lp/scene.splinecode" />
+          </Suspense>
+        ) : (
+          <div className="absolute inset-0 bg-[#0a0a0a]" />
+        )}
         {/* Film grain (replaces fragile WebGL post-processing stack) */}
         <div
           className="pointer-events-none absolute inset-0 z-[1] opacity-[0.07] mix-blend-overlay"

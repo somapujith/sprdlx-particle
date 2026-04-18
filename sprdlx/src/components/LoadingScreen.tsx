@@ -20,7 +20,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
 
   useEffect(() => {
     const duration = 3200;
-    const interval = 30;
+    const interval = 60;
     const steps = duration / interval;
     let currentStep = 0;
 

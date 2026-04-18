@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Home from './pages/Home';
-import About from './pages/About';
 import LoadingScreen from './components/LoadingScreen';
 import { CustomCursor } from './components/ui/CustomCursor';
 import ScrollToTop from './components/ScrollToTop';
+
+const About = lazy(() => import('./pages/About'));
 
 declare global {
   interface Window {
@@ -56,10 +57,12 @@ export default function App() {
       <Router>
         <ScrollToTop />
         <CustomCursor />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
+        <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </Suspense>
       </Router>
     </>
   );

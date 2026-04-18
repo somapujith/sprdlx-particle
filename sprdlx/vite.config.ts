@@ -12,10 +12,21 @@ export default defineConfig(({mode}) => {
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(__dirname, './src'),
       },
     },
     build: {
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+        format: {
+          comments: false,
+        },
+      },
+      sourcemap: false,
       rollupOptions: {
         output: {
           manualChunks: {
@@ -23,9 +34,13 @@ export default defineConfig(({mode}) => {
             'animation-vendor': ['gsap', 'framer-motion'],
             'spline-vendor': ['@splinetool/react-spline'],
           },
+          chunkFileNames: 'assets/[name]-[hash].js',
+          entryFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash][extname]',
         },
       },
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 5000,
+      reportCompressedSize: true,
     },
     server: {
       host: '::',

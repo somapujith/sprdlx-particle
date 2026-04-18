@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -276,12 +276,22 @@ function About() {
           </div>
           <div className="w-full md:w-2/5 lg:w-1/3">
             <div className="aspect-[3/4] w-full overflow-hidden rounded-md bg-zinc-900 object-cover grayscale transition-all duration-700 hover:grayscale-0 ring-1 ring-white/10">
-              <img
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
-                alt="SPRDLX Digital Solutions"
-                className="h-full w-full object-cover transition-transform duration-[2s] hover:scale-105"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcSet="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=640&auto=format&fit=crop&fm=webp 640w, https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1024&auto=format&fit=crop&fm=webp 1024w"
+                  type="image/webp"
+                />
+                <source
+                  srcSet="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=640&auto=format&fit=crop 640w, https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1024&auto=format&fit=crop 1024w"
+                  type="image/jpeg"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
+                  alt="SPRDLX Digital Solutions"
+                  className="h-full w-full object-cover transition-transform duration-[2s] hover:scale-105"
+                  loading="lazy"
+                />
+              </picture>
             </div>
           </div>
         </div>
