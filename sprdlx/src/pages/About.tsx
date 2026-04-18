@@ -56,10 +56,10 @@ function About() {
   const textContainerRef = useRef<HTMLHeadingElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroTaglineRef = useRef<HTMLParagraphElement>(null);
-  const bottomWrapperRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    (window as any).lenisInstance?.start();
+
     const minCoverTimer = window.setTimeout(() => setCanRevealEntry(true), 450);
     const failSafeTimer = window.setTimeout(() => setForceReveal(true), 2800);
 
@@ -113,20 +113,6 @@ function About() {
         );
       }
 
-      // Butter-Smooth Background Color Blend Transition
-      if (bottomWrapperRef.current && footerRef.current) {
-        gsap.to(bottomWrapperRef.current, {
-          backgroundColor: '#ffffff',
-          color: '#000000',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: footerRef.current,
-            start: 'top bottom', // Start blending when Footer just enters the viewport
-            end: 'top center',   // Finish blending when Footer reaches the center of the viewport
-            scrub: true,
-          }
-        });
-      }
     });
 
     return () => {
@@ -376,7 +362,7 @@ function About() {
       </section>
 
       {/* ── Blended Bottom Section ────────────────────────────────────────────────── */}
-      <div ref={bottomWrapperRef} className="relative z-10 w-full bg-black text-white">
+      <div className="relative z-10 w-full bg-black text-white">
 
         {/* ── CTA Section ───────────────────────────────────────────────────────────── */}
         <section className="relative w-full min-h-[90vh] px-6 flex flex-col items-center justify-center text-center border-t border-white/5">
@@ -402,7 +388,7 @@ function About() {
         </section>
 
         {/* ── Elaborate Minimal Footer ──────────────────────────────────────────────────────── */}
-        <footer ref={footerRef} className="relative w-full px-6 py-12 md:px-16 md:py-20 lg:pt-32 lg:pb-16 text-left">
+        <footer className="relative w-full px-6 py-12 md:px-16 md:py-20 lg:pt-32 lg:pb-16 text-left">
           <div className="mx-auto max-w-[1500px] flex flex-col h-full">
 
             {/* Top Row */}
@@ -448,10 +434,7 @@ function About() {
             </div>
 
             {/* Bottom Row */}
-            <div className="flex flex-col md:flex-row justify-between items-end gap-6 mt-16 pb-4">
-              <span className="font-serif text-4xl md:text-5xl font-medium tracking-tight">
-                SPRDLX.
-              </span>
+            <div className="flex justify-end items-end mt-16 pb-4">
               <span className="font-serif text-xs md:text-[14px] tracking-wide opacity-80 pb-1">
                 ©{new Date().getFullYear()} Somapujith. Creative Developer
               </span>
