@@ -11,7 +11,6 @@ import { SRGBColorSpace } from 'three';
 import EarthquakeParticleHero from '../components/Canvas/EarthquakeParticleHero';
 import MacbookModel from '../components/Canvas/MacbookModel';
 
-// ─── Floating & Interactive MacBook ──────────────────────────────────────────────
 function FloatingInteractiveMacbook({
   textureUrl,
   scale,
@@ -26,6 +25,7 @@ function FloatingInteractiveMacbook({
   useEffect(() => {
     texture.colorSpace = SRGBColorSpace;
     texture.needsUpdate = true;
+    return () => texture.dispose();
   }, [texture]);
 
   return (
@@ -39,14 +39,13 @@ function FloatingInteractiveMacbook({
       polar={[-Math.PI / 5, Math.PI / 5]}
       azimuth={[-Math.PI / 3, Math.PI / 3]}
     >
-      <Float rotationIntensity={0.6} floatIntensity={1.5} speed={2.5}>
+      <Float rotationIntensity={0.4} floatIntensity={1} speed={2}>
         <MacbookModel texture={texture} position={position} scale={scale} />
       </Float>
     </PresentationControls>
   );
 }
 
-// ─── Main component ────────────────────────────────────────────────────────────
 function About() {
   const navigate = useNavigate();
   const [isExiting, setIsExiting] = useState(false);
@@ -56,63 +55,73 @@ function About() {
   const textContainerRef = useRef<HTMLHeadingElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroTaglineRef = useRef<HTMLParagraphElement>(null);
+  const bottomWrapperRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     (window as any).lenisInstance?.start();
 
-    const minCoverTimer = window.setTimeout(() => setCanRevealEntry(true), 450);
-    const failSafeTimer = window.setTimeout(() => setForceReveal(true), 2800);
+    const minCoverTimer = window.setTimeout(() => setCanRevealEntry(true), 300);
+    const failSafeTimer = window.setTimeout(() => setForceReveal(true), 1500);
 
     const ctx = gsap.context(() => {
-      // Hero Title Reveal
       if (heroTitleRef.current) {
         const titleWords = heroTitleRef.current.querySelectorAll('.hero-reveal-word');
         gsap.fromTo(
           titleWords,
-          { y: '120%', opacity: 0, rotateZ: 2 },
+          { y: '120%', opacity: 0 },
           {
             y: '0%',
             opacity: 1,
-            rotateZ: 0,
-            duration: 1.5,
-            delay: 0.5,
-            ease: 'power4.out',
-            stagger: 0.04,
+            duration: 0.8,
+            delay: 0.2,
+            ease: 'power2.out',
+            stagger: 0.03,
           }
         );
       }
 
-      // Hero Tagline Reveal
       if (heroTaglineRef.current) {
         gsap.fromTo(
           heroTaglineRef.current,
-          { opacity: 0, x: -30 },
-          { opacity: 1, x: 0, duration: 1.5, delay: 1.2, ease: 'power3.out' }
+          { opacity: 0 },
+          { opacity: 1, duration: 0.8, delay: 0.5, ease: 'power2.out' }
         );
       }
 
-      // About Data Text Reveal (Scroll Triggered)
       if (textContainerRef.current) {
         const words = textContainerRef.current.querySelectorAll('.reveal-word');
         gsap.fromTo(
           words,
-          { y: '120%', opacity: 0, rotateZ: 3 },
+          { y: '30%', opacity: 0 },
           {
             y: '0%',
             opacity: 1,
-            rotateZ: 0,
-            duration: 1.2,
-            ease: 'power3.out',
-            stagger: 0.015,
+            duration: 0.6,
+            ease: 'power2.out',
+            stagger: 0.01,
             scrollTrigger: {
               trigger: textContainerRef.current,
-              start: 'top 80%',
+              start: 'top 75%',
               toggleActions: 'play none none reverse',
             },
           }
         );
       }
 
+      if (bottomWrapperRef.current && footerRef.current) {
+        gsap.to(bottomWrapperRef.current, {
+          backgroundColor: '#ffffff',
+          color: '#000000',
+          ease: 'power1.inOut',
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: 'top bottom',
+            end: 'top 60%',
+            scrub: 0.5,
+          }
+        });
+      }
     });
 
     return () => {
@@ -159,7 +168,7 @@ function About() {
     }, 1200);
   };
 
-  const activeItem = workItems[0]; // Statically show the first project
+  const activeItem = workItems[0];
 
   return (
     <div
@@ -168,7 +177,6 @@ function About() {
         backgroundColor: '#000000',
       }}
     >
-      {/* ── Hero ───────────────────────────────────────────────────────────────── */}
       <section
         id="about-hero"
         aria-label="Hero"
@@ -244,7 +252,6 @@ function About() {
         </div>
       </section>
 
-      {/* ── Company Info ────────────────────────────────────────────────────────── */}
       <section
         id="about-data"
         aria-label="About"
@@ -273,28 +280,25 @@ function About() {
                 src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
                 alt="SPRDLX Digital Solutions"
                 className="h-full w-full object-cover transition-transform duration-[2s] hover:scale-105"
+                loading="lazy"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Recent Work — static showcase ────────────────────────────────────────── */}
       <section
         id="recent-work"
         aria-label="Recent Work"
         className="relative z-10 flex h-screen w-full flex-col bg-black overflow-hidden"
       >
-        {/* ── Top bar ── */}
         <div className="flex items-center justify-between border-b border-white/10 px-8 py-5 md:px-12">
           <h3 className="font-sans text-sm font-semibold uppercase tracking-[0.25em] text-white/60 md:text-base">
             Recent Work
           </h3>
         </div>
 
-        {/* ── Main content — title + macbook ── */}
         <div className="relative flex flex-1 flex-col overflow-hidden">
-          {/* Project title + meta */}
           <div className="relative z-20 flex items-end justify-between px-8 pt-8 pb-4 md:px-12 md:pt-10">
             <h4
               className="font-sans text-[clamp(2rem,6vw,5.5rem)] font-extralight tracking-tighter text-white leading-none"
@@ -312,26 +316,25 @@ function About() {
             </div>
           </div>
 
-            {/* MacBook 3-D canvas — full-bleed */}
             <div className="relative flex-1 w-full overflow-visible">
 
             <Canvas
               camera={{ position: [0, 0, 7.5], fov: 45 }}
               dpr={[1, 1.5]}
-              gl={{ 
-                alpha: true, 
+              gl={{
+                alpha: true,
                 antialias: false,
                 powerPreference: 'high-performance',
                 stencil: false,
                 depth: true
               }}
-              style={{ width: '100%', height: '100%', background: 'transparent' }}
+              style={{ width: '100%', height: '100%', background: '#000000' }}
               onCreated={({ gl }) => {
-                gl.setClearColor(0x000000, 0);
+                gl.setClearColor(0x000000, 1);
               }}
             >
-              <ambientLight intensity={0.7} />
-              <Environment preset="city" />
+              <ambientLight intensity={0.6} />
+              <Environment preset="apartment" />
 
               <FloatingInteractiveMacbook
                 textureUrl={activeItem?.textureUrl ?? ''}
@@ -341,16 +344,15 @@ function About() {
 
               <ContactShadows
                 position={[0, -1.8, 0]}
-                opacity={0.6}
+                opacity={0.4}
                 scale={28}
-                blur={2.4}
+                blur={1.8}
                 far={5}
-                resolution={256}
+                resolution={128}
               />
             </Canvas>
           </div>
 
-          {/* View project pill */}
           <div className="absolute bottom-5 left-8 z-20 md:bottom-7 md:left-12">
             <div className="overflow-hidden rounded-full bg-white/8 px-5 py-2 backdrop-blur-md ring-1 ring-white/15 transition-all hover:bg-white/15">
               <span className="font-sans text-sm font-medium tracking-wide text-white">
@@ -361,25 +363,20 @@ function About() {
         </div>
       </section>
 
-      {/* ── Blended Bottom Section ────────────────────────────────────────────────── */}
-      <div className="relative z-10 w-full bg-black text-white">
+      <div ref={bottomWrapperRef} className="relative z-10 w-full bg-black text-white">
 
-        {/* ── CTA Section ───────────────────────────────────────────────────────────── */}
         <section className="relative w-full min-h-[90vh] px-6 flex flex-col items-center justify-center text-center border-t border-white/5">
           <div className="flex flex-col items-center w-full max-w-4xl">
-            {/* Header block */}
             <div className="flex flex-col items-center md:items-start mb-14 md:mb-16">
               <h2 className="font-serif text-[clamp(2.5rem,7vw,5.5rem)] font-extralight tracking-tight m-0 text-center md:text-left">
                 Let's work together
               </h2>
             </div>
 
-            {/* Subtitle */}
             <p className="font-sans text-lg md:text-[22px] font-light opacity-90 mb-14 tracking-wide max-w-2xl leading-relaxed">
               I'm here to help you make your next big idea a reality. Contact me now.
             </p>
 
-            {/* Button */}
             <button className="group flex items-center justify-center gap-3 rounded-[32px] border border-current px-8 py-3.5 hover:opacity-60">
               <span className="w-2.5 h-2.5 rounded-full bg-[#A5DCA3]"></span>
               <span className="font-sans text-sm md:text-[15px] font-normal tracking-wide">Connect With Me</span>
@@ -387,11 +384,9 @@ function About() {
           </div>
         </section>
 
-        {/* ── Elaborate Minimal Footer ──────────────────────────────────────────────────────── */}
-        <footer className="relative w-full px-6 py-12 md:px-16 md:py-20 lg:pt-32 lg:pb-16 text-left">
+        <footer ref={footerRef} className="relative w-full px-6 py-12 md:px-16 md:py-20 lg:pt-32 lg:pb-16 text-left">
           <div className="mx-auto max-w-[1500px] flex flex-col h-full">
 
-            {/* Top Row */}
             <div className="flex justify-between items-start mb-24 md:mb-40">
               <h3 className="font-serif text-3xl md:text-5xl font-extralight tracking-tight max-w-[15ch]">
                 Creative & Digital Experiences
@@ -401,7 +396,6 @@ function About() {
               </div>
             </div>
 
-            {/* Middle Row */}
             <div className="flex justify-between items-end mb-20 md:mb-32">
               <div className="flex gap-16 md:gap-32 font-sans text-lg md:text-[20px] font-light tracking-wide">
                 <ul className="flex flex-col gap-5">
@@ -416,15 +410,14 @@ function About() {
                   <li><a href="#" className="hover:opacity-50 transition-opacity">Contact</a></li>
                 </ul>
               </div>
-              
-              {/* Back to Top Arrow */}
-              <button 
+
+              <button
                 onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
                 className="group pb-4 cursor-pointer"
                 aria-label="Back to top"
               >
-                <svg 
-                  width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                <svg
+                  width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
                   className="transition-transform duration-500 group-hover:-translate-y-3 md:w-[64px] md:h-[64px]"
                 >
@@ -433,8 +426,10 @@ function About() {
               </button>
             </div>
 
-            {/* Bottom Row */}
-            <div className="flex justify-end items-end mt-16 pb-4">
+            <div className="flex flex-col md:flex-row justify-between items-end gap-6 mt-16 pb-4">
+              <span className="font-serif text-4xl md:text-5xl font-medium tracking-tight">
+                SPRDLX.
+              </span>
               <span className="font-serif text-xs md:text-[14px] tracking-wide opacity-80 pb-1">
                 ©{new Date().getFullYear()} Somapujith. Creative Developer
               </span>

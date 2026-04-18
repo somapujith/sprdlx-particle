@@ -16,7 +16,7 @@ const EARTH_GLB_URL = `${import.meta.env.BASE_URL}earthquakes_-_2000_to_2019.opt
 function VolumetricAtmosphere() {
   return (
     <mesh>
-      <sphereGeometry args={[3.8, 64, 64]} />
+      <sphereGeometry args={[3.8, 32, 32]} />
       <shaderMaterial
         transparent
         depthWrite={false}
@@ -28,7 +28,7 @@ function VolumetricAtmosphere() {
         vertexShader={`
           varying vec3 vNormal;
           varying vec3 vViewDirection;
-          
+
           void main() {
             vNormal = normalize(normalMatrix * normal);
             vec4 worldPos = modelMatrix * vec4(position, 1.0);
@@ -40,28 +40,20 @@ function VolumetricAtmosphere() {
           uniform float uTime;
           varying vec3 vNormal;
           varying vec3 vViewDirection;
-          
+
           void main() {
-            // Rayleigh scattering: edge shimmer based on view angle
-            float fresnel = pow(1.0 - abs(dot(vNormal, vViewDirection)), 3.0);
-            
-            // Multi-layer atmospheric density with time-based pulsing
-            float atmosphereStrength = 0.15;
+            float fresnel = pow(1.0 - abs(dot(vNormal, vViewDirection)), 2.5);
+
             float pulse = sin(uTime * 0.5) * 0.5 + 0.5;
-            float fogDensity = (0.12 + pulse * 0.08) * fresnel;
-            
-            // Aurora-like color gradient: cyan to blue to aurora green
-            vec3 color1 = vec3(0.1, 0.8, 1.0);  // Cyan
-            vec3 color2 = vec3(0.4, 0.2, 0.8);  // Purple-blue
-            vec3 color3 = vec3(0.2, 0.6, 0.4);  // Aurora green
-            
-            vec3 finalColor = mix(color1, color2, fresnel * 0.5);
-            finalColor = mix(finalColor, color3, abs(sin(uTime * 0.3)) * 0.3);
-            
-            // Soft edge fade with layered depth
-            float edgeFade = smoothstep(1.0, 0.3, fresnel);
-            float alpha = fogDensity * edgeFade * atmosphereStrength;
-            
+            float fogDensity = (0.15 + pulse * 0.1) * fresnel;
+
+            // Cyan to purple glow
+            vec3 color1 = vec3(0.2, 0.9, 1.0);
+            vec3 color2 = vec3(0.5, 0.3, 0.9);
+            vec3 finalColor = mix(color1, color2, fresnel);
+
+            float alpha = fogDensity * 0.25;
+
             gl_FragColor = vec4(finalColor, alpha);
           }
         `}
@@ -281,8 +273,8 @@ function EarthquakeParticles({ onReady }: { onReady?: () => void }) {
     const posAttribute = merged.getAttribute('position');
     const colorAttr = merged.getAttribute('color');
 
-    // Optimization: Reduced to 20k since points are now much larger and highly visible
-    const MAX_POINTS = 20000;
+    // Optimization: Reduced to 12k for smooth 60fps on low-end devices
+    const MAX_POINTS = 12000;
 
     const points: number[] = [];
     const colors: number[] = [];
@@ -496,12 +488,12 @@ function EarthquakeParticles({ onReady }: { onReady?: () => void }) {
 
   return (
     <group ref={groupRef}>
-      {/* ENHANCEMENT 1: Atmospheric halo */}
+      {/* Atmospheric halo */}
       <mesh ref={atmosphereRef}>
         <VolumetricAtmosphere />
       </mesh>
 
-      {/* Main particles with enhanced shaders */}
+      {/* Main particles */}
       <points ref={pointsRef}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[particleData.positions, 3]} />
@@ -604,30 +596,19 @@ function EarthquakeParticles({ onReady }: { onReady?: () => void }) {
             varying vec3 vColor;
             varying float vAlpha;
             varying float vChromaticShift;
-            
+
             void main() {
               float d = length(gl_PointCoord - 0.5);
               if (d > 0.5) discard;
-              
-              float soft = smoothstep(0.5, 0.05, d);
-              float core = smoothstep(0.2, 0.0, d);
-              
-              // ENHANCEMENT 3: Chromatic aberration - RGB channel splitting
-              vec3 aberratedColor = vColor;
-              
-              if (vChromaticShift > 0.01) {
-                float offset = vChromaticShift * 0.03;
-                vec2 coord = gl_PointCoord - 0.5;
-                
-                // Sample RGB channels at slightly offset positions
-                float r = vColor.r * smoothstep(0.5, 0.05, length(coord + vec2(offset, 0.0)));
-                float g = vColor.g * (soft + core * 0.5);
-                float b = vColor.b * smoothstep(0.5, 0.05, length(coord - vec2(offset, 0.0)));
-                
-                aberratedColor = vec3(r, g, b);
-              }
-              
-              gl_FragColor = vec4(aberratedColor * 1.5, soft * vAlpha * 1.5);
+
+              float soft = smoothstep(0.5, 0.1, d);
+              float core = smoothstep(0.15, 0.0, d);
+              float glow = soft * 0.8 + core * 0.2;
+
+              vec3 finalColor = vColor * glow;
+              float alpha = soft * vAlpha;
+
+              gl_FragColor = vec4(finalColor, alpha);
             }
           `}
         />
@@ -642,9 +623,18 @@ export default function EarthquakeParticleHero({ onReady }: { onReady?: () => vo
     <Canvas
       camera={{ position: [0, 0, 7.5], fov: 60 }}
       dpr={[1, 1.5]}
-      gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}
+      gl={{
+        antialias: false,
+        alpha: true,
+        powerPreference: 'high-performance',
+        stencil: false,
+        depth: true,
+      }}
+      onCreated={({ gl }) => {
+        gl.setClearColor(0x000000, 1);
+      }}
+      style={{ background: '#000000' }}
     >
-      <color attach="background" args={['#000000']} />
       <ambientLight intensity={0.5} />
       <Suspense fallback={null}>
         <EarthquakeParticles onReady={onReady} />
