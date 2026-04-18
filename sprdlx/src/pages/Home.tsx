@@ -13,12 +13,15 @@ export default function Home() {
   const handleAboutClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
 
-    // Buttery smooth fade transition
-    gsap.to(document.querySelector('[role="application"]') || document.body, {
-      opacity: 0,
-      duration: 1.2,
-      ease: 'power1.inOut',
-    });
+    // Smooth fade-out to black
+    const mainContent = document.querySelector('main') || document.querySelector('.relative.h-screen');
+    if (mainContent) {
+      gsap.to(mainContent, {
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power1.inOut',
+      });
+    }
 
     (window as any).lenisInstance?.stop();
     setTimeout(() => {

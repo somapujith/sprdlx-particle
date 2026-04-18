@@ -166,8 +166,11 @@ function About() {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isExiting ? 0 : 1 }}
+      initial={{ opacity: 0, backgroundColor: '#000000' }}
+      animate={{
+        opacity: isExiting ? 0 : 1,
+        backgroundColor: isExiting ? '#000000' : '#000000'
+      }}
       transition={{ duration: 1.2, ease: 'easeInOut' }}
       className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden"
     >
