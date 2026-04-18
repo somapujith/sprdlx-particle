@@ -4,6 +4,7 @@ import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { useDevicePerformance } from '../../hooks/useDevicePerformance';
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 const EARTH_GLB_URL = `${import.meta.env.BASE_URL}earthquakes_-_2000_to_2019.optimized.glb`;
 
