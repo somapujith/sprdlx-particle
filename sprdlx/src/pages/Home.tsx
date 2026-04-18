@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, type MouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import SplineHero from '../components/Canvas/SplineHero';
@@ -7,26 +7,21 @@ import { MagneticLink } from '../components/ui/MagneticLink';
 export default function Home() {
   useEffect(() => { document.title = 'SPRDLX — Creative Digital Studio'; }, []);
   const navigate = useNavigate();
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const uiRootRef = useRef<HTMLDivElement>(null);
 
   const handleAboutClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
 
-    // Smooth fade-out to black
-    const mainContent = document.querySelector('main') || document.querySelector('.relative.h-screen');
-    if (mainContent) {
-      gsap.to(mainContent, {
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power1.inOut',
-      });
-    }
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
 
     (window as any).lenisInstance?.stop();
     setTimeout(() => {
       navigate('/about', { state: { fromAbout: true } });
-    }, 1200);
+    }, 1000);
   };
 
 
@@ -111,6 +106,12 @@ export default function Home() {
           </nav>
         </footer>
       </div>
+
+      <div
+        className="pointer-events-none absolute inset-0 z-50 bg-black transition-opacity duration-1000 ease-in-out"
+        style={{ opacity: isTransitioning ? 1 : 0 }}
+        aria-hidden
+      />
     </div>
   );
 }

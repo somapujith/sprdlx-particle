@@ -50,6 +50,7 @@ function FloatingInteractiveMacbook({
 function About() {
   const navigate = useNavigate();
   const [isExiting, setIsExiting] = useState(false);
+  const [isEntering, setIsEntering] = useState(true);
   const textContainerRef = useRef<HTMLHeadingElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroTaglineRef = useRef<HTMLParagraphElement>(null);
@@ -57,6 +58,8 @@ function About() {
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const enterTimer = window.setTimeout(() => setIsEntering(false), 50);
+
     const ctx = gsap.context(() => {
       // Hero Title Reveal
       if (heroTitleRef.current) {
@@ -123,7 +126,10 @@ function About() {
       }
     });
 
-    return () => ctx.revert();
+    return () => {
+      window.clearTimeout(enterTimer);
+      ctx.revert();
+    };
   }, []);
 
   const workItems = useMemo(
@@ -167,8 +173,6 @@ function About() {
     <div
       className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden"
       style={{
-        opacity: isExiting ? 0 : 1,
-        transition: 'opacity 1.2s ease-in-out',
         backgroundColor: '#000000',
       }}
     >
@@ -450,6 +454,12 @@ function About() {
           </div>
         </footer>
       </div>
+
+      <div
+        className="pointer-events-none fixed inset-0 z-[9999] bg-black transition-opacity duration-[1200ms] ease-in-out"
+        style={{ opacity: isExiting || isEntering ? 1 : 0 }}
+        aria-hidden
+      />
     </div>
   );
 }
