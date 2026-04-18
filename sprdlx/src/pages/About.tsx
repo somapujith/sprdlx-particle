@@ -192,29 +192,33 @@ function About() {
               </svg>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.3 }}
+            <div
               className="flex cursor-pointer items-center gap-4 font-serif text-2xl transition-opacity hover:opacity-70 md:text-3xl"
+              style={{
+                opacity: 1,
+                transform: 'translateY(0)',
+                transition: 'opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s, transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s',
+              }}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                 <path d="M11 5L6 9H2V15H6L11 19V5Z" fill="currentColor" />
                 <path d="M15.54 8.46A5 5 0 0 1 15.54 15.54" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
               <span>Menu</span>
-            </motion.div>
+            </div>
           </header>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
+          <div
             className="pointer-events-none absolute right-8 top-1/2 flex -translate-y-1/2 flex-col items-center"
+            style={{
+              opacity: 1,
+              transform: 'translateX(0) translateY(-50%)',
+              transition: 'opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s, transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s',
+            }}
           >
             <div className="z-10 h-3 w-1 rounded-full bg-white" />
             <div className="-mt-1 h-32 w-px bg-white/25" />
-          </motion.div>
+          </div>
 
           <div className="relative w-full flex flex-col items-center px-6 pb-10 pt-8 md:px-12 md:pb-14">
             <div className="mb-3 w-full max-w-6xl md:mb-4">
