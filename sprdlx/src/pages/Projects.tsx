@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { projects } from './projects/data.js';
 import { vertexShader, fragmentShader } from './projects/shaders.js';
@@ -15,6 +16,7 @@ const config = {
 
 export default function Projects() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -211,8 +213,8 @@ export default function Projects() {
           const texIndex = Math.floor((cellX + cellY * gridWidth) % projects.length);
           const actualIndex = texIndex < 0 ? projects.length + texIndex : texIndex;
 
-          if (projects[actualIndex]?.href) {
-            window.location.href = projects[actualIndex].href;
+          if (projects[actualIndex]?.id) {
+            navigate(`/project/${projects[actualIndex].id}`);
           }
         }
       }

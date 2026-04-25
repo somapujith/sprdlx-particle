@@ -11,6 +11,7 @@ import ScrollToTop from './components/ScrollToTop';
 
 const About = lazy(() => import('./pages/About'));
 const Projects = lazy(() => import('./pages/Projects'));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 
 declare global {
   interface Window {
@@ -63,6 +64,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/project/:id" element={<ProjectDetail />} />
           </Routes>
         </Suspense>
       </Router>

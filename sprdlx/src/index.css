@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Cormorant+Garamond:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Cormorant+Garamond:wght@300;400;500&display=swap');
 @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 @import "tailwindcss";
 
@@ -38,4 +38,271 @@ body {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
   --font-sf: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Menu Overlay Styles */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  padding: 1rem;
+  color: #fefff8;
+  display: flex;
+  justify-content: space-between;
+  mix-blend-mode: difference;
+  z-index: 2;
+}
+
+nav p {
+  padding: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+  user-select: none;
+  font-family: "DM Sans", sans-serif;
+}
+
+.nav-close {
+  padding: 1rem;
+  cursor: pointer;
+  color: #fefff8;
+  display: none;
+}
+
+.nav-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #1e1e1e;
+  color: #fefff8;
+  z-index: 50;
+  will-change: clip-path;
+  clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+}
+
+.menu-content {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  will-change: transform, opacity;
+}
+
+.menu-col {
+  font-family: "DM Sans", sans-serif;
+}
+
+.menu-col p {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.6;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-col:nth-child(2) {
+  text-align: right;
+}
+
+.menu-img-section {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  will-change: transform, opacity;
+}
+
+.menu-img {
+  width: 200px;
+  height: 178px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-img svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.menu-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.menu-quote {
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fefff8;
+  line-height: 2.2;
+  max-width: 500px;
+}
+
+.menu-quote p {
+  margin: 0;
+  padding: 0;
+}
+
+.menu-quote span {
+  color: #fefff8;
+  font-weight: 700;
+}
+
+.menu-links-wrapper {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: max-content;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  will-change: transform;
+}
+
+.menu-link {
+  position: relative;
+  will-change: transform;
+  overflow: hidden;
+}
+
+.menu-link a {
+  position: relative;
+  color: #fefff8;
+  font-family: "Anton", sans-serif;
+  font-size: 12rem;
+  font-weight: 500;
+  letter-spacing: -0.2rem;
+  display: inline-block;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.menu-link a span:nth-child(2) {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.link-highlighter {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 400px;
+  height: 0.75rem;
+  background-color: #fca311;
+  will-change: transform, width;
+}
+
+.char {
+  position: relative;
+  display: inline-block;
+  will-change: transform;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+  z-index: 0;
+  pointer-events: auto;
+}
+
+.scroll-indicator {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fefff8;
+  opacity: 0.6;
+  animation: bounce 2s infinite;
+}
+
+.scroll-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-icon svg {
+  width: 20px;
+  height: 32px;
+}
+
+.scroll-indicator p {
+  font-family: "Inter", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 0;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@media (max-width: 1000px) {
+  .menu-content {
+    top: 25%;
+  }
+
+  .menu-img,
+  .link-highlighter {
+    display: none;
+  }
+
+  .menu-links-wrapper {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .menu-link a {
+    font-size: 4rem;
+    letter-spacing: -0.05rem;
+  }
+
+  .scroll-indicator {
+    bottom: 1rem;
+    right: 1rem;
+  }
 }
