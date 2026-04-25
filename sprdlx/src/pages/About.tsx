@@ -415,8 +415,8 @@ function About() {
                   <li><a href="#" className="hover:opacity-50 transition-opacity">Email</a></li>
                 </ul>
                 <ul className="flex flex-col gap-5">
-                  <li><a href="#" className="hover:opacity-50 transition-opacity">Home</a></li>
-                  <li><a href="#" className="hover:opacity-50 transition-opacity">Work</a></li>
+                  <li><a href="/" className="hover:opacity-50 transition-opacity">Home</a></li>
+                  <li><a href="/projects" className="hover:opacity-50 transition-opacity">Projects</a></li>
                   <li><a href="#" className="hover:opacity-50 transition-opacity">Contact</a></li>
                 </ul>
               </div>

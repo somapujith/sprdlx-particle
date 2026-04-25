@@ -10,6 +10,7 @@ import { CustomCursor } from './components/ui/CustomCursor';
 import ScrollToTop from './components/ScrollToTop';
 
 const About = lazy(() => import('./pages/About'));
+const Projects = lazy(() => import('./pages/Projects'));
 
 declare global {
   interface Window {
@@ -61,6 +62,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
           </Routes>
         </Suspense>
       </Router>
