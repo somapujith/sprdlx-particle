@@ -5,30 +5,11 @@ import MenuOverlay from '../components/Canvas/MenuOverlay';
 import Footer from '../components/Footer';
 import VTLink from '../components/VTLink';
 
-function BlurUpImg({ className = '', src, ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) {
+function BlurUpImg({ className = '', ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) {
   const [loaded, setLoaded] = useState(false);
-
-  const getActualImagePath = (path: string) => {
-    const projectIdMap: { [key: string]: string } = {
-      '/img1.jpeg': '/projects/esthetic-insights/hero.png',
-      '/img2.jpeg': '/projects/esthetic-insights/gallery-1.png',
-      '/img3.jpeg': '/projects/esthetic-insights/gallery-2.png',
-      '/img4.jpeg': '/projects/anthill/hero.png',
-      '/img5.jpeg': '/projects/anthill/gallery-1.png',
-      '/img6.jpeg': '/projects/anthill/gallery-2.png',
-      '/img7.jpeg': '/projects/pulp/hero.png',
-      '/img8.jpeg': '/projects/pulp/hero.png',
-      '/img9.jpeg': '/projects/pulp/cosmic-dew.png',
-    };
-    return projectIdMap[path] || path;
-  };
-
-  const actualSrc = typeof src === 'string' ? getActualImagePath(src) : src;
-
   return (
     <img
       {...rest}
-      src={actualSrc}
       onLoad={(e) => {
         setLoaded(true);
         rest.onLoad?.(e);
