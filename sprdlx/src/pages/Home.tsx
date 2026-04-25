@@ -1,19 +1,26 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, lazy, Suspense } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, Suspense } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import { useLazyLoad3D } from '../hooks/useLazyLoad3D';
 import { MagneticLink } from '../components/ui/MagneticLink';
-
-const SplineHero = lazy(() => import('../components/Canvas/SplineHero'));
+import SplineHero from '../components/Canvas/SplineHero';
 
 export default function Home() {
-  useEffect(() => { document.title = 'SPRDLX — Creative Digital Studio'; }, []);
+  useEffect(() => {
+    document.title = 'SPRDLX — Creative Digital Studio';
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'fetch';
+    link.href = 'https://my.spline.design/themuseum-iFL1LUqdGUQuIkXQY9gvK8Lp/scene.splinecode';
+    link.crossOrigin = 'anonymous';
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
   const navigate = useNavigate();
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const { ref: splineRef, isVisible: isSplineVisible } = useLazyLoad3D({
-    threshold: 0.1,
-    rootMargin: '100px',
-  });
+  const splineRef = useRef<HTMLDivElement>(null);
 
   const uiRootRef = useRef<HTMLDivElement>(null);
 
@@ -55,22 +62,19 @@ export default function Home() {
   return (
     <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[#0a0a0a] font-sans text-[#f0f0f0] pointer-coarse:cursor-auto">
       <div ref={splineRef} className="absolute inset-0 z-0 min-h-full min-w-full">
-        {isSplineVisible ? (
-          <Suspense fallback={<div className="absolute inset-0 bg-[#0a0a0a]" />}>
-            <SplineHero sceneUrl="https://my.spline.design/themuseum-iFL1LUqdGUQuIkXQY9gvK8Lp/scene.splinecode" />
-          </Suspense>
-        ) : (
-          <div className="absolute inset-0 bg-[#0a0a0a]" />
-        )}
-        {/* Film grain (replaces fragile WebGL post-processing stack) */}
-        <div
-          className="pointer-events-none absolute inset-0 z-[1] opacity-[0.07] mix-blend-overlay"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }}
-          aria-hidden
-        />
+        <Suspense fallback={<div className="absolute inset-0 bg-[#0a0a0a]" />}>
+          <SplineHero sceneUrl="https://my.spline.design/themuseum-iFL1LUqdGUQuIkXQY9gvK8Lp/scene.splinecode" />
+        </Suspense>
       </div>
+
+      {/* Film grain (replaces fragile WebGL post-processing stack) */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] opacity-[0.07] mix-blend-overlay"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }}
+        aria-hidden
+      />
 
       <div
         className="pointer-events-none absolute inset-0 z-[2]"

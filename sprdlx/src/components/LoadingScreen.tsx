@@ -19,23 +19,55 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
   completeRef.current = onComplete;
 
   useEffect(() => {
-    const duration = 3200;
-    const interval = 60;
-    const steps = duration / interval;
-    let currentStep = 0;
+    const MIN_LOAD_TIME = 3000;
+    const startTime = Date.now();
 
-    const timer = setInterval(() => {
-      currentStep++;
-      const newProgress = Math.min(Math.round((currentStep / steps) * 100), 100);
-      setProgress(newProgress);
+    const preloadAssets = async () => {
+      const assets = [
+        'https://my.spline.design/themuseum-iFL1LUqdGUQuIkXQY9gvK8Lp/scene.splinecode',
+      ];
 
-      if (currentStep >= steps) {
-        clearInterval(timer);
-        setPhase('fadeOut');
-      }
-    }, interval);
+      let loaded = 0;
+      const updateProgress = (current: number) => {
+        setProgress(current);
+      };
 
-    return () => clearInterval(timer);
+      const preloadImage = (src: string) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            loaded++;
+            resolve(null);
+          };
+          img.onerror = () => {
+            loaded++;
+            resolve(null);
+          };
+          img.src = src;
+        });
+      };
+
+      await Promise.all(assets.map((asset) => preloadImage(asset)));
+
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, MIN_LOAD_TIME - elapsedTime);
+
+      const progressInterval = setInterval(() => {
+        const now = Date.now();
+        const timeLeft = Math.max(0, MIN_LOAD_TIME - (now - startTime));
+        const newProgress = Math.round(((MIN_LOAD_TIME - timeLeft) / MIN_LOAD_TIME) * 100);
+        updateProgress(Math.min(newProgress, 99));
+      }, 50);
+
+      await new Promise((r) => setTimeout(r, remainingTime));
+      clearInterval(progressInterval);
+
+      setProgress(100);
+      await new Promise((r) => setTimeout(r, 300));
+      setPhase('fadeOut');
+    };
+
+    preloadAssets();
   }, []);
 
   useEffect(() => {
