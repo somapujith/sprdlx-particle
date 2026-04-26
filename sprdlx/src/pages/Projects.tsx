@@ -123,7 +123,7 @@ export default function Projects() {
       return new Promise<THREE.Texture[]>((resolve) => {
         projects.forEach((project) => {
           const texture = textureLoader.load(
-            '/projects/public' + project.image,
+            project.image,
             () => {
               if (++loadedCount === projects.length) resolve(imageTextures);
             },
