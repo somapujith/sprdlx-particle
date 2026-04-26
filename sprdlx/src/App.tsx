@@ -5,9 +5,9 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Home from './pages/Home';
-import LoadingScreen from './components/LoadingScreen';
+import LoadingScreen from './components/Common/LoadingScreen';
 import { CustomCursor } from './components/ui/CustomCursor';
-import ScrollToTop from './components/ScrollToTop';
+import ScrollToTop from './components/Common/ScrollToTop';
 
 const About = lazy(() => import('./pages/About'));
 const Projects = lazy(() => import('./pages/Projects'));

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import sprdlxTextLogo from '../../sprdlx.svg';
+import sprdlxTextLogo from '../../../sprdlx.svg';
 
 /** Lewis-style spaced digits: e.g. 71 → "0 7 1", 100 → "1 0 0" */
 function formatSpacedPercent(progress: number): string {

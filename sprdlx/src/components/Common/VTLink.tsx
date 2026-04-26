@@ -8,21 +8,18 @@ declare global {
   }
 }
 
+const pageModules: Record<string, () => Promise<unknown>> = {
+  '/about': () => import('@/pages/About'),
+  '/projects': () => import('@/pages/Projects'),
+  '/project': () => import('@/pages/ProjectDetail'),
+};
+
 function prefetchPath(path: string) {
   if (path === '/' || path.startsWith('/#')) {
     return;
   }
-  if (path === '/about') {
-    void import('../pages/About');
-    return;
-  }
-  if (path === '/projects') {
-    void import('../pages/Projects');
-    return;
-  }
-  if (path.startsWith('/project/')) {
-    void import('../pages/ProjectDetail');
-  }
+  const key = path.startsWith('/project/') ? '/project' : path;
+  void pageModules[key]?.();
 }
 
 const VTLink = forwardRef<HTMLAnchorElement, LinkProps>(function VTLink(

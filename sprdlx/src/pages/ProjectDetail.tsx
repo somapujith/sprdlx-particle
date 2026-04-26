@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { projects } from './projects/data';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
-import Footer from '../components/Footer';
-import VTLink from '../components/VTLink';
+import Footer from '../components/Common/Footer';
+import VTLink from '../components/Common/VTLink';
 
 function BlurUpImg({ className = '', ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) {
   const [loaded, setLoaded] = useState(false);
