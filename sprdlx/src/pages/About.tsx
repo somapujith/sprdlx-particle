@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import WaterRipple from '../components/Canvas/WaterRipple';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
+import { MagneticLink } from '../components/ui/MagneticLink';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -114,6 +115,40 @@ function About() {
           </div>
         </div>
       </section>
+
+      <footer className="relative z-20 flex flex-col items-center justify-center gap-8 border-t border-white/10 px-6 py-12 md:py-16">
+        <nav className="pointer-events-auto flex justify-center gap-6 text-xs font-medium uppercase tracking-widest">
+          <MagneticLink
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            className="text-[#f0f0f0] hover:opacity-80"
+          >
+            SPRDLX
+          </MagneticLink>
+          <span className="select-none opacity-40">•</span>
+          <MagneticLink
+            href="/"
+            className="text-[#888888] hover:opacity-80"
+          >
+            HOME
+          </MagneticLink>
+          <span className="select-none opacity-40">•</span>
+          <MagneticLink
+            href="/projects"
+            className="text-[#888888] hover:opacity-80"
+          >
+            PROJECTS
+          </MagneticLink>
+          <span className="select-none opacity-40">•</span>
+          <MagneticLink
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            className="text-[#888888] opacity-70 hover:opacity-80"
+          >
+            CONTACT
+          </MagneticLink>
+        </nav>
+      </footer>
 
       <div
         className="pointer-events-none fixed inset-0 z-40 bg-black transition-opacity duration-[1200ms] ease-in-out"

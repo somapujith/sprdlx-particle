@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { projects } from './projects/data.js';
 import { vertexShader, fragmentShader } from './projects/shaders.js';
+import { MagneticLink } from '../components/ui/MagneticLink';
 
 const config = {
   cellSize: 0.75,
@@ -357,10 +358,45 @@ export default function Projects() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-screen h-screen overflow-hidden bg-black"
-      style={{ cursor: 'grab' }}
-    />
+    <div className="flex flex-col w-screen h-screen bg-black">
+      <div
+        ref={containerRef}
+        className="relative flex-1 overflow-hidden bg-black"
+        style={{ cursor: 'grab' }}
+      />
+      <footer className="flex flex-col items-center justify-center gap-8 border-t border-white/10 px-6 py-12 bg-black z-20">
+        <nav className="pointer-events-auto flex justify-center gap-6 text-xs font-medium uppercase tracking-widest">
+          <MagneticLink
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            className="text-[#f0f0f0] hover:opacity-80"
+          >
+            SPRDLX
+          </MagneticLink>
+          <span className="select-none opacity-40">•</span>
+          <MagneticLink
+            href="/"
+            className="text-[#888888] hover:opacity-80"
+          >
+            HOME
+          </MagneticLink>
+          <span className="select-none opacity-40">•</span>
+          <MagneticLink
+            href="/about"
+            className="text-[#888888] hover:opacity-80"
+          >
+            ABOUT
+          </MagneticLink>
+          <span className="select-none opacity-40">•</span>
+          <MagneticLink
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            className="text-[#888888] opacity-70 hover:opacity-80"
+          >
+            CONTACT
+          </MagneticLink>
+        </nav>
+      </footer>
+    </div>
   );
 }
