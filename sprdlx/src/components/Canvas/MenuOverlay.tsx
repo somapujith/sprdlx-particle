@@ -20,8 +20,8 @@ function MenuOverlay() {
       }
     }
 
-    const navToggle = menuOverlay.querySelector('.nav-toggle') as HTMLElement;
-    const navClose = menuOverlay.querySelector('.nav-close') as HTMLElement;
+    const navToggle = document.querySelector('.nav-toggle') as HTMLElement;
+    const navClose = document.querySelector('.nav-close') as HTMLElement;
     const menuContent = menuOverlay.querySelector('.menu-content');
     const menuImage = menuOverlay.querySelector('.menu-img');
     const menuLinksWrapper = menuOverlay.querySelector('.menu-links-wrapper');
