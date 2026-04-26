@@ -94,7 +94,7 @@ export default function Home() {
         <footer className="relative mt-auto flex flex-col gap-8">
           <nav
             data-home-reveal
-            className="pointer-events-auto absolute bottom-0 left-1/2 flex -translate-x-1/2 gap-6 text-xs font-medium uppercase tracking-widest"
+            className="pointer-events-auto flex justify-center gap-6 text-xs font-medium uppercase tracking-widest"
           >
             <MagneticLink
               href="#"
