@@ -1,418 +1,297 @@
-import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import * as THREE from 'three';
-import { projects } from './projects/data.js';
-import { vertexShader, fragmentShader } from './projects/shaders.js';
-import { MagneticLink } from '../components/ui/MagneticLink';
+import { useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const config = {
-  cellSize: 0.75,
-  zoomLevel: 1.25,
-  lerpFactor: 0.075,
-  borderColor: 'rgba(255, 255, 255, 0.15)',
-  backgroundColor: 'rgba(0, 0, 0, 1)',
-  textColor: 'rgba(128, 128, 128, 1)',
-  hoverColor: 'rgba(255, 255, 255, 0)',
+  gap: 0.08,
+  speed: 0.3,
+  arcRadius: 500,
 };
 
+const spotlightItems = [
+  { name: 'Pulp', img: '/Logos/img5.jpeg' },
+  { name: 'Esthetic Insights', img: '/Logos/img16.jpeg' },
+  { name: 'Anthill', img: '/Logos/img17.jpeg' },
+];
+
 export default function Projects() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
-
   useEffect(() => {
-    if (!containerRef.current) return;
+    (window as any).lenisInstance?.start();
 
-    let scene: THREE.Scene,
-      camera: THREE.OrthographicCamera,
-      renderer: THREE.WebGLRenderer,
-      plane: THREE.Mesh;
-    let isDragging = false,
-      isClick = true,
-      clickStartTime = 0;
-    let previousMouse = { x: 0, y: 0 };
-    let offset = { x: 0, y: 0 },
-      targetOffset = { x: 0, y: 0 };
-    let mousePosition = { x: -1, y: -1 };
-    let zoomLevel = 1.0,
-      targetZoom = 1.0;
-    let textTextures: THREE.CanvasTexture[] = [];
+    const lenis = (window as any).lenisInstance;
+    if (lenis) {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time: number) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
 
-    const rgbaToArray = (rgba: string) => {
-      const match = rgba.match(/rgba?\(([^)]+)\)/);
-      if (!match) return [1, 1, 1, 1];
-      return match[1]
-        .split(',')
-        .map((v, i) =>
-          i < 3 ? parseFloat(v.trim()) / 255 : parseFloat(v.trim() || '1')
-        );
-    };
+    const titlesContainer = document.querySelector('.spotlight-titles');
+    const imagesContainer = document.querySelector('.spotlight-images');
+    const spotlightHeader = document.querySelector('.spotlight-header');
+    const titlesContainerElement = document.querySelector(
+      '.spotlight-titles-container'
+    );
+    const introTextElements = document.querySelectorAll('.spotlight-intro-text');
+    const imageElements: HTMLElement[] = [];
 
-    const createTextTexture = (title: string, year: number) => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 2048;
-      canvas.height = 256;
-      const ctx = canvas.getContext('2d')!;
+    spotlightItems.forEach((item, index) => {
+      const titleElement = document.createElement('h1');
+      titleElement.textContent = item.name;
+      if (index === 0) titleElement.style.opacity = '1';
+      titlesContainer?.appendChild(titleElement);
 
-      ctx.clearRect(0, 0, 2048, 256);
-      ctx.font = '80px IBM Plex Mono';
-      ctx.fillStyle = config.textColor;
-      ctx.textBaseline = 'middle';
-      ctx.imageSmoothingEnabled = false;
+      const imgWrapper = document.createElement('div');
+      imgWrapper.className = 'spotlight-img';
+      const imgElement = document.createElement('img');
+      imgElement.src = item.img;
+      imgElement.alt = '';
+      imgWrapper.appendChild(imgElement);
+      imagesContainer?.appendChild(imgWrapper);
+      imageElements.push(imgWrapper);
+    });
 
-      ctx.textAlign = 'left';
-      ctx.fillText(title.toUpperCase(), 30, 128);
-      ctx.textAlign = 'right';
-      ctx.fillText(year.toString().toUpperCase(), 2048 - 30, 128);
+    const titleElements = titlesContainer?.querySelectorAll('h1');
+    let currentActiveIndex = 0;
 
-      const texture = new THREE.CanvasTexture(canvas);
-      Object.assign(texture, {
-        wrapS: THREE.ClampToEdgeWrapping,
-        wrapT: THREE.ClampToEdgeWrapping,
-        minFilter: THREE.NearestFilter,
-        magFilter: THREE.NearestFilter,
-        flipY: false,
-        generateMipmaps: false,
-        format: THREE.RGBAFormat,
-      });
+    const containerWidth = window.innerWidth * 0.3;
+    const containerHeight = window.innerHeight;
+    const arcStartX = containerWidth - 220;
+    const arcStartY = -200;
+    const arcEndY = containerHeight + 200;
+    const arcControlPointX = arcStartX + config.arcRadius;
+    const arcControlPointY = containerHeight / 2;
 
-      return texture;
-    };
+    function getBezierPosition(t: number) {
+      const x =
+        (1 - t) * (1 - t) * arcStartX +
+        2 * (1 - t) * t * arcControlPointX +
+        t * t * arcStartX;
+      const y =
+        (1 - t) * (1 - t) * arcStartY +
+        2 * (1 - t) * t * arcControlPointY +
+        t * t * arcEndY;
+      return { x, y };
+    }
 
-    const createTextureAtlas = (textures: THREE.Texture[], isText = false) => {
-      const atlasSize = Math.ceil(Math.sqrt(textures.length));
-      const textureSize = 512;
-      const canvas = document.createElement('canvas');
-      canvas.width = canvas.height = atlasSize * textureSize;
-      const ctx = canvas.getContext('2d')!;
+    function getImgProgressState(index: number, overallProgress: number) {
+      const startTime = index * config.gap;
+      const endTime = startTime + config.speed;
 
-      if (isText) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      } else {
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
+      if (overallProgress < startTime) return -1;
+      if (overallProgress > endTime) return 2;
 
-      textures.forEach((texture, index) => {
-        const x = (index % atlasSize) * textureSize;
-        const y = Math.floor(index / atlasSize) * textureSize;
+      return (overallProgress - startTime) / config.speed;
+    }
 
-        if (isText && (texture as any).source?.data) {
-          ctx.drawImage((texture as any).source.data, x, y, textureSize, textureSize);
-        } else if (!isText && (texture as any).image?.complete) {
-          ctx.drawImage((texture as any).image, x, y, textureSize, textureSize);
-        }
-      });
+    imageElements.forEach((img) => gsap.set(img, { opacity: 0 }));
 
-      const atlasTexture = new THREE.CanvasTexture(canvas);
-      Object.assign(atlasTexture, {
-        wrapS: THREE.ClampToEdgeWrapping,
-        wrapT: THREE.ClampToEdgeWrapping,
-        minFilter: THREE.LinearFilter,
-        magFilter: THREE.LinearFilter,
-        flipY: false,
-      });
+    ScrollTrigger.create({
+      trigger: '.spotlight',
+      start: 'top top',
+      end: `+=${window.innerHeight * 10}px`,
+      pin: true,
+      pinSpacing: true,
+      scrub: 1,
+      onUpdate: (self) => {
+        const progress = self.progress;
 
-      return atlasTexture;
-    };
+        if (progress <= 0.2) {
+          const animationProgress = progress / 0.2;
 
-    const loadTextures = () => {
-      const textureLoader = new THREE.TextureLoader();
-      const imageTextures: THREE.Texture[] = [];
-      let loadedCount = 0;
+          const moveDistance = window.innerWidth * 0.6;
+          gsap.set(introTextElements[0], {
+            x: -animationProgress * moveDistance,
+          });
+          gsap.set(introTextElements[1], {
+            x: animationProgress * moveDistance,
+          });
+          gsap.set(introTextElements[0], { opacity: 1 });
+          gsap.set(introTextElements[1], { opacity: 1 });
 
-      return new Promise<THREE.Texture[]>((resolve) => {
-        projects.forEach((project) => {
-          const texture = textureLoader.load(
-            project.image,
-            () => {
-              if (++loadedCount === projects.length) resolve(imageTextures);
-            },
-            undefined,
-            () => {
-              if (++loadedCount === projects.length) resolve(imageTextures);
-            }
-          );
-
-          Object.assign(texture, {
-            wrapS: THREE.ClampToEdgeWrapping,
-            wrapT: THREE.ClampToEdgeWrapping,
-            minFilter: THREE.LinearFilter,
-            magFilter: THREE.LinearFilter,
+          gsap.set('.spotlight-bg-img', {
+            transform: `scale(${animationProgress})`,
+          });
+          gsap.set('.spotlight-bg-img img', {
+            transform: `scale(${1.5 - animationProgress * 0.5})`,
           });
 
-          imageTextures.push(texture);
-          textTextures.push(createTextTexture(project.title, project.year));
-        });
-      });
-    };
+          imageElements.forEach((img) => gsap.set(img, { opacity: 0 }));
+          if (spotlightHeader) spotlightHeader.style.opacity = '0';
+          gsap.set(titlesContainerElement, {
+            '--before-opacity': '0',
+            '--after-opacity': '0',
+          } as any);
+        } else if (progress > 0.2 && progress <= 0.25) {
+          gsap.set('.spotlight-bg-img', { transform: 'scale(1)' });
+          gsap.set('.spotlight-bg-img img', { transform: 'scale(1)' });
 
-    const updateMousePosition = (event: MouseEvent) => {
-      const rect = renderer.domElement.getBoundingClientRect();
-      mousePosition.x = event.clientX - rect.left;
-      mousePosition.y = event.clientY - rect.top;
-      if (plane?.material instanceof THREE.ShaderMaterial) {
-        (plane.material.uniforms.uMousePos.value as THREE.Vector2).set(
-          mousePosition.x,
-          mousePosition.y
-        );
-      }
-    };
+          gsap.set(introTextElements[0], { opacity: 0 });
+          gsap.set(introTextElements[1], { opacity: 0 });
 
-    const startDrag = (x: number, y: number) => {
-      isDragging = true;
-      isClick = true;
-      clickStartTime = Date.now();
-      document.body.classList.add('dragging');
-      previousMouse.x = x;
-      previousMouse.y = y;
-      setTimeout(() => isDragging && (targetZoom = config.zoomLevel), 150);
-    };
+          imageElements.forEach((img) => gsap.set(img, { opacity: 0 }));
+          if (spotlightHeader) spotlightHeader.style.opacity = '1';
+          gsap.set(titlesContainerElement, {
+            '--before-opacity': '1',
+            '--after-opacity': '1',
+          } as any);
+        } else if (progress > 0.25 && progress <= 0.95) {
+          gsap.set('.spotlight-bg-img', { transform: 'scale(1)' });
+          gsap.set('.spotlight-bg-img img', { transform: 'scale(1)' });
 
-    const handleMove = (currentX: number, currentY: number) => {
-      if (!isDragging || currentX === undefined || currentY === undefined) return;
+          gsap.set(introTextElements[0], { opacity: 0 });
+          gsap.set(introTextElements[1], { opacity: 0 });
 
-      const deltaX = currentX - previousMouse.x;
-      const deltaY = currentY - previousMouse.y;
+          if (spotlightHeader) spotlightHeader.style.opacity = '1';
+          gsap.set(titlesContainerElement, {
+            '--before-opacity': '1',
+            '--after-opacity': '1',
+          } as any);
 
-      if (Math.abs(deltaX) > 2 || Math.abs(deltaY) > 2) {
-        isClick = false;
-        if (targetZoom === 1.0) targetZoom = config.zoomLevel;
-      }
+          const switchProgress = (progress - 0.25) / 0.7;
+          const viewportHeight = window.innerHeight;
+          const titlesContainerHeight = titlesContainer?.scrollHeight || 0;
+          const startPosition = viewportHeight;
+          const targetPosition = -titlesContainerHeight;
+          const totalDistance = startPosition - targetPosition;
+          const currentY = startPosition - switchProgress * totalDistance;
 
-      targetOffset.x -= deltaX * 0.003;
-      targetOffset.y += deltaY * 0.003;
-      previousMouse.x = currentX;
-      previousMouse.y = currentY;
-    };
+          gsap.set('.spotlight-titles', {
+            transform: `translateY(${currentY}px)`,
+          });
 
-    const onPointerUp = (event: PointerEvent | TouchEvent) => {
-      isDragging = false;
-      document.body.classList.remove('dragging');
-      targetZoom = 1.0;
+          imageElements.forEach((img, index) => {
+            const imageProgress = getImgProgressState(index, switchProgress);
 
-      if (isClick && Date.now() - clickStartTime < 200) {
-        const endX =
-          (event as PointerEvent).clientX || (event as TouchEvent).changedTouches?.[0]?.clientX;
-        const endY =
-          (event as PointerEvent).clientY || (event as TouchEvent).changedTouches?.[0]?.clientY;
+            if (imageProgress < 0 || imageProgress > 1) {
+              gsap.set(img, { opacity: 0 });
+            } else {
+              const pos = getBezierPosition(imageProgress);
+              gsap.set(img, {
+                x: pos.x - 100,
+                y: pos.y - 75,
+                opacity: 1,
+              });
+            }
+          });
 
-        if (endX !== undefined && endY !== undefined) {
-          const rect = renderer.domElement.getBoundingClientRect();
-          const screenX = ((endX - rect.left) / rect.width) * 2 - 1;
-          const screenY = -(((endY - rect.top) / rect.height) * 2 - 1);
+          const viewportMiddle = viewportHeight / 2;
+          let closestIndex = 0;
+          let closestDistance = Infinity;
 
-          const radius = Math.sqrt(screenX * screenX + screenY * screenY);
-          const distortion = 1.0 - 0.08 * radius * radius;
+          titleElements?.forEach((title, index) => {
+            const titleRect = title.getBoundingClientRect();
+            const titleCenter = titleRect.top + titleRect.height / 2;
+            const distanceFromCenter = Math.abs(titleCenter - viewportMiddle);
 
-          let worldX =
-            screenX * distortion * (rect.width / rect.height) * zoomLevel + offset.x;
-          let worldY = screenY * distortion * zoomLevel + offset.y;
+            if (distanceFromCenter < closestDistance) {
+              closestDistance = distanceFromCenter;
+              closestIndex = index;
+            }
+          });
 
-          const cellX = Math.floor(worldX / config.cellSize);
-          const cellY = Math.floor(worldY / config.cellSize);
-          const gridWidth = Math.ceil(Math.sqrt(projects.length));
-          const texIndex = Math.floor((cellX + cellY * gridWidth) % projects.length);
-          const actualIndex = texIndex < 0 ? projects.length + texIndex : texIndex;
-
-          if (projects[actualIndex]?.id) {
-            navigate(`/project/${projects[actualIndex].id}`);
+          if (closestIndex !== currentActiveIndex) {
+            if (titleElements && titleElements[currentActiveIndex]) {
+              titleElements[currentActiveIndex].style.opacity = '0.25';
+            }
+            if (titleElements) titleElements[closestIndex].style.opacity = '1';
+            const bgImg = document.querySelector(
+              '.spotlight-bg-img img'
+            ) as HTMLImageElement;
+            if (bgImg) bgImg.src = spotlightItems[closestIndex].img;
+            currentActiveIndex = closestIndex;
           }
+        } else if (progress > 0.95) {
+          if (spotlightHeader) spotlightHeader.style.opacity = '0';
+          gsap.set(titlesContainerElement, {
+            '--before-opacity': '0',
+            '--after-opacity': '0',
+          } as any);
         }
-      }
-    };
-
-    const onWindowResize = () => {
-      if (!containerRef.current) return;
-
-      const { offsetWidth: width, offsetHeight: height } = containerRef.current;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(window.devicePixelRatio);
-      if (plane?.material instanceof THREE.ShaderMaterial) {
-        (plane.material.uniforms.uResolution.value as THREE.Vector2).set(width, height);
-      }
-    };
-
-    const setupEventListeners = () => {
-      document.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
-      document.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
-      document.addEventListener('mouseup', onPointerUp);
-      document.addEventListener('mouseleave', onPointerUp);
-
-      const passiveOpts = { passive: false };
-      document.addEventListener(
-        'touchstart',
-        (e) => {
-          e.preventDefault();
-          startDrag(e.touches[0].clientX, e.touches[0].clientY);
-        },
-        passiveOpts
-      );
-      document.addEventListener(
-        'touchmove',
-        (e) => {
-          e.preventDefault();
-          handleMove(e.touches[0].clientX, e.touches[0].clientY);
-        },
-        passiveOpts
-      );
-      document.addEventListener('touchend', onPointerUp, passiveOpts);
-
-      window.addEventListener('resize', onWindowResize);
-      document.addEventListener('contextmenu', (e) => e.preventDefault());
-
-      renderer.domElement.addEventListener('mousemove', updateMousePosition);
-      renderer.domElement.addEventListener('mouseleave', () => {
-        mousePosition.x = mousePosition.y = -1;
-        if (plane?.material instanceof THREE.ShaderMaterial) {
-          (plane.material.uniforms.uMousePos.value as THREE.Vector2).set(-1, -1);
-        }
-      });
-    };
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-
-      offset.x += (targetOffset.x - offset.x) * config.lerpFactor;
-      offset.y += (targetOffset.y - offset.y) * config.lerpFactor;
-      zoomLevel += (targetZoom - zoomLevel) * config.lerpFactor;
-
-      if (plane?.material instanceof THREE.ShaderMaterial) {
-        (plane.material.uniforms.uOffset.value as THREE.Vector2).set(offset.x, offset.y);
-        (plane.material.uniforms.uZoom as any).value = zoomLevel;
-      }
-
-      renderer.render(scene, camera);
-    };
-
-    const init = async () => {
-      if (!containerRef.current) return;
-
-      scene = new THREE.Scene();
-      camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-      camera.position.z = 1;
-
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-      renderer.setSize(containerRef.current.offsetWidth, containerRef.current.offsetHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
-
-      const bgColor = rgbaToArray(config.backgroundColor);
-      renderer.setClearColor(
-        new THREE.Color(bgColor[0], bgColor[1], bgColor[2]),
-        bgColor[3]
-      );
-      containerRef.current.appendChild(renderer.domElement);
-
-      const imageTextures = await loadTextures();
-      const imageAtlas = createTextureAtlas(imageTextures, false);
-      const textAtlas = createTextureAtlas(textTextures, true);
-
-      const uniforms = {
-        uOffset: { value: new THREE.Vector2(0, 0) },
-        uResolution: {
-          value: new THREE.Vector2(
-            containerRef.current.offsetWidth,
-            containerRef.current.offsetHeight
-          ),
-        },
-        uBorderColor: {
-          value: new THREE.Vector4(...(rgbaToArray(config.borderColor) as [number, number, number, number])),
-        },
-        uHoverColor: {
-          value: new THREE.Vector4(...(rgbaToArray(config.hoverColor) as [number, number, number, number])),
-        },
-        uBackgroundColor: {
-          value: new THREE.Vector4(...(rgbaToArray(config.backgroundColor) as [number, number, number, number])),
-        },
-        uMousePos: { value: new THREE.Vector2(-1, -1) },
-        uZoom: { value: 1.0 },
-        uCellSize: { value: config.cellSize },
-        uTextureCount: { value: projects.length },
-        uImageAtlas: { value: imageAtlas },
-        uTextAtlas: { value: textAtlas },
-      };
-
-      const geometry = new THREE.PlaneGeometry(2, 2);
-      const material = new THREE.ShaderMaterial({
-        vertexShader,
-        fragmentShader,
-        uniforms,
-      });
-
-      plane = new THREE.Mesh(geometry, material);
-      scene.add(plane);
-
-      setupEventListeners();
-      animate();
-    };
-
-    init();
+      },
+    });
 
     return () => {
-      if (containerRef.current && renderer?.domElement) {
-        try {
-          containerRef.current.removeChild(renderer.domElement);
-        } catch (e) {}
-      }
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
   return (
-    <div className="flex flex-col w-screen h-screen bg-black">
-      <div
-        ref={containerRef}
-        className="relative flex-1 overflow-hidden bg-black"
-        style={{ cursor: 'grab' }}
-      />
-      <footer className="flex flex-col items-center justify-center gap-8 border-t border-white/10 px-6 py-12 bg-black z-20">
-        <nav className="pointer-events-auto flex justify-center gap-6 text-xs font-medium uppercase tracking-widest">
-          <MagneticLink
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            className="text-[#f0f0f0] hover:opacity-80"
-          >
-            SPRDLX
-          </MagneticLink>
-          <span className="select-none opacity-40">•</span>
-          <MagneticLink
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              (window as any).lenisInstance?.stop();
-              setTimeout(() => navigate('/'), 600);
-            }}
-            className="text-[#888888] hover:opacity-80"
-          >
-            HOME
-          </MagneticLink>
-          <span className="select-none opacity-40">•</span>
-          <MagneticLink
-            href="/about"
-            onClick={(e) => {
-              e.preventDefault();
-              (window as any).lenisInstance?.stop();
-              setTimeout(() => navigate('/about'), 600);
-            }}
-            className="text-[#888888] hover:opacity-80"
-          >
-            ABOUT
-          </MagneticLink>
-          <span className="select-none opacity-40">•</span>
-          <MagneticLink
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            className="text-[#888888] opacity-70 hover:opacity-80"
-          >
-            CONTACT
-          </MagneticLink>
-        </nav>
-      </footer>
+    <div className="bg-black text-white">
+      <section className="intro flex justify-center items-center w-screen h-screen bg-[#0f0f0f] text-white overflow-hidden">
+        <h1 className="text-6xl font-medium leading-tight">
+          A curated series of projects.
+        </h1>
+      </section>
 
-      <div
-        className="pointer-events-none fixed inset-0 z-40 bg-black transition-opacity duration-600 ease-in-out"
-        style={{ opacity: 0 }}
-        aria-hidden
-      />
+      <section className="spotlight relative w-screen h-screen overflow-hidden bg-black">
+        <div className="spotlight-intro-text-wrapper absolute w-full top-1/2 -translate-y-1/2 flex gap-2">
+          <div className="spotlight-intro-text flex-1 relative will-change-transform flex justify-end">
+            <p className="text-6xl font-medium leading-none">Discover</p>
+          </div>
+          <div className="spotlight-intro-text flex-1 relative will-change-transform">
+            <p className="text-6xl font-medium leading-none">Innovation</p>
+          </div>
+        </div>
+
+        <div className="spotlight-bg-img absolute w-full h-full overflow-hidden scale-0 will-change-transform">
+          <img
+            src="/Logos/img5.jpeg"
+            alt=""
+            className="w-full h-full object-cover scale-150 will-change-transform"
+          />
+        </div>
+
+        <div
+          className="spotlight-titles-container absolute top-0 left-[15vw] w-full h-full overflow-hidden"
+          style={{
+            clipPath:
+              'polygon(50svh 0px, 0px 50%, 50svh 100%, 100% calc(100% + 100svh), 100% -100svh)',
+            '--before-opacity': 0,
+            '--after-opacity': 0,
+          } as any}
+        >
+          <style>{`
+            .spotlight-titles-container::before,
+            .spotlight-titles-container::after {
+              content: "";
+              position: absolute;
+              width: 100svh;
+              height: 2.5px;
+              background: #fff;
+              pointer-events: none;
+              transition: opacity 0.3s ease;
+              z-index: 10;
+            }
+            .spotlight-titles-container::before {
+              top: 0;
+              left: 0;
+              transform: rotate(-45deg) translate(-7rem);
+              opacity: var(--before-opacity);
+            }
+            .spotlight-titles-container::after {
+              bottom: 0;
+              left: 0;
+              transform: rotate(45deg) translate(-7rem);
+              opacity: var(--after-opacity);
+            }
+          `}</style>
+          <div className="spotlight-titles relative left-[15%] w-3/4 h-full flex flex-col gap-20 translate-y-full" />
+        </div>
+
+        <div className="spotlight-images absolute top-0 right-0 w-1/2 min-w-[300px] h-full z-1 pointer-events-none" />
+
+        <div className="spotlight-header absolute top-1/2 left-[10%] -translate-y-1/2 text-white transition-opacity duration-300 z-2 opacity-0">
+          <p className="text-6xl font-medium">Explore</p>
+        </div>
+      </section>
+
+      <section className="outro flex justify-center items-center w-screen h-screen bg-[#0f0f0f] text-white overflow-hidden">
+        <h1 className="text-6xl font-medium leading-tight">
+          Moments in still motion.
+        </h1>
+      </section>
     </div>
   );
 }
