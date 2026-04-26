@@ -407,6 +407,12 @@ export default function Projects() {
           </MagneticLink>
         </nav>
       </footer>
+
+      <div
+        className="pointer-events-none fixed inset-0 z-40 bg-black transition-opacity duration-600 ease-in-out"
+        style={{ opacity: 0 }}
+        aria-hidden
+      />
     </div>
   );
 }

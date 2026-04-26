@@ -83,7 +83,6 @@ export default function Home() {
         <header className="flex items-start justify-between gap-6">
         </header>
 
-
         <footer className="relative mt-auto flex flex-col gap-8">
           <nav
             data-home-reveal
@@ -124,6 +123,11 @@ export default function Home() {
         </footer>
       </div>
 
+      <div
+        className="pointer-events-none absolute inset-0 z-40 bg-black transition-opacity duration-600 ease-in-out"
+        style={{ opacity: 0 }}
+        aria-hidden
+      />
     </div>
   );
 }

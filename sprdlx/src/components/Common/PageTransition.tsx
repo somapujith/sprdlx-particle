@@ -3,24 +3,37 @@ import { useLocation } from 'react-router-dom';
 
 export function PageTransition() {
   const location = useLocation();
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayTransition, setDisplayTransition] = useState(false);
+  const [isFadingOut, setIsFadingOut] = useState(false);
+  const [isFadingIn, setIsFadingIn] = useState(true);
 
   useEffect(() => {
-    setIsTransitioning(true);
-    setDisplayTransition(true);
+    // Start fade out of current page
+    setIsFadingOut(true);
+    setIsFadingIn(false);
 
-    const timer = setTimeout(() => {
-      setIsTransitioning(false);
+    // After fade out, switch page and fade in
+    const fadeOutTimer = setTimeout(() => {
+      setIsFadingOut(false);
+      setIsFadingIn(true);
+    }, 600);
+
+    // End fade in
+    const fadeInTimer = setTimeout(() => {
+      setIsFadingIn(false);
     }, 1200);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(fadeOutTimer);
+      clearTimeout(fadeInTimer);
+    };
   }, [location.pathname]);
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-50 bg-black transition-opacity duration-[1200ms] ease-in-out"
-      style={{ opacity: isTransitioning ? 1 : 0 }}
+      className="pointer-events-none fixed inset-0 z-50 bg-black transition-opacity duration-600 ease-in-out"
+      style={{
+        opacity: isFadingOut ? 1 : (isFadingIn ? 1 : 0),
+      }}
       aria-hidden
     />
   );
