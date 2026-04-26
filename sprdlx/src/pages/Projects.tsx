@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import './projects/styles.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import './projects/styles.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,6 +18,8 @@ const spotlightItems = [
 ];
 
 export default function Projects() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     (window as any).lenisInstance?.start();
 
@@ -28,14 +30,20 @@ export default function Projects() {
       gsap.ticker.lagSmoothing(0);
     }
 
-    const titlesContainer = document.querySelector('.spotlight-titles');
-    const imagesContainer = document.querySelector('.spotlight-images');
-    const spotlightHeader = document.querySelector('.spotlight-header');
-    const titlesContainerElement = document.querySelector(
+    if (!containerRef.current) return;
+
+    const titlesContainer = containerRef.current.querySelector('.spotlight-titles');
+    const imagesContainer = containerRef.current.querySelector('.spotlight-images');
+    const spotlightHeader = containerRef.current.querySelector('.spotlight-header');
+    const titlesContainerElement = containerRef.current.querySelector(
       '.spotlight-titles-container'
     );
-    const introTextElements = document.querySelectorAll('.spotlight-intro-text');
+    const introTextElements = containerRef.current.querySelectorAll('.spotlight-intro-text');
     const imageElements: HTMLElement[] = [];
+
+    // Clear and rebuild
+    if (titlesContainer) titlesContainer.innerHTML = '';
+    if (imagesContainer) imagesContainer.innerHTML = '';
 
     spotlightItems.forEach((item, index) => {
       const titleElement = document.createElement('h1');
@@ -88,8 +96,11 @@ export default function Projects() {
 
     imageElements.forEach((img) => gsap.set(img, { opacity: 0 }));
 
+    const spotlightElement = containerRef.current.querySelector('.spotlight');
+    if (!spotlightElement) return;
+
     ScrollTrigger.create({
-      trigger: '.spotlight',
+      trigger: spotlightElement,
       start: 'top top',
       end: `+=${window.innerHeight * 10}px`,
       pin: true,
@@ -111,10 +122,10 @@ export default function Projects() {
           gsap.set(introTextElements[0], { opacity: 1 });
           gsap.set(introTextElements[1], { opacity: 1 });
 
-          gsap.set('.spotlight-bg-img', {
+          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img'), {
             transform: `scale(${animationProgress})`,
           });
-          gsap.set('.spotlight-bg-img img', {
+          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img img'), {
             transform: `scale(${1.5 - animationProgress * 0.5})`,
           });
 
@@ -125,8 +136,12 @@ export default function Projects() {
             '--after-opacity': '0',
           } as any);
         } else if (progress > 0.2 && progress <= 0.25) {
-          gsap.set('.spotlight-bg-img', { transform: 'scale(1)' });
-          gsap.set('.spotlight-bg-img img', { transform: 'scale(1)' });
+          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img'), {
+            transform: 'scale(1)',
+          });
+          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img img'), {
+            transform: 'scale(1)',
+          });
 
           gsap.set(introTextElements[0], { opacity: 0 });
           gsap.set(introTextElements[1], { opacity: 0 });
@@ -138,8 +153,12 @@ export default function Projects() {
             '--after-opacity': '1',
           } as any);
         } else if (progress > 0.25 && progress <= 0.95) {
-          gsap.set('.spotlight-bg-img', { transform: 'scale(1)' });
-          gsap.set('.spotlight-bg-img img', { transform: 'scale(1)' });
+          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img'), {
+            transform: 'scale(1)',
+          });
+          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img img'), {
+            transform: 'scale(1)',
+          });
 
           gsap.set(introTextElements[0], { opacity: 0 });
           gsap.set(introTextElements[1], { opacity: 0 });
@@ -158,7 +177,7 @@ export default function Projects() {
           const totalDistance = startPosition - targetPosition;
           const currentY = startPosition - switchProgress * totalDistance;
 
-          gsap.set('.spotlight-titles', {
+          gsap.set(titlesContainer, {
             transform: `translateY(${currentY}px)`,
           });
 
@@ -197,7 +216,7 @@ export default function Projects() {
               titleElements[currentActiveIndex].style.opacity = '0.25';
             }
             if (titleElements) titleElements[closestIndex].style.opacity = '1';
-            const bgImg = document.querySelector(
+            const bgImg = containerRef.current?.querySelector(
               '.spotlight-bg-img img'
             ) as HTMLImageElement;
             if (bgImg) bgImg.src = spotlightItems[closestIndex].img;
@@ -219,79 +238,38 @@ export default function Projects() {
   }, []);
 
   return (
-    <div className="bg-black text-white">
-      <section className="intro flex justify-center items-center w-screen h-screen bg-[#0f0f0f] text-white overflow-hidden">
-        <h1 className="text-6xl font-medium leading-tight">
-          A curated series of projects.
-        </h1>
+    <div ref={containerRef} className="projects-container">
+      <section className="intro">
+        <h1>A curated series of surreal frames.</h1>
       </section>
 
-      <section className="spotlight relative w-screen h-screen overflow-hidden bg-black">
-        <div className="spotlight-intro-text-wrapper absolute w-full top-1/2 -translate-y-1/2 flex gap-2">
-          <div className="spotlight-intro-text flex-1 relative will-change-transform flex justify-end">
-            <p className="text-6xl font-medium leading-none">Discover</p>
+      <section className="spotlight">
+        <div className="spotlight-intro-text-wrapper">
+          <div className="spotlight-intro-text">
+            <p>Beneath</p>
           </div>
-          <div className="spotlight-intro-text flex-1 relative will-change-transform">
-            <p className="text-6xl font-medium leading-none">Innovation</p>
+          <div className="spotlight-intro-text">
+            <p>Beyond</p>
           </div>
         </div>
 
-        <div className="spotlight-bg-img absolute w-full h-full overflow-hidden scale-0 will-change-transform">
-          <img
-            src="/projects/img_1.jpg"
-            alt=""
-            className="w-full h-full object-cover scale-150 will-change-transform"
-          />
+        <div className="spotlight-bg-img">
+          <img src={spotlightItems[0].img} alt="" />
         </div>
 
-        <div
-          className="spotlight-titles-container absolute top-0 left-[15vw] w-full h-full overflow-hidden"
-          style={{
-            clipPath:
-              'polygon(50svh 0px, 0px 50%, 50svh 100%, 100% calc(100% + 100svh), 100% -100svh)',
-            '--before-opacity': 0,
-            '--after-opacity': 0,
-          } as any}
-        >
-          <style>{`
-            .spotlight-titles-container::before,
-            .spotlight-titles-container::after {
-              content: "";
-              position: absolute;
-              width: 100svh;
-              height: 2.5px;
-              background: #fff;
-              pointer-events: none;
-              transition: opacity 0.3s ease;
-              z-index: 10;
-            }
-            .spotlight-titles-container::before {
-              top: 0;
-              left: 0;
-              transform: rotate(-45deg) translate(-7rem);
-              opacity: var(--before-opacity);
-            }
-            .spotlight-titles-container::after {
-              bottom: 0;
-              left: 0;
-              transform: rotate(45deg) translate(-7rem);
-              opacity: var(--after-opacity);
-            }
-          `}</style>
-          <div className="spotlight-titles relative left-[15%] w-3/4 h-full flex flex-col gap-20 translate-y-full" />
+        <div className="spotlight-titles-container">
+          <div className="spotlight-titles"></div>
         </div>
 
-        <div className="spotlight-images absolute top-0 right-0 w-1/2 min-w-[300px] h-full z-1 pointer-events-none" />
+        <div className="spotlight-images"></div>
 
-        <div className="spotlight-header absolute top-1/2 left-[10%] -translate-y-1/2 text-white transition-opacity duration-300 z-2 opacity-0">
-          <p className="text-6xl font-medium">Explore</p>
+        <div className="spotlight-header">
+          <p>Discover</p>
         </div>
       </section>
 
-      <section className="outro flex justify-center items-center w-screen h-screen bg-[#0f0f0f] text-white overflow-hidden">
-        <h1 className="text-6xl font-medium leading-tight">
-          Moments in still motion.
-        </h1>
+      <section className="outro">
+        <h1>Moments in still motion.</h1>
       </section>
     </div>
   );
