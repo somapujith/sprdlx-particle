@@ -58,6 +58,9 @@ function About() {
         backgroundColor: '#000000',
       }}
     >
+      <nav>
+        <p className="nav-toggle cursor-pointer">MENU</p>
+      </nav>
       <MenuOverlay />
       <section
         id="about-hero"
