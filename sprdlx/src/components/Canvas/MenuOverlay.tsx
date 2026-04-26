@@ -329,20 +329,7 @@ function MenuOverlay() {
   }, []);
 
   return (
-    <>
-      <nav>
-        <div className="nav-toggle">
-          <p>Menu</p>
-        </div>
-        <div className="nav-close" style={{ display: 'none' }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </div>
-      </nav>
-
-      <div ref={menuOverlayRef} className="menu-overlay">
+    <div ref={menuOverlayRef} className="menu-overlay">
         <div className="menu-content">
           <div className="menu-col">
             <p>SPRDLX</p>
@@ -416,7 +403,7 @@ function MenuOverlay() {
           <p>Scroll</p>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
