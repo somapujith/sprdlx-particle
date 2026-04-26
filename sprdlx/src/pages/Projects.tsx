@@ -11,9 +11,9 @@ const config = {
 };
 
 const spotlightItems = [
-  { name: 'Pulp', img: '/Logos/img5.jpeg' },
-  { name: 'Esthetic Insights', img: '/Logos/img16.jpeg' },
-  { name: 'Anthill', img: '/Logos/img17.jpeg' },
+  { name: 'Pulp', img: '/projects/img_1.jpg' },
+  { name: 'Esthetic Insights', img: '/projects/img_2.jpg' },
+  { name: 'Anthill', img: '/projects/img_3.jpg' },
 ];
 
 export default function Projects() {
@@ -237,7 +237,7 @@ export default function Projects() {
 
         <div className="spotlight-bg-img absolute w-full h-full overflow-hidden scale-0 will-change-transform">
           <img
-            src="/Logos/img5.jpeg"
+            src="/projects/img_1.jpg"
             alt=""
             className="w-full h-full object-cover scale-150 will-change-transform"
           />
