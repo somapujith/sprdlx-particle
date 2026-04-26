@@ -239,10 +239,6 @@ export default function Projects() {
 
   return (
     <div ref={containerRef} className="projects-container">
-      <section className="intro">
-        <h1>A curated series of surreal frames.</h1>
-      </section>
-
       <section className="spotlight">
         <div className="spotlight-intro-text-wrapper">
           <div className="spotlight-intro-text">
@@ -266,10 +262,6 @@ export default function Projects() {
         <div className="spotlight-header">
           <p>Discover</p>
         </div>
-      </section>
-
-      <section className="outro">
-        <h1>Moments in still motion.</h1>
       </section>
     </div>
   );
