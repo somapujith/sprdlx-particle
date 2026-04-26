@@ -43,13 +43,13 @@ body {
 /* Menu Overlay Styles */
 nav {
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
-  width: 100vw;
-  padding: 0.5rem 1rem;
+  width: auto;
+  padding: 1rem;
   color: #fefff8;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 2rem;
   mix-blend-mode: difference;
