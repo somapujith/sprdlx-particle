@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, Suspense } from 'react';
+import { useEffect, useLayoutEffect, useRef, Suspense } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import { useLazyLoad3D } from '../hooks/useLazyLoad3D';
@@ -19,22 +19,15 @@ export default function Home() {
     };
   }, []);
   const navigate = useNavigate();
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const splineRef = useRef<HTMLDivElement>(null);
-
   const uiRootRef = useRef<HTMLDivElement>(null);
 
-  const handleAboutClick = (e: MouseEvent<HTMLAnchorElement>) => {
+  const handleNavigation = (path: string) => (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-
-    if (isTransitioning) return;
-
-    setIsTransitioning(true);
-
     (window as any).lenisInstance?.stop();
     setTimeout(() => {
-      navigate('/about', { state: { fromAbout: true } });
-    }, 1000);
+      navigate(path);
+    }, 600);
   };
 
 
@@ -106,7 +99,7 @@ export default function Home() {
             <span className="select-none opacity-40">•</span>
             <MagneticLink
               href="/about"
-              onClick={handleAboutClick}
+              onClick={handleNavigation('/about')}
               className="text-[#888888] hover:opacity-80"
             >
               ABOUT
@@ -114,10 +107,7 @@ export default function Home() {
             <span className="select-none opacity-40">•</span>
             <MagneticLink
               href="/projects"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate('/projects');
-              }}
+              onClick={handleNavigation('/projects')}
               className="text-[#888888] hover:opacity-80"
             >
               PROJECTS
@@ -134,11 +124,6 @@ export default function Home() {
         </footer>
       </div>
 
-      <div
-        className="pointer-events-none absolute inset-0 z-50 bg-black transition-opacity duration-1000 ease-in-out"
-        style={{ opacity: isTransitioning ? 1 : 0 }}
-        aria-hidden
-      />
     </div>
   );
 }

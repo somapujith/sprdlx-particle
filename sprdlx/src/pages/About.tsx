@@ -128,6 +128,11 @@ function About() {
           <span className="select-none opacity-40">•</span>
           <MagneticLink
             href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              (window as any).lenisInstance?.stop();
+              setTimeout(() => navigate('/'), 600);
+            }}
             className="text-[#888888] hover:opacity-80"
           >
             HOME
@@ -135,6 +140,11 @@ function About() {
           <span className="select-none opacity-40">•</span>
           <MagneticLink
             href="/projects"
+            onClick={(e) => {
+              e.preventDefault();
+              (window as any).lenisInstance?.stop();
+              setTimeout(() => navigate('/projects'), 600);
+            }}
             className="text-[#888888] hover:opacity-80"
           >
             PROJECTS

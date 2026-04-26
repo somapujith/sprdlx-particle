@@ -376,6 +376,11 @@ export default function Projects() {
           <span className="select-none opacity-40">•</span>
           <MagneticLink
             href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              (window as any).lenisInstance?.stop();
+              setTimeout(() => navigate('/'), 600);
+            }}
             className="text-[#888888] hover:opacity-80"
           >
             HOME
@@ -383,6 +388,11 @@ export default function Projects() {
           <span className="select-none opacity-40">•</span>
           <MagneticLink
             href="/about"
+            onClick={(e) => {
+              e.preventDefault();
+              (window as any).lenisInstance?.stop();
+              setTimeout(() => navigate('/about'), 600);
+            }}
             className="text-[#888888] hover:opacity-80"
           >
             ABOUT

@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import LoadingScreen from './components/Common/LoadingScreen';
 import { CustomCursor } from './components/ui/CustomCursor';
 import ScrollToTop from './components/Common/ScrollToTop';
+import { PageTransition } from './components/Common/PageTransition';
 
 const About = lazy(() => import('./pages/About'));
 const Projects = lazy(() => import('./pages/Projects'));
@@ -59,6 +60,7 @@ export default function App() {
       <Router>
         <ScrollToTop />
         <CustomCursor />
+        <PageTransition />
         <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
           <Routes>
             <Route path="/" element={<Home />} />

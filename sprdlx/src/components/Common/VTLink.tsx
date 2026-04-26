@@ -69,6 +69,7 @@ const VTLink = forwardRef<HTMLAnchorElement, LinkProps>(function VTLink(
           prefetchPath(to.split('#')[0] || '/');
         }
 
+        (window as any).lenisInstance?.stop();
         const run = () => navigate(to, { replace, state });
 
         if (typeof document !== 'undefined' && typeof document.startViewTransition === 'function') {
