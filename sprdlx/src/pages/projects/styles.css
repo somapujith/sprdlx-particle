@@ -1,7 +1,12 @@
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+body {
+  background-color: #ffffff;
+  overflow-x: hidden;
 }
 
 img {
@@ -13,7 +18,7 @@ img {
 section {
   position: relative;
   width: 100vw;
-  height: 100svh;
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -22,183 +27,100 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0f0f0f;
-  color: #fff;
+  background-color: #ffffff;
+  color: #000;
 }
 
 .intro h1,
 .outro h1 {
-  font-size: 4rem;
-  font-weight: 500;
-  line-height: 1;
+  font-family: "GR NORCH";
+  font-size: 5vw;
+  font-weight: lighter;
+  text-transform: uppercase;
 }
 
-.spotlight-intro-text-wrapper {
-  position: absolute;
-  width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  gap: 0.5rem;
+.outro {
+  top: -0.125em;
 }
 
-.spotlight-intro-text {
-  flex: 1;
-  position: relative;
-  will-change: transform;
-}
-
-.spotlight-intro-text:nth-child(1) {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.spotlight-intro-text p {
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.spotlight-bg-img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+.work {
+  background-color: #000;
   overflow: hidden;
-  transform: scale(0);
-  will-change: transform;
 }
 
-.spotlight-bg-img img {
-  transform: scale(1.5);
-  will-change: transform;
-}
-
-.spotlight-titles-container {
+canvas {
   position: absolute;
   top: 0;
-  left: 15vw;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  clip-path: polygon(
-    50svh 0px,
-    0px 50%,
-    50svh 100%,
-    100% calc(100% + 100svh),
-    100% -100svh
-  );
-  --before-opacity: 0;
-  --after-opacity: 0;
+  left: 0;
 }
 
-.spotlight-titles-container::before,
-.spotlight-titles-container::after {
-  content: "";
+#grid-canvas {
+  z-index: 0;
+}
+
+#letters-canvas {
+  z-index: 1;
+}
+
+.text-container {
+  width: 100%;
+  height: 100%;
   position: absolute;
-  width: 100svh;
-  height: 2.5px;
-  background: #fff;
+  top: 0;
+  left: 0;
+  z-index: 2;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  perspective: 2500px;
+  perspective-origin: center;
+}
+
+.letter {
+  position: absolute;
+  font-family: "Bigger", sans-serif;
+  font-size: 14rem;
+  font-weight: bold;
+  color: #ffffff;
+  z-index: 2;
+  transform-origin: center;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.cards {
+  position: relative;
+  width: 500vw;
+  height: 100vh;
+  padding-left: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   z-index: 10;
 }
 
-.spotlight-titles-container::before {
-  top: 0;
-  left: 0;
-  transform: rotate(-45deg) translate(-7rem);
-  opacity: var(--before-opacity);
-}
-
-.spotlight-titles-container::after {
-  bottom: 0;
-  left: 0;
-  transform: rotate(45deg) translate(-7rem);
-  opacity: var(--after-opacity);
-}
-
-.spotlight-titles {
-  position: relative;
-  left: 15%;
-  width: 75%;
-  height: 100%;
+.card {
+  width: 10%;
+  height: 50%;
+  padding: 8px;
+  background-color: #000;
   display: flex;
   flex-direction: column;
-  gap: 5rem;
-  transform: translateY(100%);
-  z-index: 2;
+  gap: 8px;
 }
 
-.spotlight-titles h1 {
-  color: #fff;
-  opacity: 0.25;
-  transition: opacity 0.3s ease;
-  font-size: 4rem;
-  font-weight: 500;
-  line-height: 1;
+.card-img {
+  flex: 1;
+  overflow: hidden;
 }
 
-.spotlight-images {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  min-width: 300px;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.spotlight-img {
-  position: absolute;
-  width: 200px;
-  height: 150px;
-  will-change: transform;
-}
-
-.spotlight-header {
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  transform: translateY(-50%);
-  color: #fff;
-  transition: opacity 0.3s ease;
-  z-index: 2;
-  opacity: 0;
-}
-
-.spotlight-header p {
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 1;
-}
-
-@media (max-width: 1000px) {
-  .intro h1,
-  .outro h1 {
-    font-size: 2rem;
-  }
-
-  .intro,
-  .outro {
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .spotlight-titles-container {
-    clip-path: none;
-  }
-
-  .spotlight-titles-container::before,
-  .spotlight-titles-container::after {
-    display: none;
-  }
-
-  .spotlight-titles {
-    left: 0;
-  }
-
-  .spotlight-header {
-    display: none;
-  }
+.card-copy {
+  height: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+  text-transform: uppercase;
+  font-family: "Akkurat Mono";
+  font-size: 12px;
+  color: #ffffff;
 }

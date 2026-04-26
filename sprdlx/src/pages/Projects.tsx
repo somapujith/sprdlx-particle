@@ -1,266 +1,265 @@
 import { useEffect, useRef } from 'react';
 import './projects/styles.css';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
-
-const config = {
-  gap: 0.08,
-  speed: 0.3,
-  arcRadius: 500,
-};
-
-const spotlightItems = [
-  { name: 'Pulp', img: '/projects/img_1.jpg' },
-  { name: 'Esthetic Insights', img: '/projects/img_2.jpg' },
-  { name: 'Anthill', img: '/projects/img_3.jpg' },
-];
 
 export default function Projects() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const workRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     (window as any).lenisInstance?.start();
 
-    const lenis = (window as any).lenisInstance;
-    if (lenis) {
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((time: number) => lenis.raf(time * 1000));
-      gsap.ticker.lagSmoothing(0);
-    }
+    const initAnimation = () => {
+      const lenis = new (window as any).Lenis();
+      lenis.on("scroll", (window as any).ScrollTrigger.update);
+      (window as any).gsap.ticker.add((time: number) => lenis.raf(time * 1000));
+      (window as any).gsap.ticker.lagSmoothing(0);
 
-    if (!containerRef.current) return;
+      const workSection = document.querySelector(".work");
+      const cardsContainer = document.querySelector(".cards");
+      const moveDistance = window.innerWidth * 5;
+      let currentXPosition = 0;
 
-    const titlesContainer = containerRef.current.querySelector('.spotlight-titles');
-    const imagesContainer = containerRef.current.querySelector('.spotlight-images');
-    const spotlightHeader = containerRef.current.querySelector('.spotlight-header');
-    const titlesContainerElement = containerRef.current.querySelector(
-      '.spotlight-titles-container'
-    );
-    const introTextElements = containerRef.current.querySelectorAll('.spotlight-intro-text');
-    const imageElements: HTMLElement[] = [];
+      const lerp = (start: number, end: number, t: number) => start + (end - start) * t;
 
-    // Clear and rebuild
-    if (titlesContainer) titlesContainer.innerHTML = '';
-    if (imagesContainer) imagesContainer.innerHTML = '';
+      const gridCanvas = document.createElement("canvas");
+      gridCanvas.id = "grid-canvas";
+      workSection?.appendChild(gridCanvas);
+      const gridCtx = gridCanvas.getContext("2d");
 
-    spotlightItems.forEach((item, index) => {
-      const titleElement = document.createElement('h1');
-      titleElement.textContent = item.name;
-      if (index === 0) titleElement.style.opacity = '1';
-      titlesContainer?.appendChild(titleElement);
+      const resizeGridCanvas = () => {
+        const dpr = window.devicePixelRatio || 1;
+        gridCanvas.width = window.innerWidth * dpr;
+        gridCanvas.height = window.innerHeight * dpr;
+        gridCanvas.style.width = `${window.innerWidth}px`;
+        gridCanvas.style.height = `${window.innerHeight}px`;
+        gridCtx?.scale(dpr, dpr);
+      };
+      resizeGridCanvas();
 
-      const imgWrapper = document.createElement('div');
-      imgWrapper.className = 'spotlight-img';
-      const imgElement = document.createElement('img');
-      imgElement.src = item.img;
-      imgElement.alt = '';
-      imgWrapper.appendChild(imgElement);
-      imagesContainer?.appendChild(imgWrapper);
-      imageElements.push(imgWrapper);
-    });
+      const drawGrid = (scrollProgress = 0) => {
+        if (!gridCtx) return;
+        gridCtx.fillStyle = "black";
+        gridCtx.fillRect(0, 0, gridCanvas.width, gridCanvas.height);
+        gridCtx.fillStyle = "#ffffff";
+        const dotSize = 1;
+        const spacing = 30;
+        const rows = Math.ceil(gridCanvas.height / spacing);
+        const cols = Math.ceil(gridCanvas.width / spacing) + 15;
+        const offset = (scrollProgress * spacing * 10) % spacing;
 
-    const titleElements = titlesContainer?.querySelectorAll('h1');
-    let currentActiveIndex = 0;
-
-    const containerWidth = window.innerWidth * 0.3;
-    const containerHeight = window.innerHeight;
-    const arcStartX = containerWidth - 220;
-    const arcStartY = -200;
-    const arcEndY = containerHeight + 200;
-    const arcControlPointX = arcStartX + config.arcRadius;
-    const arcControlPointY = containerHeight / 2;
-
-    function getBezierPosition(t: number) {
-      const x =
-        (1 - t) * (1 - t) * arcStartX +
-        2 * (1 - t) * t * arcControlPointX +
-        t * t * arcStartX;
-      const y =
-        (1 - t) * (1 - t) * arcStartY +
-        2 * (1 - t) * t * arcControlPointY +
-        t * t * arcEndY;
-      return { x, y };
-    }
-
-    function getImgProgressState(index: number, overallProgress: number) {
-      const startTime = index * config.gap;
-      const endTime = startTime + config.speed;
-
-      if (overallProgress < startTime) return -1;
-      if (overallProgress > endTime) return 2;
-
-      return (overallProgress - startTime) / config.speed;
-    }
-
-    imageElements.forEach((img) => gsap.set(img, { opacity: 0 }));
-
-    const spotlightElement = containerRef.current.querySelector('.spotlight');
-    if (!spotlightElement) return;
-
-    ScrollTrigger.create({
-      trigger: spotlightElement,
-      start: 'top top',
-      end: `+=${window.innerHeight * 10}px`,
-      pin: true,
-      pinSpacing: true,
-      scrub: 1,
-      onUpdate: (self) => {
-        const progress = self.progress;
-
-        if (progress <= 0.2) {
-          const animationProgress = progress / 0.2;
-
-          const moveDistance = window.innerWidth * 0.6;
-          gsap.set(introTextElements[0], {
-            x: -animationProgress * moveDistance,
-          });
-          gsap.set(introTextElements[1], {
-            x: animationProgress * moveDistance,
-          });
-          gsap.set(introTextElements[0], { opacity: 1 });
-          gsap.set(introTextElements[1], { opacity: 1 });
-
-          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img'), {
-            transform: `scale(${animationProgress})`,
-          });
-          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img img'), {
-            transform: `scale(${1.5 - animationProgress * 0.5})`,
-          });
-
-          imageElements.forEach((img) => gsap.set(img, { opacity: 0 }));
-          if (spotlightHeader) spotlightHeader.style.opacity = '0';
-          gsap.set(titlesContainerElement, {
-            '--before-opacity': '0',
-            '--after-opacity': '0',
-          } as any);
-        } else if (progress > 0.2 && progress <= 0.25) {
-          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img'), {
-            transform: 'scale(1)',
-          });
-          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img img'), {
-            transform: 'scale(1)',
-          });
-
-          gsap.set(introTextElements[0], { opacity: 0 });
-          gsap.set(introTextElements[1], { opacity: 0 });
-
-          imageElements.forEach((img) => gsap.set(img, { opacity: 0 }));
-          if (spotlightHeader) spotlightHeader.style.opacity = '1';
-          gsap.set(titlesContainerElement, {
-            '--before-opacity': '1',
-            '--after-opacity': '1',
-          } as any);
-        } else if (progress > 0.25 && progress <= 0.95) {
-          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img'), {
-            transform: 'scale(1)',
-          });
-          gsap.set(containerRef.current?.querySelector('.spotlight-bg-img img'), {
-            transform: 'scale(1)',
-          });
-
-          gsap.set(introTextElements[0], { opacity: 0 });
-          gsap.set(introTextElements[1], { opacity: 0 });
-
-          if (spotlightHeader) spotlightHeader.style.opacity = '1';
-          gsap.set(titlesContainerElement, {
-            '--before-opacity': '1',
-            '--after-opacity': '1',
-          } as any);
-
-          const switchProgress = (progress - 0.25) / 0.7;
-          const viewportHeight = window.innerHeight;
-          const titlesContainerHeight = titlesContainer?.scrollHeight || 0;
-          const startPosition = viewportHeight;
-          const targetPosition = -titlesContainerHeight;
-          const totalDistance = startPosition - targetPosition;
-          const currentY = startPosition - switchProgress * totalDistance;
-
-          gsap.set(titlesContainer, {
-            transform: `translateY(${currentY}px)`,
-          });
-
-          imageElements.forEach((img, index) => {
-            const imageProgress = getImgProgressState(index, switchProgress);
-
-            if (imageProgress < 0 || imageProgress > 1) {
-              gsap.set(img, { opacity: 0 });
-            } else {
-              const pos = getBezierPosition(imageProgress);
-              gsap.set(img, {
-                x: pos.x - 100,
-                y: pos.y - 75,
-                opacity: 1,
-              });
-            }
-          });
-
-          const viewportMiddle = viewportHeight / 2;
-          let closestIndex = 0;
-          let closestDistance = Infinity;
-
-          titleElements?.forEach((title, index) => {
-            const titleRect = title.getBoundingClientRect();
-            const titleCenter = titleRect.top + titleRect.height / 2;
-            const distanceFromCenter = Math.abs(titleCenter - viewportMiddle);
-
-            if (distanceFromCenter < closestDistance) {
-              closestDistance = distanceFromCenter;
-              closestIndex = index;
-            }
-          });
-
-          if (closestIndex !== currentActiveIndex) {
-            if (titleElements && titleElements[currentActiveIndex]) {
-              titleElements[currentActiveIndex].style.opacity = '0.25';
-            }
-            if (titleElements) titleElements[closestIndex].style.opacity = '1';
-            const bgImg = containerRef.current?.querySelector(
-              '.spotlight-bg-img img'
-            ) as HTMLImageElement;
-            if (bgImg) bgImg.src = spotlightItems[closestIndex].img;
-            currentActiveIndex = closestIndex;
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            gridCtx.beginPath();
+            gridCtx.arc(x * spacing - offset, y * spacing, dotSize, 0, Math.PI * 2);
+            gridCtx.fill();
           }
-        } else if (progress > 0.95) {
-          if (spotlightHeader) spotlightHeader.style.opacity = '0';
-          gsap.set(titlesContainerElement, {
-            '--before-opacity': '0',
-            '--after-opacity': '0',
-          } as any);
         }
-      },
-    });
+      };
 
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      const THREE = (window as any).THREE;
+      const lettersScene = new THREE.Scene();
+      const lettersCamera = new THREE.PerspectiveCamera(
+        50,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      lettersCamera.position.z = 20;
+
+      const lettersRenderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+      });
+      lettersRenderer.setSize(window.innerWidth, window.innerHeight);
+      lettersRenderer.setClearColor(0x000000, 0);
+      lettersRenderer.setPixelRatio(window.devicePixelRatio);
+      lettersRenderer.domElement.id = "letters-canvas";
+      workSection?.appendChild(lettersRenderer.domElement);
+
+      const createTextAnimationPath = (yPos: number, amplitude: number) => {
+        const points = [];
+        for (let i = 0; i <= 20; i++) {
+          const t = i / 20;
+          points.push(
+            new THREE.Vector3(
+              -25 + 50 * t,
+              yPos + Math.sin(t * Math.PI) * -amplitude,
+              (1 - Math.pow(Math.abs(t - 0.5) * 2, 2)) * -5
+            )
+          );
+        }
+        const curve = new THREE.CatmullRomCurve3(points);
+        const line = new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints(curve.getPoints(100)),
+          new THREE.LineBasicMaterial({ color: 0x000, linewidth: 1 })
+        );
+        (line as any).curve = curve;
+        return line;
+      };
+
+      const path = [
+        createTextAnimationPath(10, 2),
+        createTextAnimationPath(3.5, 1),
+        createTextAnimationPath(-3.5, -1),
+        createTextAnimationPath(-10, -2),
+      ];
+      path.forEach((line) => lettersScene.add(line));
+
+      const textContainer = document.querySelector(".text-container");
+      const letterPositions = new Map();
+      path.forEach((line, i) => {
+        (line as any).letterElements = Array.from({ length: 15 }, () => {
+          const el = document.createElement("div");
+          el.className = "letter";
+          el.textContent = ["W", "O", "R", "K"][i];
+          textContainer?.appendChild(el);
+          letterPositions.set(el, {
+            current: { x: 0, y: 0 },
+            target: { x: 0, y: 0 },
+          });
+          return el;
+        });
+      });
+
+      const lineSpeedMultipliers = [0.8, 1, 0.7, 0.9];
+      const updateTargetPositions = (scrollProgress = 0) => {
+        path.forEach((line, lineIndex) => {
+          (line as any).letterElements.forEach((element: HTMLElement, i: number) => {
+            const point = (line as any).curve.getPoint(
+              (i / 14 + scrollProgress * lineSpeedMultipliers[lineIndex]) % 1
+            );
+            const vector = point.clone().project(lettersCamera);
+            const positions = letterPositions.get(element);
+            positions.target = {
+              x: (-vector.x * 0.5 + 0.5) * window.innerWidth,
+              y: (-vector.y * 0.5 + 0.5) * window.innerHeight,
+            };
+          });
+        });
+      };
+
+      const updateLetterPositions = () => {
+        letterPositions.forEach((positions, element: HTMLElement) => {
+          const distX = positions.target.x - positions.current.x;
+          if (Math.abs(distX) > window.innerWidth * 0.7) {
+            positions.current.x = positions.target.x;
+            positions.current.y = positions.target.y;
+          } else {
+            positions.current.x = lerp(
+              positions.current.x,
+              positions.target.x,
+              0.07
+            );
+            positions.current.y = lerp(
+              positions.current.y,
+              positions.target.y,
+              0.07
+            );
+          }
+          element.style.transform = `translate(-50%, -50%) translate3d(${positions.current.x}px, ${positions.current.y}px, 0px)`;
+        });
+      };
+
+      const updateCardsPosition = () => {
+        const targetX = -moveDistance * ((window as any).ScrollTrigger.getAll()[0]?.progress || 0);
+        currentXPosition = lerp(currentXPosition, targetX, 0.07);
+        (window as any).gsap.set(cardsContainer, {
+          x: currentXPosition,
+        });
+      };
+
+      const animate = () => {
+        updateLetterPositions();
+        updateCardsPosition();
+        lettersRenderer.render(lettersScene, lettersCamera);
+        requestAnimationFrame(animate);
+      };
+
+      (window as any).ScrollTrigger.create({
+        trigger: ".work",
+        start: "top top",
+        end: "+=700%",
+        pin: true,
+        pinSpacing: true,
+        scrub: 1,
+        onUpdate: (self: any) => {
+          updateTargetPositions(self.progress);
+          drawGrid(self.progress);
+        },
+      });
+
+      drawGrid(0);
+      animate();
+      updateTargetPositions(0);
+
+      const handleResize = () => {
+        resizeGridCanvas();
+        drawGrid((window as any).ScrollTrigger.getAll()[0]?.progress || 0);
+        lettersCamera.aspect = window.innerWidth / window.innerHeight;
+        lettersCamera.updateProjectionMatrix();
+        lettersRenderer.setSize(window.innerWidth, window.innerHeight);
+        updateTargetPositions((window as any).ScrollTrigger.getAll()[0]?.progress || 0);
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+        lettersRenderer.dispose();
+      };
     };
+
+    // Small delay to ensure DOM is ready
+    const timeout = setTimeout(initAnimation, 0);
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
-    <div ref={containerRef} className="projects-container">
-      <section className="spotlight">
-        <div className="spotlight-intro-text-wrapper">
-          <div className="spotlight-intro-text">
-            <p>Beneath</p>
+    <div>
+      <section className="work" ref={workRef}>
+        <div className="text-container"></div>
+        <div className="cards">
+          <div className="card">
+            <div className="card-img"><img src="/projects/assets/img1.jpg" alt="" /></div>
+            <div className="card-copy">
+              <p>Pulp</p>
+              <p>2024</p>
+            </div>
           </div>
-          <div className="spotlight-intro-text">
-            <p>Beyond</p>
+          <div className="card">
+            <div className="card-img"><img src="/projects/assets/img2.jpg" alt="" /></div>
+            <div className="card-copy">
+              <p>Esthetic Insights</p>
+              <p>2025</p>
+            </div>
           </div>
-        </div>
-
-        <div className="spotlight-bg-img">
-          <img src={spotlightItems[0].img} alt="" />
-        </div>
-
-        <div className="spotlight-titles-container">
-          <div className="spotlight-titles"></div>
-        </div>
-
-        <div className="spotlight-images"></div>
-
-        <div className="spotlight-header">
-          <p>Discover</p>
+          <div className="card">
+            <div className="card-img"><img src="/projects/assets/img3.jpg" alt="" /></div>
+            <div className="card-copy">
+              <p>Anthill</p>
+              <p>2026</p>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-img"><img src="/projects/assets/img4.jpg" alt="" /></div>
+            <div className="card-copy">
+              <p>Volery</p>
+              <p>2024</p>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-img"><img src="/projects/assets/img5.jpg" alt="" /></div>
+            <div className="card-copy">
+              <p>Alpha</p>
+              <p>2025</p>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-img"><img src="/projects/assets/img6.jpg" alt="" /></div>
+            <div className="card-copy">
+              <p>Jay</p>
+              <p>2026</p>
+            </div>
+          </div>
         </div>
       </section>
     </div>
