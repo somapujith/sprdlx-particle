@@ -113,7 +113,7 @@ function About() {
       </section>
 
       <div
-        className="pointer-events-none fixed inset-0 z-[9999] bg-black transition-opacity duration-[1200ms] ease-in-out"
+        className="pointer-events-none fixed inset-0 z-40 bg-black transition-opacity duration-[1200ms] ease-in-out"
         style={{ opacity: isExiting || isEntryBlocking ? 1 : 0 }}
         aria-hidden
       />
