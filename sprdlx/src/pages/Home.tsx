@@ -8,15 +8,6 @@ import SplineHero from '../components/Canvas/SplineHero';
 export default function Home() {
   useEffect(() => {
     document.title = 'SPRDLX — Creative Digital Studio';
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'fetch';
-    link.href = 'https://my.spline.design/themuseum-iFL1LUqdGUQuIkXQY9gvK8Lp/scene.splinecode';
-    link.crossOrigin = 'anonymous';
-    document.head.appendChild(link);
-    return () => {
-      document.head.removeChild(link);
-    };
   }, []);
   const navigate = useNavigate();
   const splineRef = useRef<HTMLDivElement>(null);

@@ -8,6 +8,11 @@ export default function Projects() {
     (window as any).lenisInstance?.start();
 
     const initAnimation = () => {
+      if (!(window as any).Lenis || !(window as any).ScrollTrigger || !(window as any).gsap) {
+        console.error('Required libraries not loaded');
+        return;
+      }
+
       const lenis = new (window as any).Lenis();
       lenis.on("scroll", (window as any).ScrollTrigger.update);
       (window as any).gsap.ticker.add((time: number) => lenis.raf(time * 1000));
