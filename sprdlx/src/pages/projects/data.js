@@ -2,7 +2,7 @@ export const projects = [
   {
     id: "esthetic-insights",
     title: "Esthetic Insights",
-    image: "/img17.jpeg",
+    image: "/Logos/img16.jpeg",
     year: 2025,
     desc: "Data-driven design analytics to optimize your visual identity.",
     industry: "Design",
@@ -20,7 +20,7 @@ export const projects = [
   {
     id: "anthill",
     title: "Anthill",
-    image: "/img16.jpeg",
+    image: "/Logos/img17.jpeg",
     year: 2026,
     desc: "The AI Operating System for Venture Capital — pitch intelligence, diligence, portfolio, and LP reporting.",
     industry: "AI",
@@ -42,7 +42,7 @@ export const projects = [
   {
     id: "pulp",
     title: "Pulp",
-    image: "/img5.jpeg",
+    image: "/Logos/img5.jpeg",
     year: 2024,
     desc: "A creative storytelling platform for the next generation of writers.",
     industry: "Creative",
