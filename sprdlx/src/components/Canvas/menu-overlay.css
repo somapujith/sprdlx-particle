@@ -1,0 +1,142 @@
+:root {
+  --base-100: #f0f0f0;
+  --base-300: #000000;
+}
+
+.nav-toggle {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  color: var(--base-100);
+  cursor: pointer;
+  z-index: 100;
+  padding: 0.5rem;
+  pointer-events: all;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.1rem;
+}
+
+.nav-toggle-menu {
+  color: var(--base-100);
+}
+
+.nav-toggle-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  color: var(--base-300);
+  opacity: 0;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  padding: 2.5rem;
+  display: flex;
+  gap: 2rem;
+  color: var(--base-300);
+  pointer-events: none;
+  z-index: 50;
+}
+
+.menu.is-open {
+  pointer-events: all;
+}
+
+.menu-bg-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.menu-logo {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  opacity: 0;
+  width: 120px;
+  height: 120px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.menu-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.menu-col-links {
+  flex: 2;
+}
+
+.menu-col a {
+  text-decoration: none;
+  color: var(--base-300);
+  font-weight: bold;
+  font-size: 3rem;
+  line-height: 1.3;
+  display: block;
+  width: max-content;
+  overflow: visible;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.menu-col-info p,
+.menu-col-info h3,
+.menu-col-info h6 {
+  color: var(--base-300);
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+.menu-col-info h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.menu-col-info h6 {
+  font-size: 0.75rem;
+}
+
+.menu a .char,
+.menu-col h3,
+.menu-col h6,
+.menu-col p {
+  will-change: transform, opacity;
+}
+
+@media (max-width: 1000px) {
+  .menu {
+    flex-direction: column-reverse;
+  }
+
+  .menu-col-links {
+    flex: 1.5;
+  }
+
+  .menu-col a {
+    font-size: 2rem;
+  }
+}
