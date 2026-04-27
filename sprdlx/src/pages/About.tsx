@@ -54,13 +54,13 @@ function About() {
 
   return (
     <div
-      className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden"
+      className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden container"
       style={{
         backgroundColor: '#000000',
       }}
     >
-      <nav>
-        <p className="nav-toggle cursor-pointer">MENU</p>
+      <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-6 mix-blend-difference pointer-events-none">
+        <p className="nav-toggle cursor-pointer pointer-events-auto text-xl font-bold tracking-widest text-white">MENU</p>
       </nav>
       <MenuOverlay />
       <section
