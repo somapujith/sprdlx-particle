@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { projects } from './projects/data';
-import MenuOverlay from '../components/Canvas/MenuOverlay';
 import Footer from '../components/Common/Footer';
 import VTLink from '../components/Common/VTLink';
 
@@ -39,13 +38,8 @@ export default function ProjectDetail() {
   const nextProject = projects[(projectIndex + 1) % projects.length];
 
   return (
-    <main className="container min-h-screen overflow-x-hidden bg-black text-white selection:bg-white selection:text-black">
-      <nav className="fixed top-0 left-0 w-full z-[60] flex justify-end items-center p-6 md:p-8 mix-blend-difference pointer-events-none">
-        <p className="nav-toggle cursor-pointer pointer-events-auto text-sm md:text-base font-bold tracking-widest text-white uppercase hover:opacity-70 transition-opacity">
-          MENU
-        </p>
-      </nav>
-      <MenuOverlay />
+    <main className="min-h-screen overflow-x-hidden bg-black text-white selection:bg-white selection:text-black">
+      {/* No menu button */}
 
       {/* Hero */}
       <section
@@ -72,25 +66,19 @@ export default function ProjectDetail() {
       </section>
 
       {/* 01 — Overview */}
-      <section className="border-t border-white/10" aria-labelledby="chapter-overview">
-        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20 md:px-8 md:py-28">
-          <div className="flex flex-col gap-12 lg:flex-row lg:gap-20">
-            <div className="lg:w-[min(100%,18rem)] lg:shrink-0 lg:sticky lg:top-28 lg:self-start">
-              <p id="chapter-overview" className="font-mono text-sm uppercase tracking-[0.32em] text-red-500">
+      <section className="border-t border-white/10 flex justify-center" aria-labelledby="chapter-overview">
+        <div className="w-full max-w-7xl px-5 py-16 sm:px-6 sm:py-20 md:px-8 md:py-28 flex flex-col gap-12">
+            <div>
+              <p id="chapter-overview" className="font-mono text-sm uppercase tracking-[0.32em] text-red-500 mb-6">
                 01 — Overview
-              </p>
-              <p className="mt-4 text-base font-serif italic text-zinc-500 leading-relaxed max-w-[14rem]">
-                Role, scope, and delivery — the contract between idea and ship.
               </p>
             </div>
 
-            <div className="flex flex-1 flex-col gap-16 lg:flex-row lg:gap-20">
-              <div className="w-full lg:w-1/2 flex flex-col justify-between">
+            <div className="flex flex-col lg:flex-row lg:gap-16">
+              <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center gap-4 mb-8">
-                    <h2 className="text-4xl font-bold tracking-tight font-serif">{project.title}</h2>
-                  </div>
-                  <p className="text-zinc-400 text-lg max-w-md leading-snug font-medium">{project.desc}</p>
+                  <h2 className="text-5xl md:text-6xl font-bold tracking-tight font-serif mb-6">{project.title}</h2>
+                  <p className="text-zinc-400 text-lg leading-snug font-medium">{project.desc}</p>
                 </div>
 
                 <div className="mt-16">
@@ -129,8 +117,8 @@ export default function ProjectDetail() {
                 </div>
               </div>
 
-              <div className="w-full lg:w-1/2">
-                <div className="flex flex-col border-t border-white/10 text-sm mt-8 lg:mt-0">
+              <div className="flex-1">
+                <div className="flex flex-col border-t border-white/10 text-sm">
                   <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
                     <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                       Industry
@@ -216,7 +204,6 @@ export default function ProjectDetail() {
               </div>
             </div>
           </div>
-        </div>
       </section>
 
       {/* 02 — Narrative */}
