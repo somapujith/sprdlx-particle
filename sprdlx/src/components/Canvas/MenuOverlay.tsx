@@ -11,7 +11,7 @@ function MenuOverlay() {
     const menuOverlay = menuOverlayRef.current;
     if (!menuOverlay) return;
 
-    let container = document.querySelector('.container') as HTMLElement;
+    let container = document.querySelector('.container, .about-container') as HTMLElement;
     // Fallback for Projects page
     if (!container) {
       const canvasDiv = document.querySelector('[style*="cursor: grab"]') as HTMLElement;
