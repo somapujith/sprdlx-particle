@@ -50,15 +50,22 @@ export default function Projects() {
 
       const gridCanvas = document.createElement("canvas");
       gridCanvas.id = "grid-canvas";
+      gridCanvas.style.position = "absolute";
+      gridCanvas.style.top = "0";
+      gridCanvas.style.left = "0";
+      gridCanvas.style.zIndex = "-1";
+      gridCanvas.style.pointerEvents = "none";
       workSection?.appendChild(gridCanvas);
       const gridCtx = gridCanvas.getContext("2d");
 
       const resizeGridCanvas = () => {
         const dpr = window.devicePixelRatio || 1;
-        gridCanvas.width = window.innerWidth * dpr;
-        gridCanvas.height = window.innerHeight * dpr;
-        gridCanvas.style.width = `${window.innerWidth}px`;
-        gridCanvas.style.height = `${window.innerHeight}px`;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        gridCanvas.width = width * dpr;
+        gridCanvas.height = height * dpr;
+        gridCanvas.style.width = `${width}px`;
+        gridCanvas.style.height = `${height}px`;
         gridCtx?.scale(dpr, dpr);
       };
       resizeGridCanvas();
