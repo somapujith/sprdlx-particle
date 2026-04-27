@@ -104,9 +104,9 @@ export default function Home() {
             </MagneticLink>
             <span className="select-none opacity-40">•</span>
             <MagneticLink
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              className="text-[#888888] opacity-70 hover:opacity-80"
+              href="/contact"
+              onClick={handleNavigation('/contact')}
+              className="text-[#888888] hover:opacity-80"
             >
               CONTACT
             </MagneticLink>
