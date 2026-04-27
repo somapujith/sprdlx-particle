@@ -30,7 +30,9 @@ export function PageTransition() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-50 bg-black transition-opacity duration-600 ease-in-out"
+      className={`fixed inset-0 z-50 bg-black transition-opacity duration-600 ease-in-out ${
+        isFadingOut || isFadingIn ? 'pointer-events-auto' : 'pointer-events-none'
+      }`}
       style={{
         opacity: isFadingOut ? 1 : (isFadingIn ? 1 : 0),
       }}
