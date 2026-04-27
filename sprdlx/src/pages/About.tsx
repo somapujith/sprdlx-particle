@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SplitText from 'gsap/SplitText';
 import WaterRipple from '../components/Canvas/WaterRipple';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
 import { MagneticLink } from '../components/ui/MagneticLink';
+import './about/team-styles.css';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 function About() {
   const navigate = useNavigate();
@@ -41,6 +43,101 @@ function About() {
           }
         );
       }
+
+      // Team section animation
+      const profileImagesContainer = document.querySelector('.profile-images');
+      const profileImages = document.querySelectorAll('.profile-images .img');
+      const nameElements = document.querySelectorAll('.profile-names .name');
+      const nameHeadings = document.querySelectorAll('.profile-names .name h1');
+
+      nameHeadings.forEach((heading) => {
+        const split = new SplitText(heading, { type: 'chars' });
+        split.chars.forEach((char) => {
+          char.classList.add('letter');
+        });
+      });
+
+      const defaultLetters = nameElements[0]?.querySelectorAll('.letter');
+      if (defaultLetters) {
+        gsap.set(defaultLetters, { y: '100%' });
+      }
+
+      if (window.innerWidth >= 900) {
+        profileImages.forEach((img, index) => {
+          const correspondingName = nameElements[index + 1];
+          const letters = correspondingName?.querySelectorAll('.letter');
+
+          img.addEventListener('mouseenter', () => {
+            gsap.to(img, {
+              width: 140,
+              height: 140,
+              duration: 0.5,
+              ease: 'power4.out',
+            });
+
+            if (letters) {
+              gsap.to(letters, {
+                y: '-100%',
+                ease: 'power4.out',
+                duration: 0.75,
+                stagger: {
+                  each: 0.025,
+                  from: 'center',
+                },
+              });
+            }
+          });
+
+          img.addEventListener('mouseleave', () => {
+            gsap.to(img, {
+              width: 70,
+              height: 70,
+              duration: 0.5,
+              ease: 'power4.out',
+            });
+
+            if (letters) {
+              gsap.to(letters, {
+                y: '0%',
+                ease: 'power4.out',
+                duration: 0.75,
+                stagger: {
+                  each: 0.025,
+                  from: 'center',
+                },
+              });
+            }
+          });
+        });
+
+        profileImagesContainer?.addEventListener('mouseenter', () => {
+          if (defaultLetters) {
+            gsap.to(defaultLetters, {
+              y: '0%',
+              ease: 'power4.out',
+              duration: 0.75,
+              stagger: {
+                each: 0.025,
+                from: 'center',
+              },
+            });
+          }
+        });
+
+        profileImagesContainer?.addEventListener('mouseleave', () => {
+          if (defaultLetters) {
+            gsap.to(defaultLetters, {
+              y: '100%',
+              ease: 'power4.out',
+              duration: 0.75,
+              stagger: {
+                each: 0.025,
+                from: 'center',
+              },
+            });
+          }
+        });
+      }
     });
 
     return () => {
@@ -51,6 +148,18 @@ function About() {
   }, []);
 
   const isEntryBlocking = !forceReveal && !canRevealEntry;
+
+  const teamMembers = [
+    { name: 'Goutham', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Rakesh', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Pujith', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Dhruv', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Ajith', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Nithin', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Udit', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Simon', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Gideon', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop' },
+  ];
 
   return (
     <div
@@ -113,6 +222,23 @@ function About() {
               </picture>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="team">
+        <div className="profile-images">
+          {teamMembers.map((member, index) => (
+            <div key={index} className="img">
+              <img src={member.image} alt={member.name} />
+            </div>
+          ))}
+        </div>
+
+        <div className="profile-names">
+          <div className="name default"><h1>The Squad</h1></div>
+          {teamMembers.map((member, index) => (
+            <div key={index} className="name"><h1>{member.name}</h1></div>
+          ))}
         </div>
       </section>
 

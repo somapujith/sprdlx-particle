@@ -1,0 +1,110 @@
+From 34c9108e47b7955c6b941b2e41e8b875ff3d6124 Mon Sep 17 00:00:00 2001
+From: somapujith <somapujith@gmail.com>
+Date: Mon, 27 Apr 2026 20:44:12 +0530
+Subject: [PATCH] fix: explicit THREE.js imports and reliable ScrollTrigger
+ reference
+
+---
+ sprdlx/src/pages/Projects.tsx | 35 ++++++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 17 deletions(-)
+
+diff --git a/sprdlx/src/pages/Projects.tsx b/sprdlx/src/pages/Projects.tsx
+index 5313f78..ed87c4b 100644
+--- a/sprdlx/src/pages/Projects.tsx
++++ b/sprdlx/src/pages/Projects.tsx
+@@ -1,6 +1,12 @@
+ import { useEffect, useRef } from 'react';
++import Lenis from 'lenis';
++import gsap from 'gsap';
++import { ScrollTrigger } from 'gsap/ScrollTrigger';
++import * as THREE from 'three';
+ import './projects/styles.css';
+ 
++gsap.registerPlugin(ScrollTrigger);
++
+ export default function Projects() {
+   const workRef = useRef<HTMLDivElement>(null);
+ 
+@@ -8,16 +14,6 @@ export default function Projects() {
+     (window as any).lenisInstance?.start();
+ 
+     const initAnimation = () => {
+-      if (!(window as any).Lenis || !(window as any).ScrollTrigger || !(window as any).gsap) {
+-        console.error('Required libraries not loaded');
+-        return;
+-      }
+-
+-      const lenis = new (window as any).Lenis();
+-      lenis.on("scroll", (window as any).ScrollTrigger.update);
+-      (window as any).gsap.ticker.add((time: number) => lenis.raf(time * 1000));
+-      (window as any).gsap.ticker.lagSmoothing(0);
+-
+       const workSection = document.querySelector(".work");
+       const cardsContainer = document.querySelector(".cards");
+       const moveDistance = window.innerWidth * 5;
+@@ -60,7 +56,6 @@ export default function Projects() {
+         }
+       };
+ 
+-      const THREE = (window as any).THREE;
+       const lettersScene = new THREE.Scene();
+       const lettersCamera = new THREE.PerspectiveCamera(
+         50,
+@@ -165,9 +160,11 @@ export default function Projects() {
+       };
+ 
+       const updateCardsPosition = () => {
+-        const targetX = -moveDistance * ((window as any).ScrollTrigger.getAll()[0]?.progress || 0);
++        const triggers = ScrollTrigger.getAll();
++        const mainTrigger = triggers.find(t => t.trigger === document.querySelector('.work'));
++        const targetX = -moveDistance * (mainTrigger?.progress || 0);
+         currentXPosition = lerp(currentXPosition, targetX, 0.07);
+-        (window as any).gsap.set(cardsContainer, {
++        gsap.set(cardsContainer, {
+           x: currentXPosition,
+         });
+       };
+@@ -179,14 +176,14 @@ export default function Projects() {
+         requestAnimationFrame(animate);
+       };
+ 
+-      (window as any).ScrollTrigger.create({
++      const scrollTrigger = ScrollTrigger.create({
+         trigger: ".work",
+         start: "top top",
+         end: "+=700%",
+         pin: true,
+         pinSpacing: true,
+         scrub: 1,
+-        onUpdate: (self: any) => {
++        onUpdate: (self) => {
+           updateTargetPositions(self.progress);
+           drawGrid(self.progress);
+         },
+@@ -198,17 +195,21 @@ export default function Projects() {
+ 
+       const handleResize = () => {
+         resizeGridCanvas();
+-        drawGrid((window as any).ScrollTrigger.getAll()[0]?.progress || 0);
++        const triggers = ScrollTrigger.getAll();
++        const mainTrigger = triggers.find(t => t.trigger === document.querySelector('.work'));
++        
++        drawGrid(mainTrigger?.progress || 0);
+         lettersCamera.aspect = window.innerWidth / window.innerHeight;
+         lettersCamera.updateProjectionMatrix();
+         lettersRenderer.setSize(window.innerWidth, window.innerHeight);
+-        updateTargetPositions((window as any).ScrollTrigger.getAll()[0]?.progress || 0);
++        updateTargetPositions(mainTrigger?.progress || 0);
+       };
+ 
+       window.addEventListener("resize", handleResize);
+ 
+       return () => {
+         window.removeEventListener("resize", handleResize);
++        scrollTrigger?.kill();
+         lettersRenderer.dispose();
+       };
+     };
+-- 
+2.52.0.windows.1
+
