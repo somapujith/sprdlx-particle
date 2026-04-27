@@ -169,11 +169,12 @@ export default function Projects() {
         });
       };
 
+      let animationFrameId: number;
       const animate = () => {
         updateLetterPositions();
         updateCardsPosition();
         lettersRenderer.render(lettersScene, lettersCamera);
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       };
 
       const scrollTrigger = ScrollTrigger.create({
@@ -210,6 +211,7 @@ export default function Projects() {
       return () => {
         window.removeEventListener("resize", handleResize);
         scrollTrigger?.kill();
+        cancelAnimationFrame(animationFrameId);
         lettersRenderer.dispose();
       };
     };
