@@ -5,7 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import WaterRipple from '../components/Canvas/WaterRipple';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
 import { MagneticLink } from '../components/ui/MagneticLink';
-import TeamSection from './about/TeamSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,58 +51,6 @@ function About() {
   }, []);
 
   const isEntryBlocking = !forceReveal && !canRevealEntry;
-
-  const teamMembers = [
-    {
-      initial: 'G',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop',
-      role: 'Founder',
-      name: 'Goutham',
-      surname: 'Uppuluri',
-    },
-    {
-      initial: 'R',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop',
-      role: 'AI Engineer',
-      name: 'Rakesh',
-      surname: 'Thakkuri',
-    },
-    {
-      initial: 'P',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=800&auto=format&fit=crop',
-      role: 'Frontend Developer',
-      name: 'Pujith',
-      surname: 'Soma',
-    },
-    {
-      initial: 'D',
-      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop',
-      role: 'Backend Developer',
-      name: 'Dhruv',
-      surname: '',
-    },
-    {
-      initial: 'A',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop',
-      role: 'Frontend Developer',
-      name: 'Ajith',
-      surname: '',
-    },
-    {
-      initial: 'N',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop',
-      role: 'AI Engineer',
-      name: 'Nithin',
-      surname: '',
-    },
-    {
-      initial: 'U',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=800&auto=format&fit=crop',
-      role: 'Backend Developer',
-      name: 'Udit',
-      surname: '',
-    },
-  ];
 
   return (
     <div
@@ -168,8 +115,6 @@ function About() {
           </div>
         </div>
       </section>
-
-      <TeamSection members={teamMembers} />
 
       <footer className="relative z-20 flex flex-col items-center justify-center gap-8 border-t border-white/10 px-6 py-12 md:py-16">
         <nav className="pointer-events-auto flex justify-center gap-6 text-xs font-medium uppercase tracking-widest">
