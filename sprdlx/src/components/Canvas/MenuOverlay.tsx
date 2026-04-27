@@ -27,7 +27,7 @@ function MenuOverlay() {
     const menuLinksWrapper = menuOverlay.querySelector('.menu-links-wrapper');
     const linkHighlighter = menuOverlay.querySelector('.link-highlighter');
 
-    if (!navToggle || !navClose || !menuContent || !menuImage || !menuLinksWrapper || !linkHighlighter) {
+    if (!navToggle || !menuContent || !menuImage || !menuLinksWrapper || !linkHighlighter) {
       return;
     }
 
@@ -100,8 +100,12 @@ function MenuOverlay() {
           onComplete: () => {
             gsap.set(container, { y: '40%' });
             gsap.set('.menu-link', { overflow: 'visible' });
-            gsap.set(navToggle, { display: 'none' });
-            gsap.set(navClose, { display: 'block' });
+            if (navClose) {
+              gsap.set(navToggle, { display: 'none' });
+              gsap.set(navClose, { display: 'block' });
+            } else {
+              navToggle.textContent = 'CLOSE';
+            }
             menuOverlay.style.pointerEvents = 'auto';
 
             isMenuOpen = true;
@@ -181,8 +185,12 @@ function MenuOverlay() {
             gsap.set(menuContent, { y: '50%', opacity: 0.25 });
             gsap.set(menuImage, { y: '0%', scale: 0.5, opacity: 0.25 });
             gsap.set(menuLinksWrapper, { x: 0 });
-            gsap.set(navToggle, { display: 'block' });
-            gsap.set(navClose, { display: 'none' });
+            if (navClose) {
+              gsap.set(navToggle, { display: 'block' });
+              gsap.set(navClose, { display: 'none' });
+            } else {
+              navToggle.textContent = 'MENU';
+            }
             currentX = 0;
             targetX = 0;
 
@@ -193,58 +201,67 @@ function MenuOverlay() {
       }
     }
 
-    navToggle.addEventListener('click', toggleMenu);
-    navClose.addEventListener('click', toggleMenu);
+    if (navToggle) {
+      navToggle.addEventListener('click', toggleMenu);
+    }
+    if (navClose) {
+      navClose.addEventListener('click', toggleMenu);
+    }
 
     const menuLinkContainers = menuOverlay.querySelectorAll('.menu-link');
+    const handleMenuLinkHover = (e: Event) => {
+      const link = e.currentTarget as HTMLElement;
+      if (window.innerWidth < 1000) return;
+
+      const linkCopy = link.querySelectorAll('a span');
+      const visibleCopy = linkCopy[0];
+      const animatedCopy = linkCopy[1];
+
+      const visibleChars = visibleCopy.querySelectorAll('.char');
+      gsap.to(visibleChars, {
+        y: '-110%',
+        stagger: 0.03,
+        duration: 0.5,
+        ease: 'expo.inOut',
+      });
+
+      const animatedChars = animatedCopy.querySelectorAll('.char');
+      gsap.to(animatedChars, {
+        y: '0%',
+        stagger: 0.03,
+        duration: 0.5,
+        ease: 'expo.inOut',
+      });
+    };
+
+    const handleMenuLinkUnhover = (e: Event) => {
+      const link = e.currentTarget as HTMLElement;
+      if (window.innerWidth < 1000) return;
+
+      const linkCopy = link.querySelectorAll('a span');
+      const visibleCopy = linkCopy[0];
+      const animatedCopy = linkCopy[1];
+
+      const animatedChars = animatedCopy.querySelectorAll('.char');
+      gsap.to(animatedChars, {
+        y: '110%',
+        stagger: 0.03,
+        duration: 0.5,
+        ease: 'expo.inOut',
+      });
+
+      const visibleChars = visibleCopy.querySelectorAll('.char');
+      gsap.to(visibleChars, {
+        y: '0%',
+        stagger: 0.03,
+        duration: 0.5,
+        ease: 'expo.inOut',
+      });
+    };
+
     menuLinkContainers.forEach((link) => {
-      link.addEventListener('mouseenter', () => {
-        if (window.innerWidth < 1000) return;
-
-        const linkCopy = link.querySelectorAll('a span');
-        const visibleCopy = linkCopy[0];
-        const animatedCopy = linkCopy[1];
-
-        const visibleChars = visibleCopy.querySelectorAll('.char');
-        gsap.to(visibleChars, {
-          y: '-110%',
-          stagger: 0.03,
-          duration: 0.5,
-          ease: 'expo.inOut',
-        });
-
-        const animatedChars = animatedCopy.querySelectorAll('.char');
-        gsap.to(animatedChars, {
-          y: '0%',
-          stagger: 0.03,
-          duration: 0.5,
-          ease: 'expo.inOut',
-        });
-      });
-
-      link.addEventListener('mouseleave', () => {
-        if (window.innerWidth < 1000) return;
-
-        const linkCopy = link.querySelectorAll('a span');
-        const visibleCopy = linkCopy[0];
-        const animatedCopy = linkCopy[1];
-
-        const animatedChars = animatedCopy.querySelectorAll('.char');
-        gsap.to(animatedChars, {
-          y: '110%',
-          stagger: 0.03,
-          duration: 0.5,
-          ease: 'expo.inOut',
-        });
-
-        const visibleChars = visibleCopy.querySelectorAll('.char');
-        gsap.to(visibleChars, {
-          y: '0%',
-          stagger: 0.03,
-          duration: 0.5,
-          ease: 'expo.inOut',
-        });
-      });
+      link.addEventListener('mouseenter', handleMenuLinkHover);
+      link.addEventListener('mouseleave', handleMenuLinkUnhover);
     });
 
     menuOverlay.addEventListener('mousemove', (e) => {
@@ -287,7 +304,7 @@ function MenuOverlay() {
       });
     });
 
-    menuLinksWrapper.addEventListener('mouseleave', () => {
+    const handleMenuLinksWrapperLeave = () => {
       const defaultLinkText = menuOverlay.querySelector('.menu-link:first-child');
       const defaultLinkTextSpan = defaultLinkText?.querySelector('a span');
 
@@ -298,9 +315,15 @@ function MenuOverlay() {
         targetHighlighterX = linkRect.left - menuWrapperRect.left;
         targetHighlighterWidth = defaultLinkTextSpan.clientWidth;
       }
-    });
+    };
+
+    menuLinksWrapper.addEventListener('mouseleave', handleMenuLinksWrapperLeave);
+
+    // Cleanup
+    let isCancelled = false;
 
     function animate() {
+      if (isCancelled) return;
       currentX += (targetX - currentX) * lerpFactor;
       currentHighlighterX += (targetHighlighterX - currentHighlighterX) * lerpFactor;
       currentHighlighterWidth += (targetHighlighterWidth - currentHighlighterWidth) * lerpFactor;
@@ -324,7 +347,18 @@ function MenuOverlay() {
     animate();
 
     return () => {
-      navToggle.removeEventListener('click', toggleMenu);
+      isCancelled = true;
+      if (navToggle) {
+        navToggle.removeEventListener('click', toggleMenu);
+      }
+      if (navClose) {
+        navClose.removeEventListener('click', toggleMenu);
+      }
+      menuLinkContainers.forEach((link) => {
+        link.removeEventListener('mouseenter', handleMenuLinkHover);
+        link.removeEventListener('mouseleave', handleMenuLinkUnhover);
+      });
+      menuLinksWrapper.removeEventListener('mouseleave', handleMenuLinksWrapperLeave);
     };
   }, []);
 
