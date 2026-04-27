@@ -24,7 +24,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
 
     const preloadAssets = async () => {
       const assets = [
-        'https://my.spline.design/themuseum-iFL1LUqdGUQuIkXQY9gvK8Lp/scene.splinecode',
+        '/spline/themuseum.splinecode',
       ];
 
       let loaded = 0;

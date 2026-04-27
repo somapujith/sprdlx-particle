@@ -11,7 +11,7 @@ const HOME_SCHEMA = {
   '@type': 'ProfessionalService',
   name: 'SPRDLX',
   description: 'Creative digital studio crafting immersive web experiences, design systems, and intelligent applications for high-growth startups.',
-  url: 'https://sprdlx.com',
+  url: 'https://sprdlx.co',
   email: 'hello@sprdlx.com',
   address: {
     '@type': 'PostalAddress',
@@ -68,7 +68,7 @@ export default function Home() {
     <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[#0a0a0a] font-sans text-[#f0f0f0] pointer-coarse:cursor-auto">
       <div ref={splineRef} className="absolute inset-0 z-0 min-h-full min-w-full">
         <Suspense fallback={<div className="absolute inset-0 bg-[#0a0a0a]" />}>
-          <SplineHero sceneUrl="https://my.spline.design/themuseum-iFL1LUqdGUQuIkXQY9gvK8Lp/scene.splinecode" />
+          <SplineHero sceneUrl="/spline/themuseum.splinecode" />
         </Suspense>
       </div>
 
