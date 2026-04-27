@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Projects() {
   const workRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (window as any).lenisInstance?.start();
@@ -226,42 +228,42 @@ export default function Projects() {
       <section className="work" ref={workRef}>
         <div className="text-container"></div>
         <div className="cards">
-          <div className="card">
+          <div className="card" onClick={() => navigate('/project/pulp')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/assets/img1.jpg" alt="" /></div>
             <div className="card-copy">
               <p>Pulp</p>
               <p>2024</p>
             </div>
           </div>
-          <div className="card">
+          <div className="card" onClick={() => navigate('/project/esthetic-insights')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/assets/img2.jpg" alt="" /></div>
             <div className="card-copy">
               <p>Esthetic Insights</p>
               <p>2025</p>
             </div>
           </div>
-          <div className="card">
+          <div className="card" onClick={() => navigate('/project/anthill')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/assets/img3.jpg" alt="" /></div>
             <div className="card-copy">
               <p>Anthill</p>
               <p>2026</p>
             </div>
           </div>
-          <div className="card">
+          <div className="card" onClick={() => navigate('/project/volery')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/assets/img4.jpg" alt="" /></div>
             <div className="card-copy">
               <p>Volery</p>
               <p>2024</p>
             </div>
           </div>
-          <div className="card">
+          <div className="card" onClick={() => navigate('/project/alpha')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/assets/img5.jpg" alt="" /></div>
             <div className="card-copy">
               <p>Alpha</p>
               <p>2025</p>
             </div>
           </div>
-          <div className="card">
+          <div className="card" onClick={() => navigate('/project/jay')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/assets/img6.jpg" alt="" /></div>
             <div className="card-copy">
               <p>Jay</p>
