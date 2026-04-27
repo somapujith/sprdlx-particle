@@ -184,7 +184,7 @@ export default function TeamSection({ members }: TeamSectionProps) {
                 ( {member.role} )
               </p>
               <h1 className="text-6xl font-bold leading-none text-[#fc694c]">
-                {member.name} <span className="text-[#171717]">{member.surname}</span>
+                {member.name} {member.surname && <span className="text-[#171717]">{member.surname}</span>}
               </h1>
             </div>
           </div>
