@@ -78,7 +78,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a] text-[#f0f0f0]"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a] text-[#f0f0f0]"
       initial={{ opacity: 1 }}
       animate={{ opacity: phase === 'fadeOut' ? 0 : 1 }}
       exit={{ opacity: 0 }}
@@ -95,7 +95,6 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
       >
         <img src={sprdlxTextLogo} alt="SPRDLX" className="h-32 md:h-40 w-auto object-contain brightness-0 invert" />
         <div className="flex items-center gap-4 text-[#888888]">
-          <span className="select-none font-light text-[#444444]">|</span>
           <span className="font-normal text-sm md:text-base">AI Venture Studio</span>
           <span className="font-light text-[#f0f0f0]">✶</span>
         </div>

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { projects } from './projects/data';
 import Footer from '../components/Common/Footer';
 import VTLink from '../components/Common/VTLink';
+import MenuOverlay from '../components/Canvas/MenuOverlay';
 
 function BlurUpImg({ className = '', ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) {
   const [loaded, setLoaded] = useState(false);
@@ -44,6 +45,7 @@ export default function ProjectDetail() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-black text-white selection:bg-white selection:text-black">
+      <MenuOverlay />
       {/* Fixed Logo */}
       <div className="fixed top-0 left-0 z-50 p-5 sm:p-6 md:p-8">
         <button
