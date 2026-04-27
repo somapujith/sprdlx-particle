@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import WaterRipple from '../components/Canvas/WaterRipple';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
 import { MagneticLink } from '../components/ui/MagneticLink';
+import TeamSection from './about/TeamSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,6 +52,30 @@ function About() {
   }, []);
 
   const isEntryBlocking = !forceReveal && !canRevealEntry;
+
+  const teamMembers = [
+    {
+      initial: 'C',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop',
+      role: 'Creative Director',
+      name: 'Caspian',
+      surname: 'Merlow',
+    },
+    {
+      initial: 'E',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop',
+      role: 'Executive Producer',
+      name: 'Evander',
+      surname: 'Coren',
+    },
+    {
+      initial: 'L',
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=800&auto=format&fit=crop',
+      role: 'Head of Production',
+      name: 'Leopold',
+      surname: 'Draven',
+    },
+  ];
 
   return (
     <div
@@ -115,6 +140,8 @@ function About() {
           </div>
         </div>
       </section>
+
+      <TeamSection members={teamMembers} />
 
       <footer className="relative z-20 flex flex-col items-center justify-center gap-8 border-t border-white/10 px-6 py-12 md:py-16">
         <nav className="pointer-events-auto flex justify-center gap-6 text-xs font-medium uppercase tracking-widest">
