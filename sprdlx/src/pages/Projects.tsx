@@ -14,7 +14,6 @@ export default function Projects() {
     (window as any).lenisInstance?.start();
 
     const initAnimation = () => {
-      // Instead of global scripts, we reuse the existing setup
       const workSection = document.querySelector(".work");
       const cardsContainer = document.querySelector(".cards");
       const moveDistance = window.innerWidth * 5;
@@ -57,7 +56,6 @@ export default function Projects() {
         }
       };
 
-      const THREE = (window as any).THREE;
       const lettersScene = new THREE.Scene();
       const lettersCamera = new THREE.PerspectiveCamera(
         50,
@@ -197,7 +195,6 @@ export default function Projects() {
 
       const handleResize = () => {
         resizeGridCanvas();
-        
         const triggers = ScrollTrigger.getAll();
         const mainTrigger = triggers.find(t => t.trigger === document.querySelector('.work'));
         
