@@ -13,7 +13,7 @@ export default function Home() {
   const splineRef = useRef<HTMLDivElement>(null);
   const uiRootRef = useRef<HTMLDivElement>(null);
 
-  const handleNavigation = (path: string) => (e: MouseEvent<HTMLAnchorElement>) => {
+  const handleNavigation = (path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     (window as any).lenisInstance?.stop();
     setTimeout(() => {

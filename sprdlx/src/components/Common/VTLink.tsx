@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 declare global {
   interface Document {
-    startViewTransition?: (callback: () => void) => { finished: Promise<void> };
+    startViewTransition(callbackOptions?: any): any;
   }
 }
 
