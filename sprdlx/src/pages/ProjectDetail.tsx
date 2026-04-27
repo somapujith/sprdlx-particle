@@ -64,7 +64,7 @@ export default function ProjectDetail() {
       >
         <div className="relative h-[min(42vh,22rem)] w-full overflow-hidden rounded-2xl sm:h-[40vh] sm:rounded-[2rem] md:h-[50vh]">
           <BlurUpImg
-            src={project.image}
+            src={project.id === 'anthill' ? '/projects/assets/anthill2.png' : project.image}
             alt={`${project.title} — hero`}
             className="w-full h-full object-cover"
           />
@@ -252,7 +252,7 @@ export default function ProjectDetail() {
               Gallery
             </p>
             <BlurUpImg
-              src={project.images[1]}
+              src={project.id === 'anthill' ? project.images[3] : project.images[1]}
               alt={`${project.title} showcase`}
               className="w-full rounded-[2rem] shadow-2xl ring-1 ring-white/10"
             />
