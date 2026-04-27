@@ -225,6 +225,11 @@ export default function Projects() {
 
   return (
     <div className="projects-container">
+      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-pulse">
+        <div className="text-white text-sm font-mono uppercase tracking-widest text-center">
+          Scroll to explore
+        </div>
+      </div>
       <section className="work" ref={workRef}>
         <div className="text-container"></div>
         <div className="cards">
