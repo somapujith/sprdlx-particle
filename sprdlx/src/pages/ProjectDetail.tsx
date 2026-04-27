@@ -96,7 +96,9 @@ export default function ProjectDetail() {
                   <button
                     type="button"
                     data-cursor="view"
-                    className="group inline-flex cursor-pointer items-center gap-3 border border-white/30 bg-transparent hover:bg-white/5 px-6 py-3 rounded-lg transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/50"
+                    onClick={() => project.website && window.open(project.website, '_blank')}
+                    disabled={!project.website}
+                    className="group inline-flex cursor-pointer items-center gap-3 border border-white/30 bg-transparent hover:bg-white/5 px-6 py-3 rounded-lg transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/50 disabled:opacity-50 disabled:cursor-default"
                   >
                     <span className="view-work-icon inline-flex h-5 w-5 shrink-0 items-center justify-center text-white group-hover:text-white/80 transition-colors" aria-hidden>
                       <svg
