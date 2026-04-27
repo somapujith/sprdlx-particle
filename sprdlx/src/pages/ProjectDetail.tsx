@@ -125,8 +125,8 @@ export default function ProjectDetail() {
               </div>
 
               <div className="w-full lg:w-1/2">
-                <div className="flex flex-col border-t border-white/10 text-sm">
-                  <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+                <div className="flex flex-col border-t border-white/10 text-sm mt-8 lg:mt-0">
+                  <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
                     <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                       Industry
                     </span>
@@ -142,31 +142,38 @@ export default function ProjectDetail() {
                       ) : null}
                     </div>
                   </div>
-                  <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+                  <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
                     <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                       Deliverables
                     </span>
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-left font-bold text-base sm:justify-end sm:text-right">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-left font-bold text-base sm:justify-end sm:text-right">
                       {project.deliverables.map((d, i) => (
-                        <span key={i}>{d}</span>
+                        <React.Fragment key={i}>
+                          <span>{d}</span>
+                          {i !== project.deliverables.length - 1 && (
+                            <span className="text-white/25 font-normal" aria-hidden>
+                              ,
+                            </span>
+                          )}
+                        </React.Fragment>
                       ))}
                     </div>
                   </div>
                   {'status' in project && project.status ? (
-                    <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+                    <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
                       <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                         Status
                       </span>
-                      <span className="text-left font-bold text-base sm:text-right">{project.status}</span>
+                      <span className="text-left font-bold text-base sm:justify-end sm:text-right">{project.status}</span>
                     </div>
                   ) : (
                     'completed' in project &&
                     project.completed && (
-                      <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+                      <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
                         <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                           Completed
                         </span>
-                        <span className="text-left font-bold text-base sm:text-right">{project.completed}</span>
+                        <span className="text-left font-bold text-base sm:justify-end sm:text-right">{project.completed}</span>
                       </div>
                     )
                   )}
@@ -175,7 +182,7 @@ export default function ProjectDetail() {
                       <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                         Funding Stage
                       </span>
-                      <span className="flex items-center gap-1.5 text-left font-bold text-base sm:justify-end sm:text-right">
+                      <span className="flex flex-wrap items-center gap-1.5 text-left font-bold text-base sm:justify-end sm:text-right">
                         {project.fundingStage}
                         <span className="text-white" aria-hidden>
                           ♥
@@ -183,21 +190,23 @@ export default function ProjectDetail() {
                       </span>
                     </div>
                   ) : null}
-                  <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
-                    <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
-                      Backed by
-                    </span>
-                    <span className="flex flex-wrap items-center gap-2 text-left font-bold text-base sm:justify-end sm:text-right">
-                      {project.backedByLogo === 'Y' ? (
-                        <span className="bg-white text-black px-1.5 py-0.5 rounded-sm text-[10px] font-black leading-none">
-                          Y
-                        </span>
-                      ) : (
-                        <span className="font-bold tracking-widest">{project.backedByLogo || project.backedBy}</span>
-                      )}
-                      {project.backedByLogo === 'Y' ? 'Combinator' : ''}
-                    </span>
-                  </div>
+                  {project.backedBy || project.backedByLogo ? (
+                    <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+                      <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
+                        Backed by
+                      </span>
+                      <span className="flex flex-wrap items-center gap-2 text-left font-bold text-base sm:justify-end sm:text-right">
+                        {project.backedByLogo === 'Y' ? (
+                          <span className="bg-white text-black px-1.5 py-0.5 rounded-sm text-[10px] font-black leading-none">
+                            Y
+                          </span>
+                        ) : (
+                          <span className="font-bold tracking-widest">{project.backedByLogo || project.backedBy}</span>
+                        )}
+                        {project.backedByLogo === 'Y' ? 'Combinator' : ''}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
