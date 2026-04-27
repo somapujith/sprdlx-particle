@@ -1,5 +1,7 @@
-import { useEffect, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MagneticLink } from '../components/ui/MagneticLink';
+import MenuOverlay from '../components/Canvas/MenuOverlay';
 
 function Contact() {
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ function Contact() {
 
   return (
     <div className="contact-container relative w-full h-screen bg-black text-white font-sans overflow-hidden flex flex-col items-center justify-center">
-      {/* No menu */}
+      <MenuOverlay />
 
       {/* Contact Content */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-2xl px-6">
