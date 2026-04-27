@@ -224,7 +224,7 @@ export default function Projects() {
   }, []);
 
   return (
-    <div>
+    <div className="projects-container">
       <section className="work" ref={workRef}>
         <div className="text-container"></div>
         <div className="cards">
