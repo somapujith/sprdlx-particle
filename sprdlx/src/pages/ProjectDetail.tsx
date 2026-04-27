@@ -39,7 +39,12 @@ export default function ProjectDetail() {
   const nextProject = projects[(projectIndex + 1) % projects.length];
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-black text-white selection:bg-white selection:text-black">
+    <main className="container min-h-screen overflow-x-hidden bg-black text-white selection:bg-white selection:text-black">
+      <nav className="fixed top-0 left-0 w-full z-[60] flex justify-end items-center p-6 md:p-8 mix-blend-difference pointer-events-none">
+        <p className="nav-toggle cursor-pointer pointer-events-auto text-sm md:text-base font-bold tracking-widest text-white uppercase hover:opacity-70 transition-opacity">
+          MENU
+        </p>
+      </nav>
       <MenuOverlay />
 
       {/* Hero */}
