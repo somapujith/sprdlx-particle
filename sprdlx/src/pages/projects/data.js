@@ -49,7 +49,7 @@ export const projects = [
     status: "In Dev",
     backedBy: "Anthill Ventures",
     backedByLogo: "Anthill Ventures",
-    about: "Anthill is the AI Operating System built for Venture Capital.",
+    about: "Anthill is the AI Operating System built for Venture Capital. It reads and scores pitch decks, automates due diligence, monitors portfolio performance, surfaces market intelligence, and generates LP reports — so your team spends less time on process and more time on conviction.",
     images: ["/projects/assets/anthill1.png", "/projects/assets/anthill2.png", "/projects/assets/anthill3.png", "/projects/assets/anthill4.png"],
     website: "https://www.anthillventures.com/",
     next: "volery",
