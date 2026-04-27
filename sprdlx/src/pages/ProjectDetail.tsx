@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { projects } from './projects/data';
 import Footer from '../components/Common/Footer';
 import VTLink from '../components/Common/VTLink';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
+import { useSEO } from '../hooks/useSEO';
 
 function BlurUpImg({ className = '', ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) {
   const [loaded, setLoaded] = useState(false);
@@ -25,6 +26,40 @@ export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const project = projects.find(p => p.id === id);
+
+  const projectSchema = useMemo(() => {
+    if (!project) return undefined;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'CreativeWork',
+      name: project.title,
+      description: project.about,
+      url: `https://sprdlx.com/project/${project.id}`,
+      image: `https://sprdlx.com${project.image}`,
+      genre: project.industry,
+      dateCreated: String(project.year),
+      creator: {
+        '@type': 'Organization',
+        name: 'SPRDLX',
+        url: 'https://sprdlx.com',
+      },
+      ...(project.website ? { sameAs: project.website } : {}),
+    };
+  }, [project]);
+
+  useSEO({
+    title: project
+      ? `${project.title} — SPRDLX Project | ${project.industry} ${project.subIndustry ?? ''}`
+      : 'Project Not Found — SPRDLX',
+    description: project
+      ? `${project.about} Deliverables: ${project.deliverables.join(', ')}.`
+      : 'The requested project could not be found.',
+    canonical: project ? `/project/${project.id}` : undefined,
+    ogType: 'article',
+    ogImage: project ? `https://sprdlx.com${project.image}` : undefined,
+    noIndex: !project,
+    schema: projectSchema,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);

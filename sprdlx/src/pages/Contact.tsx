@@ -2,8 +2,34 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MagneticLink } from '../components/ui/MagneticLink';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
+import { useSEO } from '../hooks/useSEO';
+
+const CONTACT_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact SPRDLX',
+  description: 'Get in touch with SPRDLX to discuss your next immersive web project, design system, or digital product.',
+  url: 'https://sprdlx.com/contact',
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'SPRDLX',
+    email: 'hello@sprdlx.com',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Hyderabad',
+      addressRegion: 'Telangana',
+      addressCountry: 'IN',
+    },
+  },
+};
 
 function Contact() {
+  useSEO({
+    title: 'Contact SPRDLX — Let\'s Build Something Amazing',
+    description: 'Ready to create an immersive digital experience? Contact SPRDLX at hello@sprdlx.com. Based in Hyderabad, we work with ambitious startups worldwide.',
+    canonical: '/contact',
+    schema: CONTACT_SCHEMA,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -5,10 +5,35 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
 import './projects/styles.css';
+import { useSEO } from '../hooks/useSEO';
+import { projects } from './projects/data';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const PROJECTS_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'SPRDLX Projects — Portfolio',
+  description: 'Explore SPRDLX portfolio: immersive web experiences, design systems, and digital products built for Y Combinator, Sequoia, and Techstars-backed startups.',
+  url: 'https://sprdlx.com/projects',
+  hasPart: projects.map((p) => ({
+    '@type': 'CreativeWork',
+    name: p.title,
+    description: p.desc,
+    url: `https://sprdlx.com/project/${p.id}`,
+    image: `https://sprdlx.com${p.image}`,
+    genre: p.industry,
+    dateCreated: String(p.year),
+  })),
+};
+
 export default function Projects() {
+  useSEO({
+    title: 'Projects — SPRDLX Portfolio | Immersive Digital Experiences',
+    description: 'Explore SPRDLX portfolio: immersive web experiences, design systems, and digital products built for Y Combinator, Sequoia, and Techstars-backed startups.',
+    canonical: '/projects',
+    schema: PROJECTS_SCHEMA,
+  });
   const workRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 

@@ -1,14 +1,35 @@
-import { useEffect, useLayoutEffect, useRef, Suspense } from 'react';
+import { useLayoutEffect, useRef, Suspense } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
+import { useSEO } from '../hooks/useSEO';
 import { useLazyLoad3D } from '../hooks/useLazyLoad3D';
 import { MagneticLink } from '../components/ui/MagneticLink';
 import SplineHero from '../components/Canvas/SplineHero';
 
+const HOME_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'SPRDLX',
+  description: 'Creative digital studio crafting immersive web experiences, design systems, and intelligent applications for high-growth startups.',
+  url: 'https://sprdlx.com',
+  email: 'hello@sprdlx.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Hyderabad',
+    addressRegion: 'Telangana',
+    addressCountry: 'IN',
+  },
+  serviceType: ['Web Design', 'UI/UX Design', 'Design Systems', 'Frontend Development', 'Brand Identity'],
+  priceRange: '$$',
+};
+
 export default function Home() {
-  useEffect(() => {
-    document.title = 'SPRDLX — Creative Digital Studio';
-  }, []);
+  useSEO({
+    title: 'SPRDLX — Creative Digital Studio | Immersive Web Experiences',
+    description: 'SPRDLX is a creative digital studio crafting immersive web experiences, design systems, and intelligent applications. Trusted by Y Combinator, Sequoia, and Techstars-backed startups.',
+    canonical: '/',
+    schema: HOME_SCHEMA,
+  });
   const navigate = useNavigate();
   const splineRef = useRef<HTMLDivElement>(null);
   const uiRootRef = useRef<HTMLDivElement>(null);

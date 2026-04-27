@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -11,6 +12,11 @@ import './about/team-styles.css';
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 function About() {
+  useSEO({
+    title: 'About SPRDLX — Creative Studio from Hyderabad',
+    description: 'Meet the team behind SPRDLX. We are a creative digital studio from Hyderabad building immersive web experiences, design systems, and intelligent products for ambitious startups.',
+    canonical: '/about',
+  });
   const navigate = useNavigate();
   const [isExiting, setIsExiting] = useState(false);
   const [canRevealEntry, setCanRevealEntry] = useState(false);
