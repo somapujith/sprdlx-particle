@@ -1,18 +1,19 @@
 .team {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 3rem 1rem;
   min-height: 100vh;
+  background-color: #000000;
 }
 
 .team-member {
-  flex: 1;
   position: relative;
-  min-width: 0;
+  aspect-ratio: 3/4;
   border: 2px dashed rgba(242, 245, 234, 0.35);
   border-radius: 1.5rem;
+  overflow: hidden;
   will-change: transform;
-  transform: translateY(125%);
 }
 
 .team-member:nth-child(1) {
@@ -45,69 +46,42 @@
 
 .team-member-name-initial {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 }
 
 .team-member-name-initial h1 {
   color: #fc694c;
-  font-size: 20rem;
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1;
   will-change: transform;
   transform: scale(0);
 }
 
 .team-member-card {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  padding: 2rem;
+  inset: 0;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   background-color: #f2f5ea;
   border-radius: 1.5rem;
   will-change: transform;
-}
-
-.team-member:nth-child(1) .team-member-card {
-  transform: translate(600%, -50%) scale(0.75) rotate(20deg);
-}
-
-.team-member:nth-child(2) .team-member-card {
-  transform: translate(500%, -50%) scale(0.75) rotate(20deg);
-}
-
-.team-member:nth-child(3) .team-member-card {
-  transform: translate(400%, -50%) scale(0.75) rotate(20deg);
-}
-
-.team-member:nth-child(4) .team-member-card {
-  transform: translate(300%, -50%) scale(0.75) rotate(20deg);
-}
-
-.team-member:nth-child(5) .team-member-card {
-  transform: translate(200%, -50%) scale(0.75) rotate(20deg);
-}
-
-.team-member:nth-child(6) .team-member-card {
-  transform: translate(100%, -50%) scale(0.75) rotate(20deg);
-}
-
-.team-member:nth-child(7) .team-member-card {
-  transform: translate(0%, -50%) scale(0.75) rotate(20deg);
+  transform: translate(0, 0) scale(1) rotate(0deg);
 }
 
 .team-member-img {
-  aspect-ratio: 1;
-  border-radius: 1rem;
-  margin-bottom: 1rem;
-  overflow: hidden;
   width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .team-member-img img {
@@ -121,42 +95,62 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1rem;
+  gap: 0.5rem;
+  flex: 1;
 }
 
-.team-member-info h1 {
-  font-size: 6.5rem;
-  color: #fc694c;
-}
-
-.team-member-info h1 span,
 .team-member-info p {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: #171717;
 }
 
-@media (max-width: 1000px) {
-  .team {
-    height: 250svh;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-  }
+.team-member-info h1 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fc694c;
+  line-height: 1.1;
+}
 
-  .team-member {
-    max-width: 400px;
-    transform: translateY(0%) !important;
+.team-member-info h1 span {
+  color: #171717;
+}
+
+@media (max-width: 768px) {
+  .team {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 2rem 1rem;
   }
 
   .team-member-name-initial h1 {
-    transform: scale(1);
-    font-size: 4rem;
-  }
-
-  .team-member .team-member-card {
-    transform: translate(-50%, -50%) scale(1) rotate(0deg) !important;
+    font-size: 3rem;
   }
 
   .team-member-info h1 {
-    font-size: 5rem;
+    font-size: 1rem;
+  }
+
+  .team-member-card {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .team {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .team-member-name-initial h1 {
+    font-size: 2rem;
+  }
+
+  .team-member-info h1 {
+    font-size: 0.9rem;
   }
 }
