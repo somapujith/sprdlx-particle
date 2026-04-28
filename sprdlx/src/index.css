@@ -26,6 +26,21 @@ body {
   scrollbar-width: none;  /* Firefox */
 }
 
+/* CLS Prevention - Reserve scrollbar space to avoid layout shifts */
+html {
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
+}
+
+/* Respect user motion preferences for Core Web Vitals */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 
 @theme {
   --color-bg: #0a0a0a;

@@ -88,52 +88,6 @@ function Contact() {
         </button>
       </div>
 
-      {/* Footer */}
-      <footer className="fixed bottom-0 w-full z-20 flex justify-center gap-6 text-xs font-medium uppercase tracking-widest py-8 px-6 border-t border-white/10 bg-black/50 backdrop-blur">
-        <MagneticLink
-          href="#"
-          onClick={(e) => e.preventDefault()}
-          className="text-[#f0f0f0] hover:opacity-80"
-        >
-          SPRDLX
-        </MagneticLink>
-        <span className="select-none opacity-40">•</span>
-        <MagneticLink
-          href="/"
-          onClick={(e) => {
-            e.preventDefault();
-            (window as any).lenisInstance?.stop();
-            setTimeout(() => navigate('/'), 600);
-          }}
-          className="text-[#888888] hover:opacity-80"
-        >
-          HOME
-        </MagneticLink>
-        <span className="select-none opacity-40">•</span>
-        <MagneticLink
-          href="/about"
-          onClick={(e) => {
-            e.preventDefault();
-            (window as any).lenisInstance?.stop();
-            setTimeout(() => navigate('/about'), 600);
-          }}
-          className="text-[#888888] hover:opacity-80"
-        >
-          ABOUT
-        </MagneticLink>
-        <span className="select-none opacity-40">•</span>
-        <MagneticLink
-          href="/projects"
-          onClick={(e) => {
-            e.preventDefault();
-            (window as any).lenisInstance?.stop();
-            setTimeout(() => navigate('/projects'), 600);
-          }}
-          className="text-[#888888] hover:opacity-80"
-        >
-          PROJECTS
-        </MagneticLink>
-      </footer>
     </div>
   );
 }

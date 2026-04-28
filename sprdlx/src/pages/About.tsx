@@ -153,13 +153,13 @@ function About() {
   const isEntryBlocking = !forceReveal && !canRevealEntry;
 
   const teamMembers = [
-    { name: 'Goutham', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop' },
-    { name: 'Rakesh', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop' },
-    { name: 'Pujith', image: '/team/Pujith.png' },
-    { name: 'Dhruv', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop' },
-    { name: 'Ajith', image: '/team/Ajith.png' },
-    { name: 'Nithin', image: '/team/Nithin.PNG' },
-    { name: 'Udit', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Goutham', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop', alt: 'Goutham' },
+    { name: 'Rakesh', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop', alt: 'Rakesh' },
+    { name: 'Pujith', image: '/team/Pujith.png', alt: 'Pujith' },
+    { name: 'Dhruv', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop', alt: 'Dhruv' },
+    { name: 'Ajith', image: '/team/Ajith.png', alt: 'Ajith' },
+    { name: 'Nithin', image: '/team/Nithin.PNG', alt: 'Nithin' },
+    { name: 'Udit', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop', alt: 'Udit' },
   ];
 
   return (
@@ -206,7 +206,13 @@ function About() {
         <div className="profile-images">
           {teamMembers.map((member, index) => (
             <div key={index} className="img">
-              <img src={member.image} alt={member.name} />
+              <img
+                src={member.image}
+                alt={member.alt}
+                width={120}
+                height={120}
+                loading="lazy"
+              />
             </div>
           ))}
         </div>

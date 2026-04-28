@@ -275,42 +275,42 @@ export default function Projects() {
         <div className="text-container"></div>
         <div className="cards">
           <div className="card" onClick={() => navigate('/project/pulp')} style={{ cursor: 'pointer' }}>
-            <div className="card-img"><img src="/projects/assets/img1.jpg" alt="" /></div>
+            <div className="card-img"><img src="/projects/assets/img1.jpg" alt="Pulp project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Pulp</p>
               <p>2024</p>
             </div>
           </div>
           <div className="card" onClick={() => navigate('/project/esthetic-insights')} style={{ cursor: 'pointer' }}>
-            <div className="card-img"><img src="/projects/assets/img2.jpg" alt="" /></div>
+            <div className="card-img"><img src="/projects/assets/img2.jpg" alt="Esthetic Insights project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Esthetic Insights</p>
               <p>2025</p>
             </div>
           </div>
           <div className="card" onClick={() => navigate('/project/anthill')} style={{ cursor: 'pointer' }}>
-            <div className="card-img"><img src="/projects/assets/img3.jpg" alt="" /></div>
+            <div className="card-img"><img src="/projects/assets/img3.jpg" alt="Anthill project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Anthill</p>
               <p>2026</p>
             </div>
           </div>
           <div className="card" onClick={() => navigate('/project/volery')} style={{ cursor: 'pointer' }}>
-            <div className="card-img"><img src="/projects/assets/img4.jpg" alt="" /></div>
+            <div className="card-img"><img src="/projects/assets/img4.jpg" alt="Volery project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Volery</p>
               <p>2024</p>
             </div>
           </div>
           <div className="card" onClick={() => navigate('/project/alpha')} style={{ cursor: 'pointer' }}>
-            <div className="card-img"><img src="/projects/assets/img5.jpg" alt="" /></div>
+            <div className="card-img"><img src="/projects/assets/img5.jpg" alt="Alpha project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Alpha</p>
               <p>2025</p>
             </div>
           </div>
           <div className="card" onClick={() => navigate('/project/jay')} style={{ cursor: 'pointer' }}>
-            <div className="card-img"><img src="/projects/assets/img6.jpg" alt="" /></div>
+            <div className="card-img"><img src="/projects/assets/img6.jpg" alt="Jay project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Jay</p>
               <p>2026</p>

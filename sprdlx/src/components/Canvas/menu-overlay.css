@@ -28,6 +28,24 @@
   right: 0.5rem;
   color: var(--base-300);
   opacity: 0;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.nav-toggle-close svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+}
+
+.menu.is-open .nav-toggle-close {
+  pointer-events: all;
 }
 
 .menu {

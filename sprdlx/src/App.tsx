@@ -10,10 +10,10 @@ import { CustomCursor } from './components/ui/CustomCursor';
 import ScrollToTop from './components/Common/ScrollToTop';
 import { PageTransition } from './components/Common/PageTransition';
 
-const About = lazy(() => import('./pages/About'));
-const Projects = lazy(() => import('./pages/Projects'));
-const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
-const Contact = lazy(() => import('./pages/Contact'));
+const About = lazy(() => import(/* webpackChunkName: "about" */ './pages/About'));
+const Projects = lazy(() => import(/* webpackChunkName: "projects" */ './pages/Projects'));
+const ProjectDetail = lazy(() => import(/* webpackChunkName: "project-detail" */ './pages/ProjectDetail'));
+const Contact = lazy(() => import(/* webpackChunkName: "contact" */ './pages/Contact'));
 
 declare global {
   interface Window {
