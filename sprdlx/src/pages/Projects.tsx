@@ -48,47 +48,6 @@ export default function Projects() {
 
       const lerp = (start: number, end: number, t: number) => start + (end - start) * t;
 
-      const gridCanvas = document.createElement("canvas");
-      gridCanvas.id = "grid-canvas";
-      gridCanvas.style.position = "absolute";
-      gridCanvas.style.top = "0";
-      gridCanvas.style.left = "0";
-      gridCanvas.style.zIndex = "-1";
-      gridCanvas.style.pointerEvents = "none";
-      workSection?.appendChild(gridCanvas);
-      const gridCtx = gridCanvas.getContext("2d");
-
-      const resizeGridCanvas = () => {
-        const dpr = window.devicePixelRatio || 1;
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        gridCanvas.width = width * dpr;
-        gridCanvas.height = height * dpr;
-        gridCanvas.style.width = `${width}px`;
-        gridCanvas.style.height = `${height}px`;
-        gridCtx?.scale(dpr, dpr);
-      };
-      resizeGridCanvas();
-
-      const drawGrid = (scrollProgress = 0) => {
-        if (!gridCtx) return;
-        gridCtx.fillStyle = "black";
-        gridCtx.fillRect(0, 0, gridCanvas.width, gridCanvas.height);
-        gridCtx.fillStyle = "#ffffff";
-        const dotSize = 1;
-        const spacing = 30;
-        const rows = Math.ceil(gridCanvas.height / spacing);
-        const cols = Math.ceil(gridCanvas.width / spacing) + 15;
-        const offset = (scrollProgress * spacing * 10) % spacing;
-
-        for (let y = 0; y < rows; y++) {
-          for (let x = 0; x < cols; x++) {
-            gridCtx.beginPath();
-            gridCtx.arc(x * spacing - offset, y * spacing, dotSize, 0, Math.PI * 2);
-            gridCtx.fill();
-          }
-        }
-      };
 
       const lettersScene = new Scene();
       const lettersCamera = new PerspectiveCamera(
@@ -223,12 +182,10 @@ export default function Projects() {
         scrub: 1,
         onUpdate: (self) => {
           updateTargetPositions(self.progress);
-          drawGrid(self.progress);
           shouldRender = true;
         },
       });
 
-      drawGrid(0);
       animate();
       updateTargetPositions(0);
 
@@ -236,11 +193,8 @@ export default function Projects() {
       const handleResize = () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-          resizeGridCanvas();
           const triggers = ScrollTrigger.getAll();
           const mainTrigger = triggers.find(t => t.trigger === document.querySelector('.work'));
-
-          drawGrid(mainTrigger?.progress || 0);
           lettersCamera.aspect = window.innerWidth / window.innerHeight;
           lettersCamera.updateProjectionMatrix();
           lettersRenderer.setSize(window.innerWidth, window.innerHeight);
