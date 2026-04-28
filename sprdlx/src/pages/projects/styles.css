@@ -112,3 +112,19 @@
   font-size: 12px;
   color: #ffffff;
 }
+
+@media (max-width: 768px) {
+  .projects-container .card {
+    width: 70vw;
+    height: 55%;
+    padding: 12px;
+  }
+
+  .projects-container .card-copy {
+    height: auto;
+    padding: 4px 6px;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: visible;
+  }
+}

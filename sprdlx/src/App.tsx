@@ -9,6 +9,7 @@ import LoadingScreen from './components/Common/LoadingScreen';
 import { CustomCursor } from './components/ui/CustomCursor';
 import ScrollToTop from './components/Common/ScrollToTop';
 import { PageTransition } from './components/Common/PageTransition';
+import { ErrorBoundary } from './components/Common/ErrorBoundary';
 
 const About = lazy(() => import(/* webpackChunkName: "about" */ './pages/About'));
 const Projects = lazy(() => import(/* webpackChunkName: "projects" */ './pages/Projects'));
@@ -62,15 +63,17 @@ export default function App() {
         <ScrollToTop />
         <CustomCursor />
         <PageTransition />
-        <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/project/:id" element={<ProjectDetail />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/project/:id" element={<ProjectDetail />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </Router>
     </>
   );

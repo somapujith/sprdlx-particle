@@ -15,6 +15,7 @@ const FADE_EASE: [number, number, number, number] = [0.22, 0.61, 0.36, 1];
 export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState<'loading' | 'fadeOut'>('loading');
+  const [showSkipHint, setShowSkipHint] = useState(false);
   const completeRef = useRef(onComplete);
   completeRef.current = onComplete;
 
@@ -75,6 +76,27 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
     return () => window.clearTimeout(id);
   }, [phase]);
 
+  useEffect(() => {
+    let skipEnabled = false;
+    const enableTimer = setTimeout(() => {
+      skipEnabled = true;
+      setShowSkipHint(true);
+    }, 2000);
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && skipEnabled && phase === 'loading') {
+        setProgress(100);
+        setPhase('fadeOut');
+      }
+    };
+
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      clearTimeout(enableTimer);
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, [phase]);
+
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a] text-[#f0f0f0]"
@@ -106,6 +128,15 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         transition={{ delay: 0.15, duration: 0.6, ease: FADE_EASE }}
       >
         {formatSpacedPercent(progress)} %
+      </motion.p>
+
+      <motion.p
+        className="absolute bottom-8 text-xs uppercase tracking-widest text-white/40"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showSkipHint ? 0.4 : 0 }}
+        transition={{ duration: 0.6, ease: FADE_EASE }}
+      >
+        Press ESC to skip
       </motion.p>
     </motion.div>
   );

@@ -17,8 +17,9 @@ export function CustomCursor() {
 
   useLayoutEffect(() => {
     const fine = window.matchMedia('(pointer: fine)').matches;
-    setUseFinePointer(fine);
-    if (fine) {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setUseFinePointer(fine && !prefersReduced);
+    if (fine && !prefersReduced) {
       document.documentElement.classList.add('has-custom-cursor');
     }
     return () => {

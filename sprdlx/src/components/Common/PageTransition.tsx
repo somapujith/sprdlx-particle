@@ -34,7 +34,7 @@ export function PageTransition() {
         isFadingOut || isFadingIn ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
       style={{
-        opacity: isFadingOut ? 1 : (isFadingIn ? 1 : 0),
+        opacity: isFadingOut && !isFadingIn ? 1 : 0,
       }}
       aria-hidden
     />
