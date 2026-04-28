@@ -29,8 +29,8 @@
 
 .img {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 138px;
+  height: 138px;
   padding: 5px;
   cursor: pointer;
   will-change: width, height;
@@ -87,8 +87,8 @@
   }
 
   .img {
-    width: 100px;
-    height: 100px;
+    width: 115px;
+    height: 115px;
     padding: 2.5px;
   }
 

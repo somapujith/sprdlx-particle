@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useSEO } from '../hooks/useSEO';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitText from 'gsap/SplitText';
-import WaterRipple from '../components/Canvas/WaterRipple';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
+
+const WaterRipple = lazy(() => import('../components/Canvas/WaterRipple'));
 import { MagneticLink } from '../components/ui/MagneticLink';
 import './about/team-styles.css';
 
@@ -91,8 +92,8 @@ function About() {
           const letters = correspondingName?.querySelectorAll('.letter');
 
           gsap.to(img, {
-            width: 200,
-            height: 200,
+            width: 230,
+            height: 230,
             duration: 0.5,
             ease: 'power4.out',
           });
@@ -114,8 +115,8 @@ function About() {
           const letters = correspondingName?.querySelectorAll('.letter');
 
           gsap.to(img, {
-            width: 120,
-            height: 120,
+            width: 138,
+            height: 138,
             duration: 0.5,
             ease: 'power4.out',
           });
@@ -154,7 +155,7 @@ function About() {
 
   const teamMembers = [
     { name: 'Goutham', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop', alt: 'Goutham' },
-    { name: 'Rakesh', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop', alt: 'Rakesh' },
+    { name: 'Rakesh', image: '/team/Rakesh.png', alt: 'Rakesh' },
     { name: 'Pujith', image: '/team/Pujith.png', alt: 'Pujith' },
     { name: 'Dhruv', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop', alt: 'Dhruv' },
     { name: 'Ajith', image: '/team/Ajith.png', alt: 'Ajith' },
@@ -176,7 +177,9 @@ function About() {
         aria-label="Hero"
         className="relative z-0 flex min-h-screen min-h-[100dvh] h-screen w-full flex-col justify-between overflow-hidden bg-black"
       >
-        <WaterRipple />
+        <Suspense fallback={null}>
+          <WaterRipple />
+        </Suspense>
       </section>
 
       <section
@@ -209,9 +212,10 @@ function About() {
               <img
                 src={member.image}
                 alt={member.alt}
-                width={120}
-                height={120}
+                width={138}
+                height={138}
                 loading="lazy"
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
             </div>
           ))}

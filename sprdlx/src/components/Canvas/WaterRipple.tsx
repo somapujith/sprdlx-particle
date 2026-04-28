@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { Scene, OrthographicCamera, WebGLRenderer, RGBAFormat, FloatType, LinearFilter, WebGLRenderTarget, ShaderMaterial, Vector2, PlaneGeometry, Mesh, CanvasTexture } from 'three';
 
 const simulationVertexShader = `
 varying vec2 vUv;
@@ -102,8 +101,11 @@ function WaterRipple() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const scene = new Scene();
-    const simScene = new Scene();
+    (async () => {
+      const { Scene, OrthographicCamera, WebGLRenderer, RGBAFormat, FloatType, LinearFilter, WebGLRenderTarget, ShaderMaterial, Vector2, PlaneGeometry, Mesh, CanvasTexture } = await import('three');
+
+      const scene = new Scene();
+      const simScene = new Scene();
 
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
@@ -255,6 +257,7 @@ function WaterRipple() {
       renderMaterial.dispose();
       renderer.dispose();
     };
+    })();
   }, []);
 
   return <div ref={containerRef} className="absolute inset-0 w-full h-full" />;
