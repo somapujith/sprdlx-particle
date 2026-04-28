@@ -182,9 +182,9 @@ function WaterRipple() {
     img.src = 'data:image/svg+xml;base64,' + btoa(SVG_STRING);
 
     const textTexture = new CanvasTexture(canvas);
-    textTexture.minFilter = THREE.LinearFilter;
-    textTexture.magFilter = THREE.LinearFilter;
-    textTexture.format = THREE.RGBAFormat;
+    textTexture.minFilter = LinearFilter;
+    textTexture.magFilter = LinearFilter;
+    textTexture.format = RGBAFormat;
 
     const handleResize = () => {
       const newWidth = window.innerWidth * window.devicePixelRatio;
