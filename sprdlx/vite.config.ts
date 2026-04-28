@@ -39,7 +39,7 @@ export default defineConfig(({mode}) => {
           assetFileNames: 'assets/[name]-[hash][extname]',
         },
       },
-      chunkSizeWarningLimit: 5000,
+      chunkSizeWarningLimit: 600,
       reportCompressedSize: true,
     },
     server: {

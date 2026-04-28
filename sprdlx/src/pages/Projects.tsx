@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import * as THREE from 'three';
+import { Scene, PerspectiveCamera, WebGLRenderer, CatmullRomCurve3, BufferGeometry, Line, LineBasicMaterial, Vector3 } from 'three';
 import './projects/styles.css';
 import { useSEO } from '../hooks/useSEO';
 import { projects } from './projects/data';
@@ -90,8 +90,8 @@ export default function Projects() {
         }
       };
 
-      const lettersScene = new THREE.Scene();
-      const lettersCamera = new THREE.PerspectiveCamera(
+      const lettersScene = new Scene();
+      const lettersCamera = new PerspectiveCamera(
         50,
         window.innerWidth / window.innerHeight,
         0.1,
@@ -99,7 +99,7 @@ export default function Projects() {
       );
       lettersCamera.position.z = 20;
 
-      const lettersRenderer = new THREE.WebGLRenderer({
+      const lettersRenderer = new WebGLRenderer({
         antialias: true,
         alpha: true,
       });
@@ -114,17 +114,17 @@ export default function Projects() {
         for (let i = 0; i <= 20; i++) {
           const t = i / 20;
           points.push(
-            new THREE.Vector3(
+            new Vector3(
               -25 + 50 * t,
               yPos + Math.sin(t * Math.PI) * -amplitude,
               (1 - Math.pow(Math.abs(t - 0.5) * 2, 2)) * -5
             )
           );
         }
-        const curve = new THREE.CatmullRomCurve3(points);
-        const line = new THREE.Line(
-          new THREE.BufferGeometry().setFromPoints(curve.getPoints(100)),
-          new THREE.LineBasicMaterial({ color: 0x000, linewidth: 1 })
+        const curve = new CatmullRomCurve3(points);
+        const line = new Line(
+          new BufferGeometry().setFromPoints(curve.getPoints(100)),
+          new LineBasicMaterial({ color: 0x000, linewidth: 1 })
         );
         (line as any).curve = curve;
         return line;
@@ -204,10 +204,13 @@ export default function Projects() {
       };
 
       let animationFrameId: number;
+      let shouldRender = false;
       const animate = () => {
         updateLetterPositions();
         updateCardsPosition();
-        lettersRenderer.render(lettersScene, lettersCamera);
+        if (shouldRender) {
+          lettersRenderer.render(lettersScene, lettersCamera);
+        }
         animationFrameId = requestAnimationFrame(animate);
       };
 
@@ -221,6 +224,7 @@ export default function Projects() {
         onUpdate: (self) => {
           updateTargetPositions(self.progress);
           drawGrid(self.progress);
+          shouldRender = true;
         },
       });
 
@@ -228,22 +232,27 @@ export default function Projects() {
       animate();
       updateTargetPositions(0);
 
+      let resizeTimeout: ReturnType<typeof setTimeout>;
       const handleResize = () => {
-        resizeGridCanvas();
-        const triggers = ScrollTrigger.getAll();
-        const mainTrigger = triggers.find(t => t.trigger === document.querySelector('.work'));
-        
-        drawGrid(mainTrigger?.progress || 0);
-        lettersCamera.aspect = window.innerWidth / window.innerHeight;
-        lettersCamera.updateProjectionMatrix();
-        lettersRenderer.setSize(window.innerWidth, window.innerHeight);
-        updateTargetPositions(mainTrigger?.progress || 0);
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          resizeGridCanvas();
+          const triggers = ScrollTrigger.getAll();
+          const mainTrigger = triggers.find(t => t.trigger === document.querySelector('.work'));
+
+          drawGrid(mainTrigger?.progress || 0);
+          lettersCamera.aspect = window.innerWidth / window.innerHeight;
+          lettersCamera.updateProjectionMatrix();
+          lettersRenderer.setSize(window.innerWidth, window.innerHeight);
+          updateTargetPositions(mainTrigger?.progress || 0);
+        }, 150);
       };
 
       window.addEventListener("resize", handleResize);
 
       return () => {
         window.removeEventListener("resize", handleResize);
+        clearTimeout(resizeTimeout);
         scrollTrigger?.kill();
         cancelAnimationFrame(animationFrameId);
         lettersRenderer.dispose();

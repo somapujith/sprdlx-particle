@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import SplitText from 'gsap/SplitText';
 import './menu-overlay.css';
@@ -9,6 +10,7 @@ function MenuOverlay() {
   const navToggleRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuBgRef = useRef<SVGPathElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const navToggle = navToggleRef.current;
@@ -180,10 +182,10 @@ function MenuOverlay() {
         </div>
 
         <div className="menu-col menu-col-links">
-          <a href="/">HOME</a>
-          <a href="/projects">PROJECTS</a>
-          <a href="/about">ABOUT</a>
-          <a href="/contact">CONTACT</a>
+          <Link to="/">HOME</Link>
+          <Link to="/projects">PROJECTS</Link>
+          <Link to="/about">ABOUT</Link>
+          <Link to="/contact">CONTACT</Link>
         </div>
       </div>
     </div>

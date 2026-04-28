@@ -82,10 +82,12 @@ function About() {
     });
 
     if (window.innerWidth >= 900) {
+      const handlers: { img: Element, enter: () => void, leave: () => void }[] = [];
+
       profileImages.forEach((img, index) => {
         const correspondingName = nameElements[index];
 
-        img.addEventListener('mouseenter', () => {
+        const onEnter = () => {
           const letters = correspondingName?.querySelectorAll('.letter');
 
           gsap.to(img, {
@@ -106,9 +108,9 @@ function About() {
               },
             });
           }
-        });
+        };
 
-        img.addEventListener('mouseleave', () => {
+        const onLeave = () => {
           const letters = correspondingName?.querySelectorAll('.letter');
 
           gsap.to(img, {
@@ -129,8 +131,19 @@ function About() {
               },
             });
           }
-        });
+        };
+
+        img.addEventListener('mouseenter', onEnter);
+        img.addEventListener('mouseleave', onLeave);
+        handlers.push({ img, enter: onEnter, leave: onLeave });
       });
+
+      return () => {
+        handlers.forEach(({ img, enter, leave }) => {
+          img.removeEventListener('mouseenter', enter);
+          img.removeEventListener('mouseleave', leave);
+        });
+      };
     }
     }, 100);
 

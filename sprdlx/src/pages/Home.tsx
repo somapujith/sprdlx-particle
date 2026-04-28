@@ -2,7 +2,6 @@ import { useLayoutEffect, useRef, Suspense } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '../hooks/useSEO';
-import { useLazyLoad3D } from '../hooks/useLazyLoad3D';
 import { MagneticLink } from '../components/ui/MagneticLink';
 import SplineHero from '../components/Canvas/SplineHero';
 

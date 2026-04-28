@@ -32,22 +32,21 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         setProgress(current);
       };
 
-      const preloadImage = (src: string) => {
+      const preloadAsset = (src: string) => {
         return new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            loaded++;
-            resolve(null);
-          };
-          img.onerror = () => {
-            loaded++;
-            resolve(null);
-          };
-          img.src = src;
+          fetch(src, { method: 'HEAD' })
+            .then(() => {
+              loaded++;
+              resolve(null);
+            })
+            .catch(() => {
+              loaded++;
+              resolve(null);
+            });
         });
       };
 
-      await Promise.all(assets.map((asset) => preloadImage(asset)));
+      await Promise.all(assets.map((asset) => preloadAsset(asset)));
 
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, MIN_LOAD_TIME - elapsedTime);

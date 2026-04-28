@@ -37,14 +37,36 @@ export function CustomCursor() {
     const startY = window.innerHeight / 2;
     gsap.set(el, { x: startX, y: startY });
 
+    let isHovered = false;
+
     const onMove = (e: PointerEvent) => {
       xTo.current?.(e.clientX);
       yTo.current?.(e.clientY);
 
-      const under = document.elementFromPoint(e.clientX, e.clientY);
-      const hover = under?.closest('[data-cursor-hover]');
+      if (isHovered) {
+        gsap.to(el, {
+          scale: 1.5,
+          duration: 0.22,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+      }
+    };
+
+    const onEnter = () => {
+      isHovered = true;
       gsap.to(el, {
-        scale: hover ? 1.5 : 1,
+        scale: 1.5,
+        duration: 0.22,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      });
+    };
+
+    const onLeave = () => {
+      isHovered = false;
+      gsap.to(el, {
+        scale: 1,
         duration: 0.22,
         ease: 'power2.out',
         overwrite: 'auto',
@@ -52,7 +74,24 @@ export function CustomCursor() {
     };
 
     window.addEventListener('pointermove', onMove, { passive: true });
-    return () => window.removeEventListener('pointermove', onMove);
+    document.addEventListener('mouseenter', onEnter, true);
+    document.addEventListener('mouseleave', onLeave, true);
+
+    const hoverElements = document.querySelectorAll('[data-cursor-hover]');
+    hoverElements.forEach((el) => {
+      el.addEventListener('mouseenter', onEnter);
+      el.addEventListener('mouseleave', onLeave);
+    });
+
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      document.removeEventListener('mouseenter', onEnter, true);
+      document.removeEventListener('mouseleave', onLeave, true);
+      hoverElements.forEach((el) => {
+        el.removeEventListener('mouseenter', onEnter);
+        el.removeEventListener('mouseleave', onLeave);
+      });
+    };
   }, [useFinePointer]);
 
   if (!useFinePointer) return null;
