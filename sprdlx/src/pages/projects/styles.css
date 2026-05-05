@@ -16,7 +16,7 @@
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
-  color: #000;
+  color: var(--color-bg);
 }
 
 .projects-container .intro h1,
@@ -32,7 +32,7 @@
 }
 
 .projects-container .work {
-  background-color: #000;
+  background-color: var(--color-bg);
   overflow: hidden;
 }
 
@@ -67,7 +67,7 @@
   font-family: "Bigger", sans-serif;
   font-size: 14rem;
   font-weight: bold;
-  color: #ffffff;
+  color: var(--color-white);
   z-index: 2;
   transform-origin: center;
   transform-style: preserve-3d;
@@ -90,7 +90,7 @@
   width: 10%;
   height: 50%;
   padding: 8px;
-  background-color: #000;
+  background-color: var(--color-bg);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -110,7 +110,7 @@
   text-transform: uppercase;
   font-family: "Akkurat Mono";
   font-size: 12px;
-  color: #ffffff;
+  color: var(--color-white);
 }
 
 @media (max-width: 768px) {

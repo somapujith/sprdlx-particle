@@ -9,8 +9,8 @@
 .team {
   position: relative;
   width: 100%;
-  background-color: #000000;
-  color: #e3e3db;
+  background-color: var(--color-bg);
+  color: var(--color-team-text);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,13 +60,13 @@
   font-weight: 900;
   letter-spacing: -0.2rem;
   line-height: 1;
-  color: #f93535;
+  color: var(--color-red);
   user-select: none;
   transform: translateY(100%);
 }
 
 .name.default h1 {
-  color: #e3e3db;
+  color: var(--color-team-text);
   transform: translateY(0%);
 }
 
