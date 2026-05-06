@@ -5,6 +5,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitText from 'gsap/SplitText';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
+import FocusAreaFluid from '../components/Canvas/FocusAreaFluid';
+import Copy from '../components/Common/Copy';
 
 const WaterRipple = lazy(() => import('../components/Canvas/WaterRipple'));
 import { MagneticLink } from '../components/ui/MagneticLink';
@@ -22,7 +24,17 @@ function About() {
   const [isExiting, setIsExiting] = useState(false);
   const [canRevealEntry, setCanRevealEntry] = useState(false);
   const [forceReveal, setForceReveal] = useState(false);
+  const [activeTopicIndex, setActiveTopicIndex] = useState(0);
   const textContainerRef = useRef<HTMLHeadingElement>(null);
+
+  const images = [
+    '/team/Goutham.png',
+    '/team/Rakesh.png',
+    '/team/Pujith.png',
+    '/team/Dhruv.png',
+    '/team/Nithin.PNG',
+    '/team/Udit.png',
+  ];
 
   useEffect(() => {
     (window as any).lenisInstance?.start();
@@ -51,6 +63,41 @@ function About() {
         );
       }
 
+      // Focus areas animation
+      const focusItems = document.querySelectorAll('.focus-item');
+      const focusItemsList = document.querySelector('.focus-items-list');
+
+      if (focusItemsList) {
+        focusItems.forEach((item, index) => {
+          gsap.to(item, {
+            scrollTrigger: {
+              trigger: focusItemsList,
+              start: 'top center',
+              end: 'bottom center',
+              onUpdate: (self) => {
+                const scrollProgress = self.progress;
+                const itemProgress = (scrollProgress * focusItems.length) - index;
+                const isActive = itemProgress > -0.5 && itemProgress < 0.5;
+
+                if (isActive) {
+                  setActiveTopicIndex(index);
+                  gsap.to(item.querySelector('h3'), {
+                    color: '#ffffff',
+                    fontSize: '2.25rem',
+                    duration: 0.3,
+                  });
+                } else {
+                  gsap.to(item.querySelector('h3'), {
+                    color: '#6b7280',
+                    fontSize: '1.875rem',
+                    duration: 0.3,
+                  });
+                }
+              },
+            },
+          });
+        });
+      }
     });
 
     return () => {
@@ -184,7 +231,7 @@ function About() {
       <section
         id="about-data"
         aria-label="About"
-        className="relative z-10 bg-black px-8 py-20 md:px-12 md:py-32 flex justify-center"
+        className="relative z-10 bg-black px-8 py-20 md:px-12 md:py-32 flex justify-center mb-[100px]"
       >
         <div className="w-full max-w-5xl flex flex-col justify-center items-center">
           <div className="font-sans text-center">
@@ -200,6 +247,46 @@ function About() {
             <p className="mt-10 text-lg font-light text-white/50 md:mt-12 md:text-2xl hover:text-white/80 transition-colors cursor-default">
               SPRDLX — Where Ideas Evolve into Intelligent Digital Realities.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="make-it-matter-section relative z-10 bg-black px-8 pt-20 pb-20 md:px-12 flex justify-center">
+        <div className="w-full max-w-6xl">
+          <Copy blockColor="#ffffff" delay={0.1}>
+            <h2 className="text-5xl md:text-7xl font-bold text-white text-center mb-16">Make it Matter.</h2>
+          </Copy>
+
+          <div className="focus-areas-container grid grid-cols-1 md:grid-cols-2 gap-20 items-start">
+            <div className="left-images sticky top-1/3 h-96 hidden md:flex items-center justify-center">
+              <FocusAreaFluid
+                currentImageUrl={images[activeTopicIndex]}
+                nextImageUrl={images[(activeTopicIndex + 1) % images.length]}
+              />
+            </div>
+
+            <div className="right-content">
+              <div className="focus-items-list space-y-8">
+                {[
+                  { title: 'Strategy' },
+                  { title: 'Branding' },
+                  { title: 'Art Direction' },
+                  { title: 'Visual Design' },
+                  { title: 'Graphic Design' },
+                  { title: 'Interactive Design' },
+                ].map((item, index) => (
+                  <div
+                    key={index}
+                    className="focus-item transition-all duration-500"
+                  >
+                    <p className="text-xs text-gray-600 mb-2 uppercase tracking-wider">Areas of focus</p>
+                    <Copy blockColor="#6b7280" delay={index * 0.1} stagger={0.05}>
+                      <h3 className="text-4xl md:text-6xl font-bold text-gray-500 transition-all duration-500">{item.title}</h3>
+                    </Copy>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
