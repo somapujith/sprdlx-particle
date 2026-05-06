@@ -30,7 +30,7 @@ export default function AboutIntroSection({ textContainerRef }: Props) {
             SPRDLX — Where Ideas Evolve into Intelligent Digital Realities.
           </p>
           <Link
-            to="/about/kin"
+            to="/about"
             className="mt-8 inline-block text-xs uppercase tracking-[0.2em] text-[color:var(--color-muted)] underline decoration-[color:var(--color-muted)] underline-offset-4 hover:text-[color:var(--color-text)] hover:decoration-[color:var(--color-text)] transition-colors md:mt-10"
           >
             Studio layout (alternate)

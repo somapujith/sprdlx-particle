@@ -1,5 +1,5 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -11,7 +11,6 @@ import { PageTransition } from './components/Common/PageTransition';
 import { ErrorBoundary } from './components/Common/ErrorBoundary';
 import { AppBootstrapProvider } from './context/AppBootstrapContext';
 
-const About = lazy(() => import(/* webpackChunkName: "about" */ './pages/About'));
 const AboutCgKin = lazy(() =>
   import(/* webpackChunkName: "about-kin" */ './pages/aboutCgKin/AboutCgKin'),
 );
@@ -19,6 +18,7 @@ const InfiniteParallax = lazy(() =>
   import(/* webpackChunkName: "infinite-parallax" */ './pages/InfiniteParallax'),
 );
 const Projects = lazy(() => import(/* webpackChunkName: "projects" */ './pages/Projects'));
+const Teams = lazy(() => import(/* webpackChunkName: "teams" */ './pages/Teams'));
 const ProjectDetail = lazy(() => import(/* webpackChunkName: "project-detail" */ './pages/ProjectDetail'));
 const Contact = lazy(() => import(/* webpackChunkName: "contact" */ './pages/Contact'));
 
@@ -73,10 +73,11 @@ export default function App() {
             <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/about/kin" element={<AboutCgKin />} />
+                <Route path="/about" element={<AboutCgKin />} />
+                <Route path="/about/kin" element={<Navigate to="/about" replace />} />
                 <Route path="/projects/parallax" element={<InfiniteParallax />} />
                 <Route path="/projects" element={<Projects />} />
+                <Route path="/teams" element={<Teams />} />
                 <Route path="/project/:id" element={<ProjectDetail />} />
                 <Route path="/contact" element={<Contact />} />
               </Routes>

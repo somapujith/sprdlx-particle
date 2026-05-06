@@ -124,6 +124,14 @@ export default function Home() {
             </MagneticLink>
             <span className="select-none opacity-40">•</span>
             <MagneticLink
+              href="/teams"
+              onClick={handleNavigation('/teams')}
+              className="text-[#888888] hover:opacity-80"
+            >
+              TEAMS
+            </MagneticLink>
+            <span className="select-none opacity-40">•</span>
+            <MagneticLink
               href="/contact"
               onClick={handleNavigation('/contact')}
               className="text-[#888888] hover:opacity-80"

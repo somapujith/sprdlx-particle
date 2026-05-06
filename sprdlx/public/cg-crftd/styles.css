@@ -1,0 +1,66 @@
+@import url("https://fonts.cdnfonts.com/css/tt-hoves-pro-trial");
+@import url("https://fonts.cdnfonts.com/css/pp-neue-bit");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "TT Hoves Pro Trial";
+  background: #d5d5d5;
+}
+
+.canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.services {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.indicator {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100%;
+  height: 36px;
+  transform: translateY(0px);
+  background-color: #000;
+  z-index: -1;
+  x: -50%;
+}
+
+.service {
+  width: max-content;
+  height: 36px;
+}
+
+.service p {
+  text-transform: uppercase;
+  font-family: "PP NeueBit";
+  font-size: 72px;
+  font-weight: 600;
+  line-height: 0.8;
+  color: #bfc0c5;
+  transition: color 0.3s;
+}
+
+.service.active p {
+  color: #fff;
+}

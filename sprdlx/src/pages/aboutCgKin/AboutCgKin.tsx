@@ -15,7 +15,7 @@ export default function AboutCgKin() {
     title: 'About — Studio layout | SPRDLX',
     description:
       'Full-viewport landing concept: Arc Worldwide–style typography, stacked image choreography, and studio details.',
-    canonical: '/about/kin',
+    canonical: '/about',
   });
 
   useEffect(() => {

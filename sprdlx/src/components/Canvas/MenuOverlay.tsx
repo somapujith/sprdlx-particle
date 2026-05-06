@@ -198,6 +198,7 @@ function MenuOverlay() {
           <Link to="/">HOME</Link>
           <Link to="/projects">PROJECTS</Link>
           <Link to="/about">ABOUT</Link>
+          <Link to="/teams">TEAMS</Link>
           <Link to="/contact">CONTACT</Link>
         </div>
       </div>
