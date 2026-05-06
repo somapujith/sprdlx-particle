@@ -1,4 +1,5 @@
 import { useSEO } from '../hooks/useSEO';
+import MenuOverlay from '../components/Canvas/MenuOverlay';
 
 export default function Teams() {
   useSEO({
@@ -9,9 +10,10 @@ export default function Teams() {
 
   return (
     <main className="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
+      <MenuOverlay />
       <iframe
-        title="Crftd Teams"
-        src="/cg-crftd/index.html"
+        title="Teams"
+        src="/teams-parallax/index.html"
         className="h-full w-full border-0"
         loading="eager"
       />
