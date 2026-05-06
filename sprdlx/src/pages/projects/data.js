@@ -2,7 +2,7 @@ export const projects = [
   {
     id: "pulp",
     title: "Pulp",
-    image: "/projects/assets/img1.jpg",
+    image: "/projects/pulp/hero.png",
     year: 2024,
     desc: "A creative storytelling platform for the next generation of writers.",
     industry: "Creative",
@@ -13,7 +13,7 @@ export const projects = [
     backedBy: "Y Combinator",
     backedByLogo: "Y",
     about: "Pulp is a creative storytelling platform designed to empower the next generation of writers with collaborative tools and AI-enhanced narrative structures.",
-    images: ["/projects/assets/img1.jpg", "/projects/assets/img2.jpg", "/projects/assets/img7.jpg"],
+    images: ["/projects/pulp/hero.png", "/projects/pulp/cosmic-dew.png", "/projects/pulp/logo.png"],
     website: "https://pulpindia.com/",
     next: "esthetic-insights",
     prev: "anthill",

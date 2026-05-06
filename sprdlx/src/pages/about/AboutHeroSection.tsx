@@ -25,7 +25,7 @@ export default function AboutHeroSection() {
       ref={sectionRef}
       id="about-hero"
       aria-label="Hero"
-      className="relative z-0 flex min-h-dvh h-screen w-full flex-col justify-between overflow-hidden bg-black"
+      className="relative z-0 flex min-h-dvh h-screen w-full flex-col justify-between overflow-hidden bg-[color:var(--color-bg)]"
     >
       <Suspense fallback={null}>
         <div className="about-hero-ripple h-full w-full">

@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Scene, PerspectiveCamera, WebGLRenderer, CatmullRomCurve3, BufferGeometry, Line, LineBasicMaterial, Vector3 } from 'three';
 import './projects/styles.css';
 import { useSEO } from '../hooks/useSEO';
+import { useMotif } from '../hooks/useMotif';
 import { projects } from './projects/data';
 import { HardwareAccelerationWarning } from '../components/HardwareAccelerationWarning';
 
@@ -28,6 +29,7 @@ const PROJECTS_SCHEMA = {
 };
 
 export default function Projects() {
+  useMotif('chrome');
   useSEO({
     title: 'Projects — SPRDLX Portfolio | Immersive Digital Experiences',
     description: 'Explore SPRDLX portfolio: immersive web experiences, design systems, and digital products built for Y Combinator, Sequoia, and Techstars-backed startups.',
@@ -101,7 +103,7 @@ export default function Projects() {
         const curve = new CatmullRomCurve3(points);
         const line = new Line(
           new BufferGeometry().setFromPoints(curve.getPoints(100)),
-          new LineBasicMaterial({ color: 0x000, linewidth: 1 })
+          new LineBasicMaterial({ color: 0xa8acb8, linewidth: 1 })
         );
         (line as any).curve = curve;
         return line;
@@ -243,7 +245,7 @@ export default function Projects() {
   return (
     <div className="projects-container">
       <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-pulse">
-        <div className="text-white text-sm font-mono uppercase tracking-widest text-center">
+        <div className="text-[color:var(--color-text)] text-sm font-mono uppercase tracking-widest text-center opacity-80">
           Scroll to explore
         </div>
       </div>
@@ -251,7 +253,7 @@ export default function Projects() {
         <div className="text-container"></div>
         <div className="cards">
           <div className="card" onClick={() => navigate('/project/pulp')} style={{ cursor: 'pointer' }}>
-            <div className="card-img"><img src="/projects/assets/img1.jpg" alt="Pulp project" width={300} height={300} loading="lazy" /></div>
+            <div className="card-img"><img src="/projects/pulp/hero.png" alt="Pulp project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Pulp</p>
               <p>2024</p>

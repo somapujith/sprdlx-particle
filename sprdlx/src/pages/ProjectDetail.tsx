@@ -5,6 +5,7 @@ import Footer from '../components/Common/Footer';
 import VTLink from '../components/Common/VTLink';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
 import { useSEO } from '../hooks/useSEO';
+import { useMotif } from '../hooks/useMotif';
 
 function BlurUpImg({ className = '', ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) {
   const [loaded, setLoaded] = useState(false);
@@ -23,6 +24,7 @@ function BlurUpImg({ className = '', ...rest }: React.ImgHTMLAttributes<HTMLImag
 }
 
 export default function ProjectDetail() {
+  useMotif('chrome');
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const project = projects.find(p => p.id === id);
@@ -71,7 +73,11 @@ export default function ProjectDetail() {
   };
 
   if (!project) {
-    return <div className="min-h-screen flex items-center justify-center text-white bg-black">Project not found</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center text-[color:var(--color-text)] bg-[color:var(--color-bg)] [font-family:var(--font-sf),ui-sans-serif,system-ui,sans-serif]">
+        Project not found
+      </div>
+    );
   }
 
   const projectIndex = projects.findIndex(p => p.id === id);
@@ -79,7 +85,7 @@ export default function ProjectDetail() {
   const nextProject = projects[(projectIndex + 1) % projects.length];
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-black text-white selection:bg-white selection:text-black">
+    <main className="min-h-screen overflow-x-hidden bg-[color:var(--color-bg)] text-[color:var(--color-text)] [font-family:var(--font-sf),ui-sans-serif,system-ui,sans-serif] selection:bg-[color:var(--prism-cyan)] selection:text-black">
       <MenuOverlay />
       {/* Fixed Logo */}
       <div className="fixed top-0 left-0 z-50 p-5 sm:p-6 md:p-8">
@@ -106,7 +112,7 @@ export default function ProjectDetail() {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 flex items-center justify-center px-3 sm:px-4">
-            <div className="bg-black/40 backdrop-blur-md border border-white/20 px-8 py-6 md:px-12 md:py-8 rounded-xl flex items-center justify-center max-w-[min(96vw,36rem)] text-center">
+            <div className="bg-[color:var(--glass-bg)] backdrop-blur-xl border border-[color:var(--glass-border)] px-8 py-6 md:px-12 md:py-8 rounded-[var(--radius-soft)] flex items-center justify-center max-w-[min(96vw,36rem)] text-center shadow-[0_0_40px_rgba(126,225,255,0.08)]">
               <h1
                 id="project-hero-title"
                 className="m-0 font-sans font-bold uppercase tracking-[0.14em] text-white text-lg sm:text-xl md:text-2xl lg:text-3xl leading-tight"

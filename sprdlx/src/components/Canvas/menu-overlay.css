@@ -21,7 +21,7 @@
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  color: var(--nav-bg);
+  color: var(--color-text);
   opacity: 0;
   background: none;
   border: none;
@@ -52,7 +52,7 @@
   padding: 2.5rem;
   display: flex;
   gap: 2rem;
-  color: var(--nav-bg);
+  color: var(--color-text);
   pointer-events: none;
   z-index: 50;
 }
@@ -103,7 +103,7 @@
 
 .menu-col a {
   text-decoration: none;
-  color: var(--nav-bg);
+  color: var(--color-text);
   font-weight: bold;
   font-size: 3rem;
   line-height: 1.3;
@@ -117,7 +117,7 @@
 .menu-col-info p,
 .menu-col-info h3,
 .menu-col-info h6 {
-  color: var(--nav-bg);
+  color: var(--color-muted);
   margin-bottom: 1rem;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -152,4 +152,40 @@
   .menu-col a {
     font-size: 2rem;
   }
+}
+
+/* Liquid Chrome menu (routes with `html[data-motif="chrome"]` only mount this overlay) */
+
+html[data-motif="chrome"] .menu-col a {
+  color: var(--ink-primary);
+  font-family: var(--font-sf), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+html[data-motif="chrome"] .menu-col-links a {
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+html[data-motif="chrome"] .menu-col-links a:hover {
+  color: var(--chrome-silver);
+  text-shadow: 0 0 28px rgba(126, 225, 255, 0.35);
+}
+
+html[data-motif="chrome"] .menu-col-info p,
+html[data-motif="chrome"] .menu-col-info h3,
+html[data-motif="chrome"] .menu-col-info h6 {
+  color: var(--ink-secondary);
+}
+
+html[data-motif="chrome"] .menu-logo img {
+  filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(255, 102, 196, 0.25));
+  opacity: 0.92;
+}
+
+html[data-motif="chrome"] .nav-toggle-close {
+  color: var(--ink-primary);
+}
+
+html[data-motif="chrome"] .menu.is-open .nav-toggle-close svg line {
+  stroke: var(--ink-primary);
 }

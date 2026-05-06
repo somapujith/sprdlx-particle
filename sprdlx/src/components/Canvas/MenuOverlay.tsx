@@ -167,10 +167,18 @@ function MenuOverlay() {
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <defs>
+            <linearGradient id="menu-chrome-fill" x1="0%" y1="0%" x2="100%" y2="100%" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#0b0e14" />
+              <stop offset="38%" stopColor="#151922" />
+              <stop offset="72%" stopColor="#1a1328" />
+              <stop offset="100%" stopColor="#0f141c" />
+            </linearGradient>
+          </defs>
           <path
             ref={menuBgRef}
             id="menu-path"
-            fill="#f0f0f0"
+            fill="url(#menu-chrome-fill)"
             d="M1131,0 Q565.5,0 0,0 L0,0 L1131,0 Z"
           />
         </svg>

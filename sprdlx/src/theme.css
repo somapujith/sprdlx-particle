@@ -23,3 +23,49 @@
   --nav-bg: #000000;
   --nav-fg: #f0f0f0;
 }
+
+/**
+ * Liquid Chrome — non-Home routes only (`data-motif="chrome"` on `<html>`).
+ * Bridge legacy `--color-*` tokens so existing CSS keeps working.
+ */
+[data-motif="chrome"] {
+  --surface-0: #0a0a0c;
+  --surface-1: #13141a;
+  --surface-2: #1c1e26;
+  --ink-primary: #e8eaf0;
+  --ink-secondary: #a8acb8;
+  --ink-tertiary: #5d6270;
+  --chrome-silver: #c8ccd2;
+  --accent-amber: #fca311;
+  --prism-cyan: #7be1ff;
+  --prism-magenta: #ff66c4;
+  --prism-amber: #fca311;
+  --gradient-prism: linear-gradient(
+    120deg,
+    var(--prism-cyan) 0%,
+    var(--prism-magenta) 50%,
+    var(--prism-amber) 100%
+  );
+  --gradient-chrome: linear-gradient(135deg, #c8ccd2 0%, #6a6e78 50%, #c8ccd2 100%);
+  --glass-bg: rgba(28, 30, 38, 0.55);
+  --glass-border: rgba(232, 234, 240, 0.08);
+  --radius-soft: 12px;
+  --radius-card: 24px;
+  --radius-pill: 9999px;
+  --ease-chrome-out: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Legacy bridge */
+  --color-bg: var(--surface-0);
+  --color-surface: var(--surface-1);
+  --color-overlay: var(--surface-2);
+  --color-border: rgba(232, 234, 240, 0.1);
+  --color-subtle: var(--ink-tertiary);
+  --color-text: var(--ink-primary);
+  --color-muted: var(--ink-secondary);
+  --color-cream: var(--ink-primary);
+  --color-team-text: var(--ink-secondary);
+  --color-accent: var(--accent-amber);
+  --color-red: var(--prism-magenta);
+  --nav-bg: var(--surface-0);
+  --nav-fg: var(--ink-primary);
+}
