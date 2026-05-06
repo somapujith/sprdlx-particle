@@ -6,7 +6,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Home from './pages/Home';
 import LoadingScreen from './components/Common/LoadingScreen';
-import { CustomCursor } from './components/ui/CustomCursor';
 import ScrollToTop from './components/Common/ScrollToTop';
 import { PageTransition } from './components/Common/PageTransition';
 import { ErrorBoundary } from './components/Common/ErrorBoundary';
@@ -15,6 +14,9 @@ import { AppBootstrapProvider } from './context/AppBootstrapContext';
 const About = lazy(() => import(/* webpackChunkName: "about" */ './pages/About'));
 const AboutCgKin = lazy(() =>
   import(/* webpackChunkName: "about-kin" */ './pages/aboutCgKin/AboutCgKin'),
+);
+const InfiniteParallax = lazy(() =>
+  import(/* webpackChunkName: "infinite-parallax" */ './pages/InfiniteParallax'),
 );
 const Projects = lazy(() => import(/* webpackChunkName: "projects" */ './pages/Projects'));
 const ProjectDetail = lazy(() => import(/* webpackChunkName: "project-detail" */ './pages/ProjectDetail'));
@@ -66,7 +68,6 @@ export default function App() {
       <AppBootstrapProvider isBootLoaderComplete={!isLoading}>
         <Router>
           <ScrollToTop />
-          <CustomCursor />
           <PageTransition />
           <ErrorBoundary>
             <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
@@ -74,6 +75,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/about/kin" element={<AboutCgKin />} />
+                <Route path="/projects/parallax" element={<InfiniteParallax />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/project/:id" element={<ProjectDetail />} />
                 <Route path="/contact" element={<Contact />} />

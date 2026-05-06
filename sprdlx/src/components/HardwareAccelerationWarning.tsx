@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import { useHardwareAcceleration } from '../hooks/useHardwareAcceleration';
 import './HardwareAccelerationWarning.css';
 
 export function HardwareAccelerationWarning() {
   const isAccelerationAvailable = useHardwareAcceleration();
+  const navigate = useNavigate();
 
   if (isAccelerationAvailable) {
     return null;
@@ -10,6 +12,10 @@ export function HardwareAccelerationWarning() {
 
   const handleRefresh = () => {
     window.location.reload();
+  };
+
+  const handleFallbackMode = () => {
+    navigate('/projects/parallax');
   };
 
   return (
@@ -32,9 +38,14 @@ export function HardwareAccelerationWarning() {
             </ol>
           </div>
         </div>
-        <button onClick={handleRefresh} className="refresh-button">
-          Refresh After Enabling
-        </button>
+        <div className="warning-actions">
+          <button onClick={handleRefresh} className="refresh-button">
+            Refresh After Enabling
+          </button>
+          <button onClick={handleFallbackMode} className="refresh-button secondary">
+            Use Non-GPU Version
+          </button>
+        </div>
       </div>
     </div>
   );

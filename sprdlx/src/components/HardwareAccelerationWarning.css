@@ -4,101 +4,127 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #000;
+  background: rgba(0, 0, 0, 0.92);
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   z-index: 99999 !important;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
   visibility: visible !important;
   opacity: 1 !important;
 }
 
 .warning-content {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 2rem;
-  max-width: 500px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 0;
+  padding: 2.25rem 2rem;
+  max-width: 560px;
+  width: calc(100% - 2rem);
   color: #fff;
   text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.75);
   position: relative;
   z-index: 100000;
   visibility: visible !important;
   opacity: 1 !important;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .warning-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  opacity: 0.9;
 }
 
 .warning-text h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .warning-text p {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 1.4rem;
+  line-height: 1.5;
 }
 
 .warning-steps {
-  background: rgba(255, 255, 255, 0.05);
-  border-left: 3px solid #ff6b6b;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1.5rem 0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 1rem 1.1rem;
+  border-radius: 0;
+  margin: 1.5rem 0 0.5rem;
   text-align: left;
 }
 
 .warning-steps p {
-  margin: 0 0 0.75rem 0;
-  font-weight: 600;
+  margin: 0 0 0.7rem 0;
+  font-weight: 500;
   color: #fff;
+  letter-spacing: 0.01em;
 }
 
 .warning-steps ol {
   margin: 0;
-  padding-left: 1.5rem;
-  font-size: 0.9rem;
+  padding-left: 1.2rem;
+  font-size: 0.92rem;
 }
 
 .warning-steps li {
-  margin-bottom: 0.5rem;
-  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.45rem;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .refresh-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 0.75rem 2rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 0.72rem 1.35rem;
+  border-radius: 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
+  transition: background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+  margin-top: 1.25rem;
+}
+
+.warning-actions {
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.warning-actions .refresh-button {
+  margin-top: 0;
+}
+
+.refresh-button.secondary {
+  border-color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .refresh-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  background: #fff;
+  color: #000;
+  border-color: #fff;
 }
 
 .refresh-button:active {
-  transform: translateY(0);
+  opacity: 0.8;
 }
 
 @media (max-width: 600px) {
   .warning-content {
-    margin: 1rem;
-    padding: 1.5rem;
+    width: calc(100% - 1.25rem);
+    padding: 1.5rem 1.2rem;
   }
 
   .warning-text h2 {
@@ -113,5 +139,9 @@
   .refresh-button {
     width: 100%;
     padding: 0.65rem 1rem;
+  }
+
+  .warning-actions {
+    flex-direction: column;
   }
 }

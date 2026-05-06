@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import MenuOverlay from '../../components/Canvas/MenuOverlay';
 import { useAppBootstrap } from '../../context/AppBootstrapContext';
 import { useSEO } from '../../hooks/useSEO';
 
@@ -8,6 +9,7 @@ import './aboutCgKin.css';
 
 export default function AboutCgKin() {
   const { isBootLoaderComplete } = useAppBootstrap();
+  const [showMenu, setShowMenu] = useState(false);
 
   useSEO({
     title: 'About — Studio layout | SPRDLX',
@@ -31,6 +33,15 @@ export default function AboutCgKin() {
     return () => w.lenisInstance?.start();
   }, []);
 
+  useEffect(() => {
+    if (!isBootLoaderComplete) {
+      setShowMenu(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setShowMenu(true), 5000);
+    return () => window.clearTimeout(timer);
+  }, [isBootLoaderComplete]);
+
   /** Full-bleed: neutralize scrollbar-gutter + scrolling so fixed layers match the paint viewport (#root-safe). */
   useEffect(() => {
     const html = document.documentElement;
@@ -52,6 +63,7 @@ export default function AboutCgKin() {
 
   return createPortal(
     <div className="cg-kin-iframe-page" aria-hidden={!isBootLoaderComplete}>
+      {isBootLoaderComplete && showMenu && <MenuOverlay />}
       {isBootLoaderComplete && (
         <iframe
           title="CG Kin landing page"

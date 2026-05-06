@@ -54,7 +54,6 @@ export function MagneticLink({ children, className = '', onMouseMove, ...rest }:
   return (
     <a
       ref={wrapRef}
-      data-cursor-hover
       className={`relative inline-block ${className}`.trim()}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}

@@ -1,13 +1,6 @@
 @import "tailwindcss";
 @import "./theme.css";
 
-@media (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor body {
-    cursor: none;
-  }
-}
-
 html,
 body,
 #root {
