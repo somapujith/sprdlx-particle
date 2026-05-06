@@ -44,7 +44,7 @@ export default defineConfig(({mode}) => {
     },
     server: {
       host: '::',
-      port: 5190,
+      port: 5174,
       strictPort: true,
       hmr: process.env.DISABLE_HMR !== 'true',
     },
