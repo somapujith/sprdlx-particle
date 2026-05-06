@@ -5,6 +5,8 @@ interface FocusAreaFluidProps {
   currentImageUrl: string;
   nextImageUrl?: string;
   blendProgress?: number;
+  className?: string;
+  height?: number;
 }
 
 const vertexShader = `
@@ -105,6 +107,8 @@ function FocusAreaFluid({
   currentImageUrl,
   nextImageUrl,
   blendProgress = 0,
+  className,
+  height = 384,
 }: FocusAreaFluidProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -113,6 +117,54 @@ function FocusAreaFluid({
   const isMovingRef = useRef(false);
   const lastMoveTimeRef = useRef(0);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const displayMaterialRef = useRef<THREE.ShaderMaterial | null>(null);
+  const topTextureSizeRef = useRef(new THREE.Vector2(1, 1));
+  const bottomTextureSizeRef = useRef(new THREE.Vector2(1, 1));
+
+  const loadImageIntoSlot = (
+    url: string,
+    target: 'top' | 'bottom',
+    displayMaterial: THREE.ShaderMaterial,
+  ) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = () => {
+      const originalWidth = img.width;
+      const originalHeight = img.height;
+      const sizeVec = target === 'top' ? topTextureSizeRef.current : bottomTextureSizeRef.current;
+      sizeVec.set(originalWidth, originalHeight);
+
+      const maxSize = 4096;
+      let newWidth = originalWidth;
+      let newHeight = originalHeight;
+      if (originalWidth > maxSize || originalHeight > maxSize) {
+        if (originalWidth > originalHeight) {
+          newWidth = maxSize;
+          newHeight = Math.floor(originalHeight * (maxSize / originalWidth));
+        } else {
+          newHeight = maxSize;
+          newWidth = Math.floor(originalWidth * (maxSize / originalHeight));
+        }
+      }
+
+      const imgCanvas = document.createElement('canvas');
+      imgCanvas.width = newWidth;
+      imgCanvas.height = newHeight;
+      const imgCtx = imgCanvas.getContext('2d');
+      if (imgCtx) imgCtx.drawImage(img, 0, 0, newWidth, newHeight);
+
+      const newTexture = new THREE.CanvasTexture(imgCanvas);
+      newTexture.minFilter = THREE.LinearFilter;
+      newTexture.magFilter = THREE.LinearFilter;
+      newTexture.needsUpdate = true;
+
+      const uniformName = target === 'top' ? 'uTopTexture' : 'uBottomTexture';
+      const previous = displayMaterial.uniforms[uniformName].value as THREE.Texture | null;
+      displayMaterial.uniforms[uniformName].value = newTexture;
+      if (previous && previous !== newTexture) previous.dispose();
+    };
+    img.src = url;
+  };
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -159,9 +211,6 @@ function FocusAreaFluid({
     const topTexture = createPlaceholderTexture('#ffffff');
     const bottomTexture = createPlaceholderTexture('#ffffff');
 
-    const topTextureSize = new THREE.Vector2(1, 1);
-    const bottomTextureSize = new THREE.Vector2(1, 1);
-
     const trailsMaterial = new THREE.ShaderMaterial({
       uniforms: {
         uPrevTrails: { value: null },
@@ -184,15 +233,16 @@ function FocusAreaFluid({
           value: new THREE.Vector2(width, height),
         },
         uDpr: { value: window.devicePixelRatio },
-        uTopTextureSize: { value: topTextureSize },
-        uBottomTextureSize: { value: bottomTextureSize },
+        uTopTextureSize: { value: topTextureSizeRef.current },
+        uBottomTextureSize: { value: bottomTextureSizeRef.current },
       },
       vertexShader,
       fragmentShader: displayFragmentShader,
     });
+    displayMaterialRef.current = displayMaterial;
 
-    loadImage(currentImageUrl, topTexture, topTextureSize, true);
-    loadImage(nextImageUrl || currentImageUrl, bottomTexture, bottomTextureSize, false);
+    loadImageIntoSlot(currentImageUrl, 'top', displayMaterial);
+    loadImageIntoSlot(nextImageUrl || currentImageUrl, 'bottom', displayMaterial);
 
     const planeGeometry = new THREE.PlaneGeometry(2, 2);
     const displayMesh = new THREE.Mesh(planeGeometry, displayMaterial);
@@ -221,56 +271,6 @@ function FocusAreaFluid({
       const texture = new THREE.CanvasTexture(placeholderCanvas);
       texture.minFilter = THREE.LinearFilter;
       return texture;
-    }
-
-    function loadImage(
-      url: string,
-      targetTexture: THREE.Texture,
-      textureSizeVector: THREE.Vector2,
-      isTop: boolean
-    ) {
-      const img = new Image();
-      img.crossOrigin = 'Anonymous';
-
-      img.onload = function () {
-        const originalWidth = img.width;
-        const originalHeight = img.height;
-        textureSizeVector.set(originalWidth, originalHeight);
-
-        const maxSize = 4096;
-        let newWidth = originalWidth;
-        let newHeight = originalHeight;
-
-        if (originalWidth > maxSize || originalHeight > maxSize) {
-          if (originalWidth > originalHeight) {
-            newWidth = maxSize;
-            newHeight = Math.floor(originalHeight * (maxSize / originalWidth));
-          } else {
-            newHeight = maxSize;
-            newWidth = Math.floor(originalWidth * (maxSize / originalHeight));
-          }
-        }
-
-        const imgCanvas = document.createElement('canvas');
-        imgCanvas.width = newWidth;
-        imgCanvas.height = newHeight;
-        const imgCtx = imgCanvas.getContext('2d');
-        if (imgCtx) {
-          imgCtx.drawImage(img, 0, 0, newWidth, newHeight);
-        }
-
-        const newTexture = new THREE.CanvasTexture(imgCanvas);
-        newTexture.minFilter = THREE.LinearFilter;
-        newTexture.magFilter = THREE.LinearFilter;
-
-        if (isTop) {
-          displayMaterial.uniforms.uTopTexture.value = newTexture;
-        } else {
-          displayMaterial.uniforms.uBottomTexture.value = newTexture;
-        }
-      };
-
-      img.src = url;
     }
 
     function onMouseMove(event: MouseEvent) {
@@ -339,16 +339,31 @@ function FocusAreaFluid({
     return () => {
       canvas.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', onWindowResize);
+      (displayMaterial.uniforms.uTopTexture.value as THREE.Texture | null)?.dispose?.();
+      (displayMaterial.uniforms.uBottomTexture.value as THREE.Texture | null)?.dispose?.();
+      trailsMaterial.dispose();
+      displayMaterial.dispose();
+      planeGeometry.dispose();
+      pingPongTargets[0].dispose();
+      pingPongTargets[1].dispose();
       renderer.dispose();
       containerRef.current?.removeChild(canvas);
+      displayMaterialRef.current = null;
     };
+  }, []);
+
+  useEffect(() => {
+    const displayMaterial = displayMaterialRef.current;
+    if (!displayMaterial) return;
+    loadImageIntoSlot(currentImageUrl, 'top', displayMaterial);
+    loadImageIntoSlot(nextImageUrl || currentImageUrl, 'bottom', displayMaterial);
   }, [currentImageUrl, nextImageUrl]);
 
   return (
     <div
       ref={containerRef}
-      className="w-full h-96 rounded-lg overflow-hidden"
-      style={{ position: 'relative' }}
+      className={`w-full rounded-lg overflow-hidden ${className ?? ''}`}
+      style={{ position: 'relative', height }}
     />
   );
 }
