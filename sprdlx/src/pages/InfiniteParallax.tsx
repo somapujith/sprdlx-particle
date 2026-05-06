@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import MenuOverlay from '../components/Canvas/MenuOverlay';
 import './infinite-parallax.css';
 
 type Project = {
@@ -6,21 +8,30 @@ type Project = {
   image: string;
   category: string;
   year: string;
+  projectId: string;
+  isAvailable?: boolean;
   objectPosition?: string;
 };
 
 const projectData: Project[] = [
-  { title: 'Anthill', image: '/projects/assets/anthill4.png', category: 'AI VC Venture', year: '2025' },
+  { title: 'Anthill', image: '/projects/assets/anthill4.png', category: 'AI VC Venture', year: '2025', projectId: 'anthill' },
   {
     title: 'Pulp',
     image: '/projects/pulp/hero.png',
     category: 'Skin Care Brand',
     year: '2025',
+    projectId: 'pulp',
     objectPosition: '50% 25%',
   },
-  { title: 'Esthetic Insights', image: '/projects/esthetic-insights/gallery-2.png', category: 'Designed for Visionaries', year: '2024' },
-  { title: 'Volery', image: '/projects/img_1.jpg', category: 'Concept', year: '2024' },
-  { title: 'Jay', image: '/projects/img_2.jpg', category: 'Concept', year: '2024' },
+  {
+    title: 'Esthetic Insights',
+    image: '/projects/esthetic-insights/gallery-2.png',
+    category: 'Designed for Visionaries',
+    year: '2024',
+    projectId: 'esthetic-insights',
+  },
+  { title: 'Volery', image: '/projects/Upcoming.png', category: 'Upcoming', year: '2024', projectId: 'volery', isAvailable: false },
+  { title: 'Jay', image: '/projects/Upcoming.png', category: 'Upcoming', year: '2024', projectId: 'jay', isAvailable: false },
 ];
 
 const config = {
@@ -101,6 +112,14 @@ export default function InfiniteParallax() {
         const el = document.createElement('div');
         el.className = 'parallax-project';
         el.innerHTML = `<img src="${data.image}" alt="${data.title}" />`;
+        if (data.isAvailable !== false) {
+          el.style.cursor = 'pointer';
+          el.addEventListener('click', () => {
+            window.location.assign(`/project/${data.projectId}`);
+          });
+        } else {
+          el.style.cursor = 'default';
+        }
         const mainImg = el.querySelector('img') as HTMLImageElement;
         if (data.objectPosition) mainImg.style.objectPosition = data.objectPosition;
         listEl.appendChild(el);
@@ -264,6 +283,10 @@ export default function InfiniteParallax() {
 
   return (
     <div className="parallax-container">
+      <MenuOverlay />
+      <Link to="/" className="parallax-logo-link" aria-label="Go to home">
+        <img src="/favicon.svg" alt="SPRDLX" className="parallax-logo" />
+      </Link>
       <ul className="project-list" ref={listRef} />
       <div className="minimap">
         <div className="minimap-wrapper">

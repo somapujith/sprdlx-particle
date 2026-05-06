@@ -58,7 +58,7 @@ export const projects = [
   {
     id: "volery",
     title: "Volery",
-    image: "/projects/assets/img4.jpg",
+    image: "/projects/Upcoming.png",
     year: 2024,
     desc: "Aviation software reimagined.",
     industry: "Aviation",
@@ -68,7 +68,7 @@ export const projects = [
     backedBy: "Techstars",
     backedByLogo: "Techstars",
     about: "Volery aims to reimagine the aviation software industry, creating simple, high-impact design systems.",
-    images: ["/projects/assets/img4.jpg", "/projects/assets/img5.jpg", "/projects/assets/img7.jpg"],
+    images: ["/projects/Upcoming.png"],
     next: "alpha",
     prev: "anthill",
   },
@@ -92,7 +92,7 @@ export const projects = [
   {
     id: "jay",
     title: "Jay",
-    image: "/projects/assets/img6.jpg",
+    image: "/projects/Upcoming.png",
     year: 2026,
     desc: "A personalized AI assistant for your daily workflows.",
     industry: "AI",
@@ -102,7 +102,7 @@ export const projects = [
     backedBy: "Sequoia",
     backedByLogo: "Sequoia",
     about: "Jay is an ultimate personalized AI companion designed to handle all daily redundant routines natively.",
-    images: ["/projects/assets/img6.jpg", "/projects/assets/img1.jpg", "/projects/assets/img7.jpg"],
+    images: ["/projects/Upcoming.png"],
     next: "pulp",
     prev: "alpha",
   }

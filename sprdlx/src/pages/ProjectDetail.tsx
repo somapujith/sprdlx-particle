@@ -27,6 +27,7 @@ export default function ProjectDetail() {
   useMotif('chrome');
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const blockedProjectIds = new Set(['volery', 'jay']);
   const project = projects.find(p => p.id === id);
 
   const projectSchema = useMemo(() => {
@@ -64,9 +65,13 @@ export default function ProjectDetail() {
   });
 
   useEffect(() => {
+    if (id && blockedProjectIds.has(id)) {
+      navigate('/projects', { replace: true });
+      return;
+    }
     window.scrollTo(0, 0);
     (window as any).lenisInstance?.start();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleLogoClick = () => {
     navigate('/');

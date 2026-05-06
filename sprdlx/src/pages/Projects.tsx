@@ -273,8 +273,8 @@ export default function Projects() {
               <p>2026</p>
             </div>
           </div>
-          <div className="card" onClick={() => navigate('/project/volery')} style={{ cursor: 'pointer' }}>
-            <div className="card-img"><img src="/projects/assets/img4.jpg" alt="Volery project" width={300} height={300} loading="lazy" /></div>
+          <div className="card" style={{ cursor: 'default' }}>
+            <div className="card-img"><img src="/projects/Upcoming.png" alt="Volery project upcoming" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Volery</p>
               <p>2024</p>
@@ -287,8 +287,8 @@ export default function Projects() {
               <p>2025</p>
             </div>
           </div>
-          <div className="card" onClick={() => navigate('/project/jay')} style={{ cursor: 'pointer' }}>
-            <div className="card-img"><img src="/projects/assets/img6.jpg" alt="Jay project" width={300} height={300} loading="lazy" /></div>
+          <div className="card" style={{ cursor: 'default' }}>
+            <div className="card-img"><img src="/projects/Upcoming.png" alt="Jay project upcoming" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Jay</p>
               <p>2026</p>
