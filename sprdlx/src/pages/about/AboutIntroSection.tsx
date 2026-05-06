@@ -1,4 +1,5 @@
 import { RefObject } from 'react';
+import { Link } from 'react-router-dom';
 import { ABOUT_LONG_COPY } from './aboutData';
 
 type Props = {
@@ -28,6 +29,13 @@ export default function AboutIntroSection({ textContainerRef }: Props) {
           <p className="mt-10 text-lg font-light text-[color:var(--color-muted)] md:mt-12 md:text-2xl hover:opacity-90 transition-opacity cursor-default">
             SPRDLX — Where Ideas Evolve into Intelligent Digital Realities.
           </p>
+          <Link
+            to="/about/kin"
+            data-cursor-hover
+            className="mt-8 inline-block text-xs uppercase tracking-[0.2em] text-[color:var(--color-muted)] underline decoration-[color:var(--color-muted)] underline-offset-4 hover:text-[color:var(--color-text)] hover:decoration-[color:var(--color-text)] transition-colors md:mt-10"
+          >
+            Studio layout (alternate)
+          </Link>
         </div>
       </div>
     </section>

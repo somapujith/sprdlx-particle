@@ -12,6 +12,7 @@ const CURSOR_SIZE = 8;
 export function CustomCursor() {
   const location = useLocation();
   const showChromeAura = isChromeMotifPath(location.pathname);
+  const disableCustomCursor = location.pathname === '/about/kin';
 
   const containerRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
@@ -23,16 +24,18 @@ export function CustomCursor() {
     const fine = window.matchMedia('(pointer: fine)').matches;
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setUseFinePointer(fine && !prefersReduced);
-    if (fine && !prefersReduced) {
+    if (fine && !prefersReduced && !disableCustomCursor) {
       document.documentElement.classList.add('has-custom-cursor');
+    } else {
+      document.documentElement.classList.remove('has-custom-cursor');
     }
     return () => {
       document.documentElement.classList.remove('has-custom-cursor');
     };
-  }, []);
+  }, [disableCustomCursor]);
 
   useLayoutEffect(() => {
-    if (!useFinePointer || !containerRef.current || !dotRef.current) return;
+    if (!useFinePointer || disableCustomCursor || !containerRef.current || !dotRef.current) return;
 
     const wrapper = containerRef.current;
     const el = dotRef.current;
@@ -98,9 +101,9 @@ export function CustomCursor() {
         node.removeEventListener('mouseleave', onLeave);
       });
     };
-  }, [useFinePointer]);
+  }, [useFinePointer, disableCustomCursor]);
 
-  if (!useFinePointer) return null;
+  if (!useFinePointer || disableCustomCursor) return null;
 
   return (
     <div ref={containerRef} className="pointer-events-none fixed left-0 top-0 z-[99999]" style={{ willChange: 'transform' }}>

@@ -10,8 +10,12 @@ import { CustomCursor } from './components/ui/CustomCursor';
 import ScrollToTop from './components/Common/ScrollToTop';
 import { PageTransition } from './components/Common/PageTransition';
 import { ErrorBoundary } from './components/Common/ErrorBoundary';
+import { AppBootstrapProvider } from './context/AppBootstrapContext';
 
 const About = lazy(() => import(/* webpackChunkName: "about" */ './pages/About'));
+const AboutCgKin = lazy(() =>
+  import(/* webpackChunkName: "about-kin" */ './pages/aboutCgKin/AboutCgKin'),
+);
 const Projects = lazy(() => import(/* webpackChunkName: "projects" */ './pages/Projects'));
 const ProjectDetail = lazy(() => import(/* webpackChunkName: "project-detail" */ './pages/ProjectDetail'));
 const Contact = lazy(() => import(/* webpackChunkName: "contact" */ './pages/Contact'));
@@ -59,22 +63,25 @@ export default function App() {
           <LoadingScreen key="app-loader" onComplete={() => setIsLoading(false)} />
         )}
       </AnimatePresence>
-      <Router>
-        <ScrollToTop />
-        <CustomCursor />
-        <PageTransition />
-        <ErrorBoundary>
-          <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/project/:id" element={<ProjectDetail />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-          </Suspense>
-        </ErrorBoundary>
-      </Router>
+      <AppBootstrapProvider isBootLoaderComplete={!isLoading}>
+        <Router>
+          <ScrollToTop />
+          <CustomCursor />
+          <PageTransition />
+          <ErrorBoundary>
+            <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/about/kin" element={<AboutCgKin />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/project/:id" element={<ProjectDetail />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
+        </Router>
+      </AppBootstrapProvider>
     </>
   );
 }
