@@ -1,12 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Scene, PerspectiveCamera, WebGLRenderer, CatmullRomCurve3, BufferGeometry, Line, LineBasicMaterial, Vector3 } from 'three';
 import './projects/styles.css';
 import { useSEO } from '../hooks/useSEO';
 import { projects } from './projects/data';
+import { HardwareAccelerationWarning } from '../components/HardwareAccelerationWarning';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,9 +36,27 @@ export default function Projects() {
   });
   const workRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const [hasWebGL, setHasWebGL] = useState(true);
 
   useEffect(() => {
     (window as any).lenisInstance?.start();
+
+    const checkWebGLSupport = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        return !!(
+          window.WebGLRenderingContext &&
+          (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+        );
+      } catch {
+        return false;
+      }
+    };
+
+    if (!checkWebGLSupport()) {
+      setHasWebGL(false);
+      return;
+    }
 
     const initAnimation = () => {
       const workSection = document.querySelector(".work");
@@ -217,6 +235,10 @@ export default function Projects() {
     const timeout = setTimeout(initAnimation, 0);
     return () => clearTimeout(timeout);
   }, []);
+
+  if (!hasWebGL) {
+    return <HardwareAccelerationWarning />;
+  }
 
   return (
     <div className="projects-container">

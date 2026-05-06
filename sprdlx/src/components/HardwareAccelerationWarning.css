@@ -1,0 +1,117 @@
+.hw-acceleration-warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important;
+  backdrop-filter: blur(4px);
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.warning-content {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  position: relative;
+  z-index: 100000;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.warning-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.warning-text h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.warning-text p {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.warning-steps {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid #ff6b6b;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.warning-steps p {
+  margin: 0 0 0.75rem 0;
+  font-weight: 600;
+  color: #fff;
+}
+
+.warning-steps ol {
+  margin: 0;
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.warning-steps li {
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.refresh-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.refresh-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+.refresh-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .warning-content {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .warning-text h2 {
+    font-size: 1.25rem;
+  }
+
+  .warning-text p,
+  .warning-steps li {
+    font-size: 0.85rem;
+  }
+
+  .refresh-button {
+    width: 100%;
+    padding: 0.65rem 1rem;
+  }
+}
