@@ -154,13 +154,12 @@ function About() {
   const isEntryBlocking = !forceReveal && !canRevealEntry;
 
   const teamMembers = [
-    { name: 'Goutham', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop', alt: 'Goutham' },
+    { name: 'Goutham', image: '/team/Goutham.png', alt: 'Goutham' },
     { name: 'Rakesh', image: '/team/Rakesh.png', alt: 'Rakesh' },
     { name: 'Pujith', image: '/team/Pujith.png', alt: 'Pujith' },
-    { name: 'Dhruv', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop', alt: 'Dhruv' },
-    { name: 'Ajith', image: '/team/Ajith.png', alt: 'Ajith' },
+    { name: 'Dhruv', image: '/team/Dhruv.png', alt: 'Dhruv' },
     { name: 'Nithin', image: '/team/Nithin.PNG', alt: 'Nithin' },
-    { name: 'Udit', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop', alt: 'Udit' },
+    { name: 'Udit', image: '/team/Udit.png', alt: 'Udit' },
   ];
 
   return (

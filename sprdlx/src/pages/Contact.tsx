@@ -41,39 +41,39 @@ function Contact() {
   };
 
   return (
-    <div className="contact-container relative w-full h-screen bg-black text-white font-sans overflow-hidden flex flex-col items-center justify-center">
+    <div className="contact-container relative w-full min-h-screen bg-black text-white font-sans flex flex-col items-center justify-center py-16 sm:py-24 md:py-32">
       <MenuOverlay />
 
       {/* Contact Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-2xl px-6">
-        <p className="text-sm md:text-base font-light uppercase tracking-widest text-white/60 mb-6">
+      <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-2xl px-4 sm:px-6 w-full">
+        <p className="text-xs sm:text-sm md:text-base font-light uppercase tracking-widest text-white/60 mb-4 sm:mb-6">
           Get In Touch
         </p>
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-light mb-8 leading-tight">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-6 sm:mb-8 md:mb-10 leading-tight">
           Let's Create<br />Something Amazing
         </h1>
 
         {/* Contact Details */}
-        <div className="flex flex-col items-center gap-4 mt-12 mb-12">
+        <div className="flex flex-col items-center gap-6 sm:gap-8 mt-8 sm:mt-12 mb-10 sm:mb-14 md:mb-16 w-full">
           {/* Email */}
-          <div className="flex flex-col items-center">
-            <p className="text-xs uppercase tracking-widest text-white/40 mb-2">
+          <div className="flex flex-col items-center w-full">
+            <p className="text-xs uppercase tracking-widest text-white/40 mb-2 sm:mb-3">
               Email
             </p>
             <MagneticLink
               href="mailto:hello@sprdlx.com"
-              className="text-lg md:text-xl text-white hover:opacity-70 transition-opacity"
+              className="text-base sm:text-lg md:text-xl text-white hover:text-white/70 transition-opacity duration-200 break-all sm:break-normal"
             >
               hello@sprdlx.com
             </MagneticLink>
           </div>
 
           {/* Location */}
-          <div className="flex flex-col items-center">
-            <p className="text-xs uppercase tracking-widest text-white/40 mb-2">
+          <div className="flex flex-col items-center w-full">
+            <p className="text-xs uppercase tracking-widest text-white/40 mb-2 sm:mb-3">
               Location
             </p>
-            <p className="text-lg md:text-xl text-white">
+            <p className="text-base sm:text-lg md:text-xl text-white">
               Hyderabad
             </p>
           </div>
@@ -82,7 +82,7 @@ function Contact() {
         {/* CTA Button */}
         <button
           onClick={handleSendMessage}
-          className="px-8 py-4 border border-white text-white uppercase tracking-widest font-medium hover:bg-white hover:text-black transition-all duration-300"
+          className="px-6 sm:px-8 py-3 sm:py-4 border border-white text-xs sm:text-sm md:text-base text-white uppercase tracking-widest font-medium hover:bg-white hover:text-black transition-all duration-300 whitespace-nowrap"
         >
           Send Message
         </button>

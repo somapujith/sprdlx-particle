@@ -1,0 +1,25 @@
+/* Theme System - Dark Theme */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --color-bg: #000000;
+  --color-surface: #111111;
+  --color-overlay: #1e1e1e;
+
+  /* Borders */
+  --color-border: #222222;
+  --color-subtle: #444444;
+
+  /* Text */
+  --color-text: #f0f0f0;
+  --color-muted: #888888;
+  --color-cream: #fefff8;
+  --color-team-text: #e3e3db;
+
+  /* Accents */
+  --color-accent: #fca311;
+  --color-red: #f93535;
+
+  /* Navigation */
+  --nav-bg: #000000;
+  --nav-fg: #f0f0f0;
+}
