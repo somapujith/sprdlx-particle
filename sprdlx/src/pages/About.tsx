@@ -231,7 +231,7 @@ function About() {
       <section
         id="about-data"
         aria-label="About"
-        className="relative z-10 bg-black px-8 py-20 md:px-12 md:py-32 flex justify-center mb-[100px]"
+        className="relative z-10 bg-black px-8 py-20 md:px-12 md:py-32 flex justify-center mb-[300px]"
       >
         <div className="w-full max-w-5xl flex flex-col justify-center items-center">
           <div className="font-sans text-center">
@@ -251,7 +251,7 @@ function About() {
         </div>
       </section>
 
-      <section className="make-it-matter-section relative z-10 bg-black px-8 pt-20 pb-20 md:px-12 flex justify-center">
+      <section className="make-it-matter-section relative z-10 bg-black px-8 pt-20 pb-[300px] md:px-12 flex justify-center">
         <div className="w-full max-w-6xl">
           <Copy blockColor="#ffffff" delay={0.1}>
             <h2 className="text-5xl md:text-7xl font-bold text-white text-center mb-16">Make it Matter.</h2>
