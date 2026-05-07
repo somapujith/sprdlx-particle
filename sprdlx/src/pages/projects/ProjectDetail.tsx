@@ -185,41 +185,47 @@ export default function ProjectDetail() {
                     <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                       Industry
                     </span>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
-                      <span>{project.industry}</span>
-                      {project.subIndustry ? (
-                        <>
-                          <span className="text-white/25" aria-hidden>
-                            ·
-                          </span>
-                          <span>{project.subIndustry}</span>
-                        </>
-                      ) : null}
-                    </div>
+                    {project.id !== 'pulp' && (
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
+                        <span>{project.industry}</span>
+                        {project.subIndustry ? (
+                          <>
+                            <span className="text-white/25" aria-hidden>
+                              ·
+                            </span>
+                            <span>{project.subIndustry}</span>
+                          </>
+                        ) : null}
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
                     <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                       Deliverables
                     </span>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
-                      {project.deliverables.map((d, i) => (
-                        <React.Fragment key={i}>
-                          <span>{d}</span>
-                          {i !== project.deliverables.length - 1 && (
-                            <span className="text-white/25 font-normal" aria-hidden>
-                              ,
-                            </span>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </div>
+                    {project.id !== 'pulp' && (
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
+                        {project.deliverables.map((d, i) => (
+                          <React.Fragment key={i}>
+                            <span>{d}</span>
+                            {i !== project.deliverables.length - 1 && (
+                              <span className="text-white/25 font-normal" aria-hidden>
+                                ,
+                              </span>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   {'status' in project && project.status ? (
                     <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
                       <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                         Status
                       </span>
-                      <span className="text-left font-bold text-base sm:justify-end sm:text-right text-white/90">{project.status}</span>
+                      {project.id !== 'pulp' && (
+                        <span className="text-left font-bold text-base sm:justify-end sm:text-right text-white/90">{project.status}</span>
+                      )}
                     </div>
                   ) : (
                     'completed' in project &&
@@ -228,7 +234,9 @@ export default function ProjectDetail() {
                         <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                           Completed
                         </span>
-                        <span className="text-left font-bold text-base sm:justify-end sm:text-right text-white/90">{project.completed}</span>
+                        {project.id !== 'pulp' && (
+                          <span className="text-left font-bold text-base sm:justify-end sm:text-right text-white/90">{project.completed}</span>
+                        )}
                       </div>
                     )
                   )}
@@ -237,12 +245,14 @@ export default function ProjectDetail() {
                       <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                         Funding Stage
                       </span>
-                      <span className="flex flex-wrap items-center gap-1.5 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
-                        {project.fundingStage}
-                        <span className="text-pink-400" aria-hidden>
-                          ♥
+                      {project.id !== 'pulp' && (
+                        <span className="flex flex-wrap items-center gap-1.5 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
+                          {project.fundingStage}
+                          <span className="text-pink-400" aria-hidden>
+                            ♥
+                          </span>
                         </span>
-                      </span>
+                      )}
                     </div>
                   ) : null}
                   {project.backedBy || project.backedByLogo ? (
@@ -250,16 +260,18 @@ export default function ProjectDetail() {
                       <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                         Backed by
                       </span>
-                      <span className="flex flex-wrap items-center gap-2 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
-                        {project.backedByLogo === 'Y' ? (
-                          <span className="bg-white text-black px-2 py-1 rounded-md text-[11px] font-black leading-none">
-                            Y
-                          </span>
-                        ) : (
-                          <span className="font-bold tracking-widest">{project.backedByLogo || project.backedBy}</span>
-                        )}
-                        {project.backedByLogo === 'Y' ? 'Combinator' : ''}
-                      </span>
+                      {project.id !== 'pulp' && (
+                        <span className="flex flex-wrap items-center gap-2 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
+                          {project.backedByLogo === 'Y' ? (
+                            <span className="bg-white text-black px-2 py-1 rounded-md text-[11px] font-black leading-none">
+                              Y
+                            </span>
+                          ) : (
+                            <span className="font-bold tracking-widest">{project.backedByLogo || project.backedBy}</span>
+                          )}
+                          {project.backedByLogo === 'Y' ? 'Combinator' : ''}
+                        </span>
+                      )}
                     </div>
                   ) : null}
                 </div>
