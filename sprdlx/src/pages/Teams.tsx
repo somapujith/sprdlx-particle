@@ -9,14 +9,23 @@ export default function Teams() {
   });
 
   return (
-    <main className="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
+    <main className="w-screen bg-black overflow-x-hidden">
       <MenuOverlay />
-      <iframe
-        title="Teams"
-        src="/teams-parallax/index.html"
-        className="h-full w-full border-0"
-        loading="eager"
-      />
+      
+      <section className="h-screen w-full">
+        <iframe
+          title="Teams"
+          src="/teams-parallax/index.html"
+          className="h-full w-full border-0"
+          loading="eager"
+        />
+      </section>
+
+      <section className="flex h-screen w-full items-center justify-center bg-black text-white">
+        <h1 className="text-8xl font-bold uppercase tracking-wider" style={{ fontFamily: 'var(--font-sf), ui-sans-serif, system-ui, sans-serif' }}>
+          hello
+        </h1>
+      </section>
     </main>
   );
 }
