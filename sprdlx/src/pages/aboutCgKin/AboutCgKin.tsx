@@ -175,11 +175,11 @@ export default function AboutCgKin() {
   }, [isBootLoaderComplete]);
 
   return createPortal(
-    <div className="cg-kin-landing-page" ref={containerRef} aria-hidden={!isBootLoaderComplete}>
-      {isBootLoaderComplete ? (
-        <div className="cg-kin-container">
-          <MenuOverlay />
-          <div className="revealers">
+    <>
+      <div className="cg-kin-landing-page" ref={containerRef} aria-hidden={!isBootLoaderComplete}>
+        {isBootLoaderComplete ? (
+          <div className="cg-kin-container">
+            <div className="revealers">
             <div className="revealer r-1" />
             <div className="revealer r-2" />
           </div>
@@ -224,7 +224,9 @@ export default function AboutCgKin() {
           </div>
         </div>
       ) : null}
-    </div>,
+    </div>
+    {isBootLoaderComplete && <MenuOverlay />}
+    </>,
     document.body,
   );
 }
