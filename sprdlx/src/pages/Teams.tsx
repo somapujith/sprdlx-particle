@@ -3,6 +3,7 @@ import { useSEO } from '../hooks/useSEO';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
 import TeamsParallax from './teams/TeamsParallax';
 import InteractiveTeamSection from './teams/InteractiveTeamSection';
+import FaultyTerminal from '../components/FaultyTerminal/FaultyTerminal';
 
 export default function Teams() {
   useSEO({
@@ -38,7 +39,28 @@ export default function Teams() {
   }, []);
 
   return (
-    <main className="w-full bg-black overflow-x-hidden">
+    <main className="w-full bg-black overflow-x-hidden relative">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <FaultyTerminal
+          scale={2.4}
+          gridMul={[2, 1]}
+          digitSize={1.9}
+          timeScale={1}
+          pause={false}
+          scanlineIntensity={1}
+          glitchAmount={1}
+          flickerAmount={1}
+          noiseAmp={1}
+          chromaticAberration={0}
+          dither={0}
+          curvature={0.2}
+          tint="#f3f7a8"
+          mouseReact={true}
+          mouseStrength={0.5}
+          pageLoadAnimation={false}
+          brightness={1}
+        />
+      </div>
       <MenuOverlay />
       
       <section className="h-screen w-full">

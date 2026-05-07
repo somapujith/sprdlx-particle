@@ -112,7 +112,7 @@ export default function InteractiveTeamSection() {
   return (
     <div
       ref={containerRef}
-      className="relative flex h-screen w-full flex-col items-center justify-center gap-10 overflow-hidden bg-black text-[#e3e3db] max-lg:flex-col-reverse"
+      className="relative flex h-screen w-full flex-col items-center justify-center gap-10 overflow-hidden bg-transparent text-[#e3e3db] max-lg:flex-col-reverse"
     >
       <style dangerouslySetInnerHTML={{
         __html: `
@@ -126,7 +126,7 @@ export default function InteractiveTeamSection() {
         `
       }} />
 
-      <div className="profile-images flex w-max items-center justify-center max-lg:max-w-[90%] max-lg:flex-wrap z-10">
+      <div className="profile-images relative flex w-max items-center justify-center max-lg:max-w-[90%] max-lg:flex-wrap z-10">
         {teamMembers.map((member, i) => (
           <div
             key={i}
@@ -143,7 +143,7 @@ export default function InteractiveTeamSection() {
       </div>
 
       <div
-        className="profile-names relative h-[15rem] w-full overflow-hidden max-lg:h-[4rem]"
+        className="profile-names relative h-[15rem] w-full overflow-hidden max-lg:h-[4rem] z-10 pointer-events-none"
         style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}
       >
         <div className="name default absolute inset-0">

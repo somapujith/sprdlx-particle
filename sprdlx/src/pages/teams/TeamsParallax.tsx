@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 export default function TeamsParallax() {
+  const container = useRef(null);
+
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-black text-[#f3f7a8]">
+    <div ref={container} className="parallax-container relative w-full h-full overflow-hidden bg-transparent flex flex-col justify-between pt-[5vh]">
       <div className="absolute left-8 top-8 z-10 flex w-full justify-start text-[#f3f7a8] font-light">
         <div className="w-[100px]">
           <img src="/favicon.svg" alt="SPRDLX" className="h-auto w-full" />
