@@ -30,6 +30,13 @@ export default function ProjectDetail() {
   const blockedProjectIds = new Set(['volery', 'jay']);
   const project = projects.find(p => p.id === id);
 
+  const getLogoPath = (projectId: string): string => {
+    const logoMap: Record<string, string> = {
+      'esthetic-insights': 'ei-logo',
+    };
+    return `/Logos/${logoMap[projectId] || projectId}.png`;
+  };
+
   const projectSchema = useMemo(() => {
     if (!project) return undefined;
     return {
@@ -123,7 +130,11 @@ export default function ProjectDetail() {
             <div className="flex flex-col lg:flex-row lg:gap-16">
               <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-5xl md:text-6xl font-bold tracking-tight font-serif mb-6 text-white">{project.title}</h2>
+                  <img
+                    src={getLogoPath(project.id)}
+                    alt={project.title}
+                    className="h-16 md:h-20 object-contain mb-6"
+                  />
                   <p className="text-zinc-300 text-lg leading-relaxed font-medium">{project.desc}</p>
                 </div>
 
