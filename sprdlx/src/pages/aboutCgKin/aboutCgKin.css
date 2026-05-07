@@ -3,7 +3,7 @@
   inset: 0;
   overflow: hidden;
   background: #000;
-  color: #fff;
+  color: #f3f7a8;
   font-family: "PP Neue Montreal", Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -140,7 +140,7 @@
   position: relative;
   font-size: 1.1vw;
   font-weight: 500;
-  color: #fff;
+  color: #f3f7a8;
   text-decoration: none;
 }
 
@@ -205,7 +205,7 @@
   font-family: "Apercu Mono Pro", ui-monospace, monospace;
   font-size: 0.75vw;
   font-weight: 500;
-  color: #fff;
+  color: #f3f7a8;
 }
 
 .cg-kin-landing-page .site-info .row:nth-child(2) .col:nth-child(2) {

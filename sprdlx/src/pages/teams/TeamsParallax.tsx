@@ -3,7 +3,7 @@ import React from 'react';
 export default function TeamsParallax() {
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black text-[#f3f7a8]">
-      <div className="absolute left-8 top-8 z-10 flex w-full justify-start text-white font-light">
+      <div className="absolute left-8 top-8 z-10 flex w-full justify-start text-[#f3f7a8] font-light">
         <div className="w-[100px]">
           <img src="/favicon.svg" alt="SPRDLX" className="h-auto w-full" />
         </div>

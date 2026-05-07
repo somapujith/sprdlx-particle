@@ -148,7 +148,7 @@ export default function InteractiveTeamSection() {
       >
         <div className="name default absolute inset-0">
           <h1
-            className="absolute w-full -translate-y-[100%] select-none text-center uppercase font-black leading-none tracking-[-0.2rem] text-[#e3e3db] max-lg:text-[4rem] max-lg:tracking-normal"
+            className="absolute w-full -translate-y-[100%] select-none text-center uppercase font-black leading-none tracking-[-0.2rem] text-[#f3f7a8] max-lg:text-[4rem] max-lg:tracking-normal"
             style={{ fontFamily: '"Barlow Condensed", sans-serif', fontSize: '15rem' }}
           >
             The Squad
@@ -157,7 +157,7 @@ export default function InteractiveTeamSection() {
         {teamMembers.map((member, i) => (
           <div key={i} className="name absolute inset-0">
             <h1
-              className="absolute w-full translate-y-[100%] select-none text-center uppercase font-black leading-none tracking-[-0.2rem] text-[#f3f7a8] max-lg:text-[4rem] max-lg:tracking-normal"
+              className="absolute w-full translate-y-[100%] select-none text-center uppercase font-black leading-none tracking-[-0.2rem] text-[#ffffff] max-lg:text-[4rem] max-lg:tracking-normal"
               style={{ fontFamily: '"Barlow Condensed", sans-serif', fontSize: '15rem' }}
             >
               {member.name}

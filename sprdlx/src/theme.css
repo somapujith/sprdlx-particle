@@ -10,9 +10,9 @@
   --color-subtle: #444444;
 
   /* Text */
-  --color-text: #f0f0f0;
+  --color-text: #f3f7a8;
   --color-muted: #888888;
-  --color-cream: #fefff8;
+  --color-cream: #f3f7a8;
   --color-team-text: #e3e3db;
 
   /* Accents */
@@ -21,7 +21,7 @@
 
   /* Navigation */
   --nav-bg: #000000;
-  --nav-fg: #f0f0f0;
+  --nav-fg: #ffffff;
 }
 
 /**
@@ -32,7 +32,7 @@
   --surface-0: #0a0a0c;
   --surface-1: #13141a;
   --surface-2: #1c1e26;
-  --ink-primary: #e8eaf0;
+  --ink-primary: #f3f7a8;
   --ink-secondary: #a8acb8;
   --ink-tertiary: #5d6270;
   --chrome-silver: #c8ccd2;
@@ -67,5 +67,5 @@
   --color-accent: var(--accent-amber);
   --color-red: var(--prism-magenta);
   --nav-bg: var(--surface-0);
-  --nav-fg: var(--ink-primary);
+  --nav-fg: #ffffff;
 }
