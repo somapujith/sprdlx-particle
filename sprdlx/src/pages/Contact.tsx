@@ -5,6 +5,7 @@ import MenuOverlay from '../components/Canvas/MenuOverlay';
 import { useSEO } from '../hooks/useSEO';
 import { useMotif } from '../hooks/useMotif';
 import { TextGenerateEffect } from '../components/TextGenerateEffect';
+import FaultyTerminal from '../components/FaultyTerminal/FaultyTerminal';
 
 const CONTACT_SCHEMA = {
   '@context': 'https://schema.org',
@@ -50,6 +51,28 @@ function Contact() {
     <div className="contact-container relative w-full min-h-screen flex flex-col items-center justify-center py-16 sm:py-24 md:py-32 bg-[color:var(--color-bg)] text-[color:var(--color-text)] [font-family:var(--font-sf),ui-sans-serif,system-ui,sans-serif]">
       <MenuOverlay />
 
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <FaultyTerminal
+          scale={2.4}
+          gridMul={[2, 1]}
+          digitSize={1.9}
+          timeScale={1}
+          pause={false}
+          scanlineIntensity={1}
+          glitchAmount={1}
+          flickerAmount={1}
+          noiseAmp={1}
+          chromaticAberration={0}
+          dither={0}
+          curvature={0.2}
+          tint="#f3f7a8"
+          mouseReact={true}
+          mouseStrength={0.5}
+          pageLoadAnimation={false}
+          brightness={1}
+        />
+      </div>
+
       {/* Logo */}
       <div className="absolute top-6 left-6 z-20 w-12 h-12 sm:w-14 sm:h-14 text-[color:var(--color-text)]">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 873 774" className="w-full h-full">
@@ -71,7 +94,7 @@ function Contact() {
           delay={3}
         />
         <TextGenerateEffect
-          words="Let's Create Something Amazing"
+          words="Let's  Create  Something  Amazing"
           className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-6 sm:mb-8 md:mb-10 leading-tight"
           duration={0.8}
           staggerDelay={0.2}
