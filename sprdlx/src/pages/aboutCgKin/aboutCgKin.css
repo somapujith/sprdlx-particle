@@ -71,8 +71,8 @@
 
 .cg-kin-landing-page .images.stacked-container {
   position: fixed;
-  left: 2em;
-  bottom: 2em;
+  left: 3em;
+  bottom: 3em;
   width: auto;
   height: auto;
   display: flex;
@@ -102,8 +102,8 @@
 
 .cg-kin-landing-page .site-logo {
   position: absolute;
-  top: 2em;
-  left: 2em;
+  top: 3em;
+  left: 3em;
   display: flex;
   gap: 1em;
 }
@@ -126,7 +126,7 @@
   position: absolute;
   right: 0;
   width: 50%;
-  padding: 2em;
+  padding: 3em;
   display: flex;
   justify-content: flex-end;
   gap: 1em;
@@ -146,8 +146,8 @@
 
 .cg-kin-landing-page .team-img {
   position: absolute;
-  right: 2em;
-  bottom: 2em;
+  right: 3em;
+  bottom: 3em;
   width: 40%;
   height: 50%;
   clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
@@ -176,8 +176,8 @@
 
 .cg-kin-landing-page .site-info {
   position: absolute;
-  bottom: 2em;
-  left: 2em;
+  bottom: 3em;
+  left: 3em;
   width: 50%;
   height: 50%;
   display: flex;
@@ -195,7 +195,7 @@
 }
 
 .cg-kin-landing-page .site-info h2 {
-  font-size: 1.75vw;
+  font-size: 1.45vw;
   font-weight: 500;
   line-height: 1.25;
 }

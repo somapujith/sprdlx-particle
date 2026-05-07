@@ -212,12 +212,7 @@ export default function AboutCgKin() {
                 </div>
                 <div className="col">
                   <h2>
-                    SPRDLX builds modern digital solutions that combine creativity, technology, and
-                    precision to deliver real-world impact. We transform ideas into high-performance
-                    websites, scalable applications, and intelligent digital systems designed for
-                    growth and long-term success. With a strong focus on innovation, user
-                    experience, and performance, we create future-ready products that help brands
-                    evolve, stand out, and lead in the digital space.
+                    SPRDLX builds modern digital solutions that blend creativity, technology, and innovation. We create high-performance websites, scalable applications, and intelligent systems designed to help brands grow, evolve, and lead in the digital world.
                   </h2>
                 </div>
               </div>
