@@ -41,8 +41,8 @@ export default function InteractiveTeamSection() {
 
           img.addEventListener('mouseenter', () => {
             gsap.to(img, {
-              width: 140,
-              height: 140,
+              width: 300,
+              height: 300,
               duration: 0.5,
               ease: 'power4.out',
             });
@@ -60,8 +60,8 @@ export default function InteractiveTeamSection() {
 
           img.addEventListener('mouseleave', () => {
             gsap.to(img, {
-              width: 70,
-              height: 70,
+              width: 150,
+              height: 150,
               duration: 0.5,
               ease: 'power4.out',
             });
@@ -130,7 +130,7 @@ export default function InteractiveTeamSection() {
         {teamMembers.map((member, i) => (
           <div
             key={i}
-            className="img relative h-[70px] w-[70px] cursor-pointer p-[5px] max-lg:h-[60px] max-lg:w-[60px] max-lg:p-[2.5px]"
+            className="img relative h-[150px] w-[150px] cursor-pointer p-[10px] max-lg:h-[100px] max-lg:w-[100px] max-lg:p-[5px]"
             style={{ willChange: 'width, height' }}
           >
             <img
