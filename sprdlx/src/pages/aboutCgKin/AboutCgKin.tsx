@@ -1,9 +1,12 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import Flip from 'gsap/Flip';
 import { CustomEase } from 'gsap/CustomEase';
 import SplitType from 'split-type';
+
+import MenuOverlay from '../../components/Canvas/MenuOverlay';
 
 import { useAppBootstrap } from '../../context/AppBootstrapContext';
 import { useSEO } from '../../hooks/useSEO';
@@ -175,6 +178,7 @@ export default function AboutCgKin() {
     <div className="cg-kin-landing-page" ref={containerRef} aria-hidden={!isBootLoaderComplete}>
       {isBootLoaderComplete ? (
         <div className="cg-kin-container">
+          <MenuOverlay />
           <div className="revealers">
             <div className="revealer r-1" />
             <div className="revealer r-2" />
