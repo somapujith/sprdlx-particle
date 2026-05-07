@@ -21,6 +21,11 @@ body {
   overflow: hidden;
 }
 
+.container,
+.container * {
+  color: #f3f7a8;
+}
+
 .marquee {
   width: 100%;
   padding-top: 4em;
@@ -62,6 +67,11 @@ body {
   display: flex;
   justify-content: flex-start;
   z-index: 5;
+}
+
+.navbar,
+.navbar * {
+  color: #fff;
 }
 
 img {

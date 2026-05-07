@@ -24,6 +24,15 @@ html {
   overflow-y: scroll;
 }
 
+/* Disable scrollbar gutter for fullscreen pages */
+.cg-kin-landing-page {
+  --scrollbar-gutter-override: auto;
+}
+
+html:has(.cg-kin-landing-page) {
+  scrollbar-gutter: auto;
+}
+
 /* Respect user motion preferences for Core Web Vitals */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

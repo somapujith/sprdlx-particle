@@ -41,16 +41,13 @@ export default function AboutCgKin() {
     const body = document.body;
     const prevOverflow = html.style.overflow;
     const prevBodyOverflow = body.style.overflow;
-    const computedGutter = window.getComputedStyle(html).scrollbarGutter;
 
     html.style.overflow = 'hidden';
     body.style.overflow = 'hidden';
-    html.style.scrollbarGutter = 'auto';
 
     return () => {
       html.style.overflow = prevOverflow;
       body.style.overflow = prevBodyOverflow;
-      html.style.scrollbarGutter = computedGutter === 'auto' ? '' : computedGutter;
     };
   }, []);
 
