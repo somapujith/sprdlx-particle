@@ -33,6 +33,7 @@ export default function ProjectDetail() {
   const getLogoPath = (projectId: string): string => {
     const logoMap: Record<string, string> = {
       'esthetic-insights': 'ei-logo',
+      'pulp': 'slazzer-preview-kr0d8',
     };
     return `/Logos/${logoMap[projectId] || projectId}.png`;
   };
