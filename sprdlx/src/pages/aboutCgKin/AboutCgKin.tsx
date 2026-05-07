@@ -1,21 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import gsap from 'gsap';
+import Flip from 'gsap/Flip';
+import { CustomEase } from 'gsap/CustomEase';
+import SplitType from 'split-type';
 
-import MenuOverlay from '../../components/Canvas/MenuOverlay';
 import { useAppBootstrap } from '../../context/AppBootstrapContext';
 import { useSEO } from '../../hooks/useSEO';
 
 import './aboutCgKin.css';
 
 export default function AboutCgKin() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const { isBootLoaderComplete } = useAppBootstrap();
-  const [showMenu, setShowMenu] = useState(false);
 
   useSEO({
     title: 'About — Studio layout | SPRDLX',
     description:
-      'Full-viewport landing concept: Arc Worldwide–style typography, stacked image choreography, and studio details.',
-    canonical: '/about',
+      'Full-viewport landing concept: Super Deluxe Studios–style typography, stacked image choreography, and studio details.',
+    canonical: '/about/kin',
   });
 
   useEffect(() => {
@@ -34,43 +37,194 @@ export default function AboutCgKin() {
   }, []);
 
   useEffect(() => {
-    if (!isBootLoaderComplete) {
-      setShowMenu(false);
-      return;
-    }
-    const timer = window.setTimeout(() => setShowMenu(true), 5000);
-    return () => window.clearTimeout(timer);
-  }, [isBootLoaderComplete]);
-
-  /** Full-bleed: neutralize scrollbar-gutter + scrolling so fixed layers match the paint viewport (#root-safe). */
-  useEffect(() => {
     const html = document.documentElement;
     const body = document.body;
-    const prev = {
-      htmlOverflow: html.style.overflow,
-      bodyOverflow: body.style.overflow,
-      gutter: html.style.scrollbarGutter,
-    };
+    const prevOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    const computedGutter = window.getComputedStyle(html).scrollbarGutter;
+
     html.style.overflow = 'hidden';
     body.style.overflow = 'hidden';
     html.style.scrollbarGutter = 'auto';
+
     return () => {
-      html.style.overflow = prev.htmlOverflow;
-      body.style.overflow = prev.bodyOverflow;
-      html.style.scrollbarGutter = prev.gutter;
+      html.style.overflow = prevOverflow;
+      body.style.overflow = prevBodyOverflow;
+      html.style.scrollbarGutter = computedGutter === 'auto' ? '' : computedGutter;
     };
   }, []);
 
+  useLayoutEffect(() => {
+    if (!isBootLoaderComplete) return undefined;
+    if (!containerRef.current) return undefined;
+
+    gsap.registerPlugin(Flip, CustomEase);
+    CustomEase.create(
+      'hop',
+      'M0,0 C0.355,0.022 0.448,0.079 0.5,0.5 0.542,0.846 0.615,1 1,1 ',
+    );
+    CustomEase.create(
+      'hop2',
+      'M0,0 C0.078,0.617 0.114,0.716 0.255,0.828 0.373,0.922 0.561,1 1,1 ',
+    );
+
+    const container = containerRef.current;
+    const h2 = container.querySelector('.site-info h2') as HTMLElement;
+    if (h2) {
+      const split = new SplitType(h2, { types: 'lines' });
+      split.lines?.forEach((line) => {
+        const text = line.textContent;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'line';
+        const span = document.createElement('span');
+        span.textContent = text ?? '';
+        wrapper.appendChild(span);
+        line.parentNode?.replaceChild(wrapper, line);
+      });
+    }
+
+    const ctx = gsap.context(() => {
+      const mainTl = gsap.timeline();
+      const revealerTl = gsap.timeline();
+      const scaleTl = gsap.timeline();
+
+      revealerTl
+        .to('.r-1', {
+          clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+          duration: 1.5,
+          ease: 'hop',
+        })
+        .to(
+          '.r-2',
+          {
+            clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
+            duration: 1.5,
+            ease: 'hop',
+          },
+          '<',
+        );
+
+      scaleTl.to('.img:first-child', {
+        scale: 1,
+        duration: 2,
+        ease: 'power4.inOut',
+      });
+
+      const images = container.querySelectorAll('.img:not(:first-child)');
+      images.forEach((img) => {
+        scaleTl.to(
+          img,
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 1.25,
+            ease: 'power3.out',
+          },
+          '>-0.95',
+        );
+      });
+
+      mainTl
+        .add(revealerTl)
+        .add(scaleTl, '-=1.25')
+        .add(() => {
+          container.querySelectorAll('.img:not(.main)').forEach((img) => img.remove());
+
+          const state = Flip.getState('.main');
+          const imagesContainer = container.querySelector('.images');
+          imagesContainer?.classList.add('stacked-container');
+
+          container.querySelectorAll('.main').forEach((img, i) => {
+            img.classList.add('stacked');
+            (img as HTMLElement).style.order = String(i);
+            gsap.set('.img.stacked', {
+              clearProps: 'transform,top,left',
+            });
+          });
+
+          return Flip.from(state, {
+            duration: 2,
+            ease: 'hop',
+            absolute: true,
+            stagger: {
+              amount: -0.3,
+            },
+          });
+        })
+        .to('.word h1, .nav-item p, .line p, .site-info h2 .line span', {
+          y: 0,
+          duration: 3,
+          ease: 'hop2',
+          stagger: 0.1,
+          delay: 1.25,
+        })
+        .to('.team-img', {
+          clipPath: 'polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)',
+          duration: 2,
+          ease: 'hop',
+          delay: -4.75,
+        });
+    }, container);
+
+    return () => {
+      ctx.revert();
+    };
+  }, [isBootLoaderComplete]);
+
   return createPortal(
-    <div className="cg-kin-iframe-page" aria-hidden={!isBootLoaderComplete}>
-      {isBootLoaderComplete && showMenu && <MenuOverlay />}
-      {isBootLoaderComplete && (
-        <iframe
-          title="CG Kin landing page"
-          src="/cg-kin-landing-page/index.html"
-          className="cg-kin-iframe"
-        />
-      )}
+    <div className="cg-kin-landing-page" ref={containerRef} aria-hidden={!isBootLoaderComplete}>
+      {isBootLoaderComplete ? (
+        <div className="container">
+          <div className="revealers">
+            <div className="revealer r-1" />
+            <div className="revealer r-2" />
+          </div>
+
+          <div className="images">
+            <div className="img"><img src="/projects/pulp/cosmic-dew.png" alt="" /></div>
+            <div className="img"><img src="/projects/esthetic-insights/gallery-2.png" alt="" /></div>
+            <div className="img"><img src="/projects/assets/anthill1.png" alt="" /></div>
+            <div className="img"><img src="/projects/assets/anthill4.png" alt="" /></div>
+            <div className="img"><img src="/projects/esthetic-insights/gallery-1.png" alt="" /></div>
+            <div className="img main"><img src="/projects/esthetic-insights/gallery-2.png" alt="" /></div>
+            <div className="img main"><img src="/projects/assets/anthill1.png" alt="" /></div>
+            <div className="img main"><img src="/projects/pulp/cosmic-dew.png" alt="" /></div>
+          </div>
+
+          <div className="hero-content">
+            <div className="site-logo">
+              <div className="word">
+                <h1>Super</h1>
+              </div>
+              <div className="word">
+                <h1>Deluxe Studios<sup>&copy;</sup></h1>
+              </div>
+            </div>
+
+            <div className="team-img team-logo">
+              <img src="/favicon.svg" alt="" />
+            </div>
+
+            <div className="site-info">
+              <div className="row">
+                <div className="col">
+                  <div className="line"><p>Featured Works</p></div>
+                </div>
+                <div className="col">
+                  <h2>
+                    SPRDLX builds modern digital solutions that combine creativity, technology, and
+                    precision to deliver real-world impact. We transform ideas into high-performance
+                    websites, scalable applications, and intelligent digital systems designed for
+                    growth and long-term success. With a strong focus on innovation, user
+                    experience, and performance, we create future-ready products that help brands
+                    evolve, stand out, and lead in the digital space.
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>,
     document.body,
   );

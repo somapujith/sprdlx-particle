@@ -1,17 +1,248 @@
-.cg-kin-iframe-page {
+.cg-kin-landing-page {
   position: fixed;
   inset: 0;
-  z-index: 200;
-  width: 100vw;
-  height: 100vh;
   overflow: hidden;
   background: #000;
+  color: #fff;
+  font-family: "PP Neue Montreal", Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
-.cg-kin-iframe {
-  display: block;
-  width: 100vw;
+.cg-kin-landing-page * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.cg-kin-landing-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cg-kin-landing-page .container {
+  position: fixed;
+  inset: 0;
   height: 100vh;
-  border: 0;
-  background: #000;
+  overflow: hidden;
+}
+
+.cg-kin-landing-page .revealers {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.cg-kin-landing-page .revealer {
+  flex: 1;
+  width: 100%;
+  background-color: #000;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.cg-kin-landing-page .images {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.cg-kin-landing-page .img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.5);
+  width: 100%;
+  height: 100%;
+  visibility: visible;
+  will-change: transform;
+  opacity: 0;
+}
+
+.cg-kin-landing-page .img:first-child {
+  opacity: 1;
+}
+
+.cg-kin-landing-page .images.stacked-container {
+  position: fixed;
+  left: 2em;
+  bottom: 2em;
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 1em;
+  transform: none;
+  will-change: transform;
+}
+
+.cg-kin-landing-page .img.stacked {
+  position: relative;
+  width: 150px;
+  height: 100px;
+  transform: none;
+  top: auto;
+  left: auto;
+  opacity: 1;
+  will-change: transform;
+}
+
+.cg-kin-landing-page .hero-content {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+}
+
+.cg-kin-landing-page .site-logo {
+  position: absolute;
+  top: 2em;
+  left: 2em;
+  display: flex;
+  gap: 1em;
+}
+
+.cg-kin-landing-page .site-logo h1 {
+  color: #fff;
+  font-size: 5vw;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.cg-kin-landing-page .site-logo h1 sup {
+  position: absolute;
+  top: -0.125em;
+  font-size: 2rem;
+}
+
+.cg-kin-landing-page .nav {
+  position: absolute;
+  right: 0;
+  width: 50%;
+  padding: 2em;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+}
+
+.cg-kin-landing-page .nav .nav-item {
+  position: relative;
+}
+
+.cg-kin-landing-page .nav .nav-item a {
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+}
+
+.cg-kin-landing-page .team-img {
+  position: absolute;
+  right: 2em;
+  bottom: 2em;
+  width: 40%;
+  height: 50%;
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
+}
+
+.cg-kin-landing-page .team-img img {
+  filter: saturate(0);
+}
+
+.cg-kin-landing-page .team-img.team-logo {
+  width: min(26vw, 290px);
+  height: auto;
+  aspect-ratio: 873 / 774;
+  min-width: 190px;
+}
+
+.cg-kin-landing-page .team-img.team-logo img {
+  object-fit: contain;
+  object-position: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 1.75rem 1.25rem;
+  filter: none;
+}
+
+.cg-kin-landing-page .site-info {
+  position: absolute;
+  bottom: 2em;
+  left: 2em;
+  width: 50%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cg-kin-landing-page .site-info .row {
+  display: flex;
+  gap: 2em;
+}
+
+.cg-kin-landing-page .site-info .row .col {
+  flex: 1;
+}
+
+.cg-kin-landing-page .site-info h2 {
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.cg-kin-landing-page .site-info p {
+  text-transform: uppercase;
+  font-family: "Apercu Mono Pro", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.cg-kin-landing-page .site-info .row:nth-child(2) .col:nth-child(2) {
+  display: flex;
+}
+
+.cg-kin-landing-page .address,
+.cg-kin-landing-page .socials {
+  flex: 1;
+}
+
+.cg-kin-landing-page .address p,
+.cg-kin-landing-page .socials p {
+  line-height: 1.25;
+}
+
+.cg-kin-landing-page .word,
+.cg-kin-landing-page .nav-item,
+.cg-kin-landing-page .line {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.cg-kin-landing-page .word h1,
+.cg-kin-landing-page .nav-item a,
+.cg-kin-landing-page .site-info h2 .line span,
+.cg-kin-landing-page .line p {
+  position: relative;
+  will-change: transform;
+}
+
+.cg-kin-landing-page .site-info h2 .line span {
+  display: block;
+  transform: translateY(100%);
+}
+
+.cg-kin-landing-page .word h1,
+.cg-kin-landing-page .nav-item a,
+.cg-kin-landing-page .line p {
+  transform: translateY(100%);
 }
