@@ -37,7 +37,7 @@ export default function ProjectDetail() {
       '@type': 'CreativeWork',
       name: project.title,
       description: project.about,
-      url: `https://sprdlx.com/project/${project.id}`,
+      url: `https://sprdlx.com/projects/${project.id}`,
       image: `https://sprdlx.com${project.image}`,
       genre: project.industry,
       dateCreated: String(project.year),
@@ -57,7 +57,7 @@ export default function ProjectDetail() {
     description: project
       ? `${project.about} Deliverables: ${project.deliverables.join(', ')}.`
       : 'The requested project could not be found.',
-    canonical: project ? `/project/${project.id}` : undefined,
+    canonical: project ? `/projects/${project.id}` : undefined,
     ogType: 'article',
     ogImage: project ? `https://sprdlx.com${project.image}` : undefined,
     noIndex: !project,
@@ -312,7 +312,7 @@ export default function ProjectDetail() {
       <div className="w-full border-t border-white/10 px-5 py-14 sm:px-8 sm:py-20">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 text-base font-serif italic text-zinc-400 sm:flex-row sm:items-center sm:justify-between sm:text-lg">
           <VTLink
-            to={`/project/${prevProject.id}`}
+            to={`/projects/${prevProject.id}`}
             data-cursor="view"
             className="hover:text-white transition-colors flex items-center gap-4 order-2 sm:order-1 no-underline group"
           >
@@ -327,7 +327,7 @@ export default function ProjectDetail() {
             All Projects
           </VTLink>
           <VTLink
-            to={`/project/${nextProject.id}`}
+            to={`/projects/${nextProject.id}`}
             data-cursor="view"
             className="hover:text-white transition-colors flex items-center gap-4 justify-end order-3 no-underline group"
           >

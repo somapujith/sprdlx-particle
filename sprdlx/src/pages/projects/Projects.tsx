@@ -21,7 +21,7 @@ const PROJECTS_SCHEMA = {
     '@type': 'CreativeWork',
     name: p.title,
     description: p.desc,
-    url: `https://sprdlx.com/project/${p.id}`,
+    url: `https://sprdlx.com/projects/${p.id}`,
     image: `https://sprdlx.com${p.image}`,
     genre: p.industry,
     dateCreated: String(p.year),
@@ -268,21 +268,21 @@ export default function Projects() {
       <section className="work" ref={workRef}>
         <div className="text-container" ref={textContainerRef}></div>
         <div className="cards" ref={cardsRef}>
-          <div className="card" onClick={() => navigate('/project/pulp')} style={{ cursor: 'pointer' }}>
+          <div className="card" onClick={() => navigate('/projects/pulp')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/pulp/hero.png" alt="Pulp project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Pulp</p>
               <p>2024</p>
             </div>
           </div>
-          <div className="card" onClick={() => navigate('/project/esthetic-insights')} style={{ cursor: 'pointer' }}>
+          <div className="card" onClick={() => navigate('/projects/esthetic-insights')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/assets/img2.jpg" alt="Esthetic Insights project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Esthetic Insights</p>
               <p>2025</p>
             </div>
           </div>
-          <div className="card" onClick={() => navigate('/project/anthill')} style={{ cursor: 'pointer' }}>
+          <div className="card" onClick={() => navigate('/projects/anthill')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/assets/img3.jpg" alt="Anthill project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Anthill</p>
@@ -296,7 +296,7 @@ export default function Projects() {
               <p>2024</p>
             </div>
           </div>
-          <div className="card" onClick={() => navigate('/project/alpha')} style={{ cursor: 'pointer' }}>
+          <div className="card" onClick={() => navigate('/projects/alpha')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/assets/img5.jpg" alt="Alpha project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Alpha</p>

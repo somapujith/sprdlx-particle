@@ -115,7 +115,7 @@ export default function InfiniteParallax() {
         if (data.isAvailable !== false) {
           el.style.cursor = 'pointer';
           el.addEventListener('click', () => {
-            window.location.assign(`/project/${data.projectId}`);
+            window.location.assign(`/projects/${data.projectId}`);
           });
         } else {
           el.style.cursor = 'default';
