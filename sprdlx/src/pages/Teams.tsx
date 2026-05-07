@@ -1,5 +1,6 @@
 import { useSEO } from '../hooks/useSEO';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
+import TeamsParallax from './teams/TeamsParallax';
 
 export default function Teams() {
   useSEO({
@@ -13,12 +14,7 @@ export default function Teams() {
       <MenuOverlay />
       
       <section className="h-screen w-full">
-        <iframe
-          title="Teams"
-          src="/teams-parallax/index.html"
-          className="h-full w-full border-0"
-          loading="eager"
-        />
+        <TeamsParallax />
       </section>
 
       <section className="flex h-screen w-full items-center justify-center bg-black text-white">
