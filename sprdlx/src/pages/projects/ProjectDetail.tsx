@@ -133,7 +133,7 @@ export default function ProjectDetail() {
                   <img
                     src={getLogoPath(project.id)}
                     alt={project.title}
-                    className="h-32 md:h-40 object-contain mb-6"
+                    className="h-48 md:h-56 object-contain mb-6"
                   />
                   <p className="text-zinc-300 text-lg leading-relaxed font-medium">{project.desc}</p>
                 </div>
