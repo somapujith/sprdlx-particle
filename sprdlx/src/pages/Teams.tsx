@@ -19,7 +19,6 @@ export default function Teams() {
     let isJumping = false;
 
     const handleScroll = ({ scroll }: any) => {
-      // Trigger the jump if scrolled more than 5px but still in the first half of the first section
       if (scroll > 5 && scroll < window.innerHeight * 0.1 && !isJumping) {
         isJumping = true;
         lenis.scrollTo(window.innerHeight, {

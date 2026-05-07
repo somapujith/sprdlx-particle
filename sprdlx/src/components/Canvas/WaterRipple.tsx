@@ -101,6 +101,10 @@ function WaterRipple() {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    let rafId: number;
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
+
     (async () => {
       const { Scene, OrthographicCamera, WebGLRenderer, RGBAFormat, FloatType, LinearFilter, WebGLRenderTarget, ShaderMaterial, Vector2, PlaneGeometry, Mesh, CanvasTexture } = await import('three');
 
@@ -227,6 +231,7 @@ function WaterRipple() {
     }, { passive: true });
 
     const animate = () => {
+      if (cancelled) return;
       simMaterial.uniforms.frame.value = frame++;
       simMaterial.uniforms.time.value = performance.now() / 1000;
 
@@ -243,12 +248,12 @@ function WaterRipple() {
       rtA = rtB;
       rtB = temp;
 
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     };
 
-    animate();
+    rafId = requestAnimationFrame(animate);
 
-    return () => {
+    cleanup = () => {
       window.removeEventListener('resize', handleResize);
       containerRef.current?.removeChild(renderer.domElement);
       rtA.dispose();
@@ -258,6 +263,12 @@ function WaterRipple() {
       renderer.dispose();
     };
     })();
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(rafId);
+      cleanup?.();
+    };
   }, []);
 
   return <div ref={containerRef} className="absolute inset-0 w-full h-full" />;

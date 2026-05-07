@@ -306,8 +306,9 @@ function FocusAreaFluid({
       displayMaterial.uniforms.uDpr.value = window.devicePixelRatio;
     }
 
+    let animationFrameId: number;
     function animate() {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
 
       if (isMovingRef.current && performance.now() - lastMoveTimeRef.current > 50) {
         isMovingRef.current = false;
@@ -337,6 +338,7 @@ function FocusAreaFluid({
     animate();
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       canvas.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', onWindowResize);
       (displayMaterial.uniforms.uTopTexture.value as THREE.Texture | null)?.dispose?.();

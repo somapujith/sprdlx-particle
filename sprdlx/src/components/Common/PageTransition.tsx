@@ -7,17 +7,14 @@ export function PageTransition() {
   const [isFadingIn, setIsFadingIn] = useState(true);
 
   useEffect(() => {
-    // Start fade out of current page
     setIsFadingOut(true);
     setIsFadingIn(false);
 
-    // After fade out, switch page and fade in
     const fadeOutTimer = setTimeout(() => {
       setIsFadingOut(false);
       setIsFadingIn(true);
     }, 600);
 
-    // End fade in
     const fadeInTimer = setTimeout(() => {
       setIsFadingIn(false);
     }, 1200);

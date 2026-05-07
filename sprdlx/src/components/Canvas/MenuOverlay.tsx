@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import SplitText from 'gsap/SplitText';
 import './menu-overlay.css';
@@ -10,8 +10,6 @@ function MenuOverlay() {
   const navToggleRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuBgRef = useRef<SVGPathElement>(null);
-  const navigate = useNavigate();
-
   useEffect(() => {
     const navToggle = navToggleRef.current;
     const menu = menuRef.current;

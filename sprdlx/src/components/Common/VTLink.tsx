@@ -9,7 +9,7 @@ declare global {
 }
 
 const pageModules: Record<string, () => Promise<unknown>> = {
-  '/about': () => import('@/pages/About'),
+  '/about': () => import('@/pages/aboutCgKin/AboutCgKin'),
   '/projects': () => import('@/pages/Projects'),
   '/project': () => import('@/pages/ProjectDetail'),
 };

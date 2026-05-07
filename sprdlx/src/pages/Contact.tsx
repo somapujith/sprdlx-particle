@@ -37,8 +37,7 @@ function Contact() {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
-    (window as any).lenisInstance?.stop();
-    // Text animation starts at 3s, "Let's Create Something Amazing" has ~6 words with 0.2 stagger = 1.2s duration, so details fade in at ~4.3s
+    window.lenisInstance?.stop();
     const timer = setTimeout(() => setShowDetails(true), 4500);
     return () => clearTimeout(timer);
   }, []);

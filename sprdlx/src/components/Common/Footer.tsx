@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Footer() {
   return (
     <footer className="chrome-footer-scope w-full flex flex-col relative z-10 border-t border-white/5">

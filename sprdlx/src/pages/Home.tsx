@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, Suspense } from 'react';
+import { useLayoutEffect, useRef, Suspense, useCallback } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '../hooks/useSEO';
@@ -33,13 +33,16 @@ export default function Home() {
   const splineRef = useRef<HTMLDivElement>(null);
   const uiRootRef = useRef<HTMLDivElement>(null);
 
-  const handleNavigation = (path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    (window as any).lenisInstance?.stop();
-    setTimeout(() => {
-      navigate(path);
-    }, 600);
-  };
+  const handleNavigation = useCallback(
+    (path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      window.lenisInstance?.stop();
+      setTimeout(() => {
+        navigate(path);
+      }, 600);
+    },
+    [navigate],
+  );
 
 
   useLayoutEffect(() => {
@@ -91,9 +94,6 @@ export default function Home() {
         ref={uiRootRef}
         className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-6 md:p-12"
       >
-        <header className="flex items-start justify-between gap-6">
-        </header>
-
         <footer className="relative mt-auto flex flex-col gap-8">
           <nav
             data-home-reveal

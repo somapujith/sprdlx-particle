@@ -37,6 +37,8 @@ export default function Projects() {
     schema: PROJECTS_SCHEMA,
   });
   const workRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const textContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const [hasWebGL, setHasWebGL] = useState(true);
 
@@ -61,8 +63,8 @@ export default function Projects() {
     }
 
     const initAnimation = () => {
-      const workSection = document.querySelector(".work");
-      const cardsContainer = document.querySelector(".cards");
+      const workSection = workRef.current;
+      const cardsContainer = cardsRef.current;
       const moveDistance = window.innerWidth * 5;
       let currentXPosition = 0;
 
@@ -117,7 +119,7 @@ export default function Projects() {
       ];
       path.forEach((line) => lettersScene.add(line));
 
-      const textContainer = document.querySelector(".text-container");
+      const textContainer = textContainerRef.current;
       const letterPositions = new Map();
       path.forEach((line, i) => {
         (line as any).letterElements = Array.from({ length: 15 }, () => {
@@ -174,7 +176,7 @@ export default function Projects() {
 
       const updateCardsPosition = () => {
         const triggers = ScrollTrigger.getAll();
-        const mainTrigger = triggers.find(t => t.trigger === document.querySelector('.work'));
+        const mainTrigger = triggers.find(t => t.trigger === workRef.current);
         const targetX = -moveDistance * (mainTrigger?.progress || 0);
         currentXPosition = lerp(currentXPosition, targetX, 0.07);
         gsap.set(cardsContainer, {
@@ -194,7 +196,7 @@ export default function Projects() {
       };
 
       const scrollTrigger = ScrollTrigger.create({
-        trigger: ".work",
+        trigger: workRef.current ?? ".work",
         start: "top top",
         end: "+=700%",
         pin: true,
@@ -214,7 +216,7 @@ export default function Projects() {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
           const triggers = ScrollTrigger.getAll();
-          const mainTrigger = triggers.find(t => t.trigger === document.querySelector('.work'));
+          const mainTrigger = triggers.find(t => t.trigger === workRef.current);
           lettersCamera.aspect = window.innerWidth / window.innerHeight;
           lettersCamera.updateProjectionMatrix();
           lettersRenderer.setSize(window.innerWidth, window.innerHeight);
@@ -229,11 +231,25 @@ export default function Projects() {
         clearTimeout(resizeTimeout);
         scrollTrigger?.kill();
         cancelAnimationFrame(animationFrameId);
+        lettersScene.children.slice().forEach((child) => {
+          const line = child as Line;
+          if (line.geometry) line.geometry.dispose();
+          if (line.material) {
+            if (Array.isArray(line.material)) {
+              line.material.forEach((m) => m.dispose());
+            } else {
+              (line.material as LineBasicMaterial).dispose();
+            }
+          }
+        });
+        lettersScene.clear();
         lettersRenderer.dispose();
+        if (textContainerRef.current) {
+          textContainerRef.current.innerHTML = '';
+        }
       };
     };
 
-    // Small delay to ensure DOM is ready
     const timeout = setTimeout(initAnimation, 0);
     return () => clearTimeout(timeout);
   }, []);
@@ -250,8 +266,8 @@ export default function Projects() {
         </div>
       </div>
       <section className="work" ref={workRef}>
-        <div className="text-container"></div>
-        <div className="cards">
+        <div className="text-container" ref={textContainerRef}></div>
+        <div className="cards" ref={cardsRef}>
           <div className="card" onClick={() => navigate('/project/pulp')} style={{ cursor: 'pointer' }}>
             <div className="card-img"><img src="/projects/pulp/hero.png" alt="Pulp project" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
