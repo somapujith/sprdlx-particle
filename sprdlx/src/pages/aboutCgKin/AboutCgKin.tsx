@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
@@ -7,6 +7,7 @@ import { CustomEase } from 'gsap/CustomEase';
 import SplitType from 'split-type';
 
 import MenuOverlay from '../../components/Canvas/MenuOverlay';
+import FaultyTerminal from '../../components/FaultyTerminal/FaultyTerminal';
 
 import { useAppBootstrap } from '../../context/AppBootstrapContext';
 import { useSEO } from '../../hooks/useSEO';
@@ -16,6 +17,16 @@ import './aboutCgKin.css';
 export default function AboutCgKin() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { isBootLoaderComplete } = useAppBootstrap();
+  const [showTerminal, setShowTerminal] = useState(false);
+
+  useEffect(() => {
+    if (isBootLoaderComplete) {
+      const timer = setTimeout(() => {
+        setShowTerminal(true);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [isBootLoaderComplete]);
 
   useSEO({
     title: 'About — Studio layout | SPRDLX',
@@ -179,12 +190,35 @@ export default function AboutCgKin() {
       <div className="cg-kin-landing-page" ref={containerRef} aria-hidden={!isBootLoaderComplete}>
         {isBootLoaderComplete ? (
           <div className="cg-kin-container">
-            <div className="revealers">
+            {showTerminal && (
+              <div className="fixed inset-0 z-0 pointer-events-none">
+                <FaultyTerminal
+                  scale={2.4}
+                  gridMul={[2, 1]}
+                  digitSize={1.9}
+                  timeScale={1}
+                  pause={false}
+                  scanlineIntensity={1}
+                  glitchAmount={1}
+                  flickerAmount={1}
+                  noiseAmp={1}
+                  chromaticAberration={0}
+                  dither={0}
+                  curvature={0.2}
+                  tint="#f3f7a8"
+                  mouseReact={true}
+                  mouseStrength={0.5}
+                  pageLoadAnimation={true}
+                  brightness={1}
+                />
+              </div>
+            )}
+            <div className="revealers relative z-10">
             <div className="revealer r-1" />
             <div className="revealer r-2" />
           </div>
 
-          <div className="images">
+          <div className="images relative z-10">
             <div className="img"><img src="/projects/pulp/cosmic-dew.png" alt="" /></div>
             <div className="img"><img src="/projects/esthetic-insights/gallery-2.png" alt="" /></div>
             <div className="img"><img src="/projects/assets/anthill1.png" alt="" /></div>
@@ -195,7 +229,7 @@ export default function AboutCgKin() {
             <div className="img main"><img src="/projects/pulp/cosmic-dew.png" alt="" /></div>
           </div>
 
-          <div className="hero-content">
+          <div className="hero-content relative z-10">
             <div className="site-logo">
               <div className="word">
                 <h1>Super</h1>
