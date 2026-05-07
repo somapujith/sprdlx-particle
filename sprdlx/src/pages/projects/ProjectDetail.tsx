@@ -240,40 +240,6 @@ export default function ProjectDetail() {
                       </div>
                     )
                   )}
-                  {'fundingStage' in project && project.fundingStage ? (
-                    <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
-                      <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
-                        Funding Stage
-                      </span>
-                      {project.id !== 'pulp' && (
-                        <span className="flex flex-wrap items-center gap-1.5 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
-                          {project.fundingStage}
-                          <span className="text-pink-400" aria-hidden>
-                            ♥
-                          </span>
-                        </span>
-                      )}
-                    </div>
-                  ) : null}
-                  {project.backedBy || project.backedByLogo ? (
-                    <div className="flex flex-col gap-1 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
-                      <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
-                        Backed by
-                      </span>
-                      {project.id !== 'pulp' && (
-                        <span className="flex flex-wrap items-center gap-2 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
-                          {project.backedByLogo === 'Y' ? (
-                            <span className="bg-white text-black px-2 py-1 rounded-md text-[11px] font-black leading-none">
-                              Y
-                            </span>
-                          ) : (
-                            <span className="font-bold tracking-widest">{project.backedByLogo || project.backedBy}</span>
-                          )}
-                          {project.backedByLogo === 'Y' ? 'Combinator' : ''}
-                        </span>
-                      )}
-                    </div>
-                  ) : null}
                 </div>
               </div>
             </div>
