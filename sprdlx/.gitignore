@@ -8,3 +8,33 @@ coverage/
 !.env.example
 temp_clone/
 Prompts/
+
+# Vite
+.vite/
+
+# IDE
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# OS
+Thumbs.db
+
+# Certificates & Keys
+*.pem
+*.key
+
+# Cache
+.eslintcache
+.stylelintcache
+.turbo/
+
+# Testing
+playwright-report/
+test-results/
+
+# Build artifacts
+*.tsbuildinfo
