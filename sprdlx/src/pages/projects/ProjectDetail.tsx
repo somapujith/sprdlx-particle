@@ -106,26 +106,13 @@ export default function ProjectDetail() {
       </div>
 
       {/* Hero */}
-      <section
-        className="w-full px-5 pb-8 pt-[max(5.5rem,env(safe-area-inset-top))] sm:px-6 sm:pb-8 md:px-8"
-        aria-labelledby="project-hero-title"
-      >
+      <section className="w-full px-5 pb-8 pt-[max(5.5rem,env(safe-area-inset-top))] sm:px-6 sm:pb-8 md:px-8">
         <div className="relative h-[min(42vh,22rem)] w-full overflow-hidden rounded-2xl sm:h-[40vh] sm:rounded-[2rem] md:h-[50vh]">
           <BlurUpImg
             src={project.id === 'anthill' ? '/projects/assets/anthill2.png' : project.image}
             alt={`${project.title} — hero`}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 flex items-center justify-center px-3 sm:px-4">
-            <div className="bg-[color:var(--glass-bg)] backdrop-blur-xl border border-[color:var(--glass-border)] px-8 py-6 md:px-12 md:py-8 rounded-[var(--radius-soft)] flex items-center justify-center max-w-[min(96vw,36rem)] text-center shadow-[0_0_40px_rgba(126,225,255,0.08)]">
-              <h1
-                id="project-hero-title"
-                className="m-0 font-sans font-bold uppercase tracking-[0.14em] text-white text-lg sm:text-xl md:text-2xl lg:text-3xl leading-tight"
-              >
-                {project.title.toUpperCase()}
-              </h1>
-            </div>
-          </div>
         </div>
       </section>
 
