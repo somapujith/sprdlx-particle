@@ -67,7 +67,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[#0a0a0a] font-sans text-[#f3f7a8] pointer-coarse:cursor-auto">
+    <div className="relative h-screen min-h-screen w-full overflow-hidden bg-[#0a0a0a] font-sans text-[#f3f7a8] cursor-auto">
       <div ref={splineRef} className="absolute inset-0 z-0 min-h-full min-w-full">
         <Suspense fallback={<div className="absolute inset-0 bg-[#0a0a0a]" />}>
           <SplineHero sceneUrl="/spline/themuseum.splinecode" />
