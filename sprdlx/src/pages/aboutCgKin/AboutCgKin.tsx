@@ -41,12 +41,15 @@ export default function AboutCgKin() {
     const body = document.body;
     const prevOverflow = html.style.overflow;
     const prevBodyOverflow = body.style.overflow;
+    const prevScrollbarGutter = html.style.scrollbarGutter;
 
     html.style.overflow = 'hidden';
+    html.style.scrollbarGutter = 'auto';
     body.style.overflow = 'hidden';
 
     return () => {
       html.style.overflow = prevOverflow;
+      html.style.scrollbarGutter = prevScrollbarGutter;
       body.style.overflow = prevBodyOverflow;
     };
   }, []);
@@ -171,7 +174,7 @@ export default function AboutCgKin() {
   return createPortal(
     <div className="cg-kin-landing-page" ref={containerRef} aria-hidden={!isBootLoaderComplete}>
       {isBootLoaderComplete ? (
-        <div className="container">
+        <div className="cg-kin-container">
           <div className="revealers">
             <div className="revealer r-1" />
             <div className="revealer r-2" />
