@@ -1,6 +1,7 @@
 import { useSEO } from '../hooks/useSEO';
 import MenuOverlay from '../components/Canvas/MenuOverlay';
 import TeamsParallax from './teams/TeamsParallax';
+import InteractiveTeamSection from './teams/InteractiveTeamSection';
 
 export default function Teams() {
   useSEO({
@@ -10,17 +11,15 @@ export default function Teams() {
   });
 
   return (
-    <main className="w-screen bg-black overflow-x-hidden">
+    <main className="w-full bg-black overflow-x-hidden">
       <MenuOverlay />
       
       <section className="h-screen w-full">
         <TeamsParallax />
       </section>
 
-      <section className="flex h-screen w-full items-center justify-center bg-black text-white">
-        <h1 className="text-8xl font-bold uppercase tracking-wider" style={{ fontFamily: 'var(--font-sf), ui-sans-serif, system-ui, sans-serif' }}>
-          hello
-        </h1>
+      <section className="h-screen w-full">
+        <InteractiveTeamSection />
       </section>
     </main>
   );
