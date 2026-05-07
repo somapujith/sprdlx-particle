@@ -4,16 +4,13 @@ import SplitText from 'gsap/SplitText';
 
 gsap.registerPlugin(SplitText);
 
-const teamNames = [
-  'Colin',
-  'Liam',
-  'Tabitha',
-  'Tyson',
-  'Max',
-  'Everest',
-  'Simon',
-  'Gideon',
-  'Benton',
+const teamMembers = [
+  { name: 'Goutham', img: 'Goutham.png' },
+  { name: 'Dhruv', img: 'Dhruv.png' },
+  { name: 'Nithin', img: 'Nithin.PNG' },
+  { name: 'Pujith', img: 'Pujith.png' },
+  { name: 'Rakesh', img: 'Rakesh.png' },
+  { name: 'Udit', img: 'Udit.png' },
 ];
 
 export default function InteractiveTeamSection() {
@@ -130,15 +127,15 @@ export default function InteractiveTeamSection() {
       }} />
 
       <div className="profile-images flex w-max items-center justify-center max-lg:max-w-[90%] max-lg:flex-wrap z-10">
-        {[...Array(9)].map((_, i) => (
+        {teamMembers.map((member, i) => (
           <div
             key={i}
             className="img relative h-[70px] w-[70px] cursor-pointer p-[5px] max-lg:h-[60px] max-lg:w-[60px] max-lg:p-[2.5px]"
             style={{ willChange: 'width, height' }}
           >
             <img
-              src={`/codegrid-team/img${i + 1}.jpeg`}
-              alt={teamNames[i]}
+              src={`/codegrid-team/${member.img}`}
+              alt={member.name}
               className="h-full w-full rounded-lg object-cover"
             />
           </div>
@@ -157,13 +154,13 @@ export default function InteractiveTeamSection() {
             The Squad
           </h1>
         </div>
-        {teamNames.map((name, i) => (
+        {teamMembers.map((member, i) => (
           <div key={i} className="name absolute inset-0">
             <h1
               className="absolute w-full translate-y-[100%] select-none text-center uppercase font-black leading-none tracking-[-0.2rem] text-[#f3f7a8] max-lg:text-[4rem] max-lg:tracking-normal"
               style={{ fontFamily: '"Barlow Condensed", sans-serif', fontSize: '15rem' }}
             >
-              {name}
+              {member.name}
             </h1>
           </div>
         ))}
