@@ -133,7 +133,9 @@ export default function ProjectDetail() {
                   <img
                     src={getLogoPath(project.id)}
                     alt={project.title}
-                    className="h-48 md:h-56 object-contain mb-6"
+                    className={`h-48 md:h-56 object-contain mb-6 ${
+                      project.id === 'esthetic-insights' ? 'brightness-0 invert' : ''
+                    }`}
                   />
                   <p className="text-zinc-300 text-lg leading-relaxed font-medium">{project.desc}</p>
                 </div>
