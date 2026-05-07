@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import MenuOverlay from '../components/Canvas/MenuOverlay';
+import MenuOverlay from '../../../components/canvas/MenuOverlay';
 import './infinite-parallax.css';
 
 type Project = {

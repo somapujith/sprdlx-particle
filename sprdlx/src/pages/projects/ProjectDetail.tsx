@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { projects } from './projects/data';
-import Footer from '../components/Common/Footer';
-import VTLink from '../components/Common/VTLink';
-import MenuOverlay from '../components/Canvas/MenuOverlay';
-import { useSEO } from '../hooks/useSEO';
-import { useMotif } from '../hooks/useMotif';
+import { projects } from './projects-data';
+import Footer from '../../components/common/Footer';
+import VTLink from '../../components/common/VTLink';
+import MenuOverlay from '../../components/canvas/MenuOverlay';
+import { useSEO } from '../../hooks/useSEO';
+import { useMotif } from '../../hooks/useMotif';
 
 function BlurUpImg({ className = '', ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) {
   const [loaded, setLoaded] = useState(false);

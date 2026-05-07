@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Scene, PerspectiveCamera, WebGLRenderer, CatmullRomCurve3, BufferGeometry, Line, LineBasicMaterial, Vector3 } from 'three';
-import './projects/styles.css';
-import { useSEO } from '../hooks/useSEO';
-import { useMotif } from '../hooks/useMotif';
-import { projects } from './projects/data';
-import { HardwareAccelerationWarning } from '../components/HardwareAccelerationWarning';
+import './projects.css';
+import { useSEO } from '../../hooks/useSEO';
+import { useMotif } from '../../hooks/useMotif';
+import { projects } from './projects-data';
+import { HardwareAccelerationWarning } from '../../components/HardwareAccelerationWarning';
 
 gsap.registerPlugin(ScrollTrigger);
 

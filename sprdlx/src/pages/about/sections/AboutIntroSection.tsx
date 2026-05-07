@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
 import { Link } from 'react-router-dom';
-import { ABOUT_LONG_COPY } from './aboutData';
+import { ABOUT_LONG_COPY } from '../about-data';
 
 type Props = {
   textContainerRef: RefObject<HTMLHeadingElement | null>;

@@ -1,7 +1,7 @@
 import { Suspense, useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import WaterRipple from '../../components/Canvas/WaterRipple';
+import WaterRipple from '../../../components/canvas/WaterRipple';
 
 gsap.registerPlugin(useGSAP);
 

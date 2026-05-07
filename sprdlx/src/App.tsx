@@ -4,23 +4,23 @@ import { AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Home from './pages/Home';
-import LoadingScreen from './components/Common/LoadingScreen';
-import ScrollToTop from './components/Common/ScrollToTop';
-import { PageTransition } from './components/Common/PageTransition';
-import { ErrorBoundary } from './components/Common/ErrorBoundary';
+import Home from './pages/home/Home';
+import LoadingScreen from './components/common/LoadingScreen';
+import ScrollToTop from './components/common/ScrollToTop';
+import { PageTransition } from './components/common/PageTransition';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { AppBootstrapProvider } from './context/AppBootstrapContext';
 
-const AboutCgKin = lazy(() =>
-  import(/* webpackChunkName: "about-kin" */ './pages/aboutCgKin/AboutCgKin'),
+const About = lazy(() =>
+  import(/* webpackChunkName: "about" */ './pages/about/About'),
 );
 const InfiniteParallax = lazy(() =>
-  import(/* webpackChunkName: "infinite-parallax" */ './pages/InfiniteParallax'),
+  import(/* webpackChunkName: "infinite-parallax" */ './pages/projects/parallax/InfiniteParallax'),
 );
-const Projects = lazy(() => import(/* webpackChunkName: "projects" */ './pages/Projects'));
-const Teams = lazy(() => import(/* webpackChunkName: "teams" */ './pages/Teams'));
-const ProjectDetail = lazy(() => import(/* webpackChunkName: "project-detail" */ './pages/ProjectDetail'));
-const Contact = lazy(() => import(/* webpackChunkName: "contact" */ './pages/Contact'));
+const Projects = lazy(() => import(/* webpackChunkName: "projects" */ './pages/projects/Projects'));
+const Teams = lazy(() => import(/* webpackChunkName: "teams" */ './pages/teams/Teams'));
+const ProjectDetail = lazy(() => import(/* webpackChunkName: "project-detail" */ './pages/projects/ProjectDetail'));
+const Contact = lazy(() => import(/* webpackChunkName: "contact" */ './pages/contact/Contact'));
 
 declare global {
   interface Window {
@@ -74,12 +74,12 @@ export default function App() {
             <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/about" element={<AboutCgKin />} />
+                <Route path="/about" element={<About />} />
                 <Route path="/about/kin" element={<Navigate to="/about" replace />} />
                 <Route path="/projects/parallax" element={<InfiniteParallax />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/teams" element={<Teams />} />
-                <Route path="/project/:id" element={<ProjectDetail />} />
+                <Route path="/projects/:id" element={<ProjectDetail />} />
                 <Route path="/contact" element={<Contact />} />
               </Routes>
             </Suspense>

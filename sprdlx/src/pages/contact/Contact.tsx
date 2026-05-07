@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { MagneticLink } from '../components/ui/MagneticLink';
-import MenuOverlay from '../components/Canvas/MenuOverlay';
-import { useSEO } from '../hooks/useSEO';
-import { useMotif } from '../hooks/useMotif';
-import { TextGenerateEffect } from '../components/TextGenerateEffect';
-import FaultyTerminal from '../components/FaultyTerminal/FaultyTerminal';
+import { MagneticLink } from '../../components/ui/MagneticLink';
+import MenuOverlay from '../../components/canvas/MenuOverlay';
+import { useSEO } from '../../hooks/useSEO';
+import { useMotif } from '../../hooks/useMotif';
+import { TextGenerateEffect } from '../../components/TextGenerateEffect';
+import FaultyTerminal from '../../components/faulty-terminal/FaultyTerminal';
 
 const CONTACT_SCHEMA = {
   '@context': 'https://schema.org',

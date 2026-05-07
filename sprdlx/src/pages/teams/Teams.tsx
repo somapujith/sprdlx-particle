@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useSEO } from '../hooks/useSEO';
-import MenuOverlay from '../components/Canvas/MenuOverlay';
-import TeamsParallax from './teams/TeamsParallax';
-import InteractiveTeamSection from './teams/InteractiveTeamSection';
-import FaultyTerminal from '../components/FaultyTerminal/FaultyTerminal';
+import { useSEO } from '../../hooks/useSEO';
+import MenuOverlay from '../../components/canvas/MenuOverlay';
+import TeamsParallax from './TeamsParallax';
+import InteractiveTeamSection from './InteractiveTeamSection';
+import FaultyTerminal from '../../components/faulty-terminal/FaultyTerminal';
 
 export default function Teams() {
   useSEO({

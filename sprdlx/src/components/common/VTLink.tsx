@@ -9,16 +9,16 @@ declare global {
 }
 
 const pageModules: Record<string, () => Promise<unknown>> = {
-  '/about': () => import('@/pages/aboutCgKin/AboutCgKin'),
-  '/projects': () => import('@/pages/Projects'),
-  '/project': () => import('@/pages/ProjectDetail'),
+  '/about': () => import('@/pages/about/About'),
+  '/projects': () => import('@/pages/projects/Projects'),
+  '/projects-detail': () => import('@/pages/projects/ProjectDetail'),
 };
 
 function prefetchPath(path: string) {
   if (path === '/' || path.startsWith('/#')) {
     return;
   }
-  const key = path.startsWith('/project/') ? '/project' : path;
+  const key = path.startsWith('/projects/') && path !== '/projects' ? '/projects-detail' : path;
   void pageModules[key]?.();
 }
 

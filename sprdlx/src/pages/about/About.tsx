@@ -6,15 +6,15 @@ import Flip from 'gsap/Flip';
 import { CustomEase } from 'gsap/CustomEase';
 import SplitType from 'split-type';
 
-import MenuOverlay from '../../components/Canvas/MenuOverlay';
-import FaultyTerminal from '../../components/FaultyTerminal/FaultyTerminal';
+import MenuOverlay from '../../components/canvas/MenuOverlay';
+import FaultyTerminal from '../../components/faulty-terminal/FaultyTerminal';
 
 import { useAppBootstrap } from '../../context/AppBootstrapContext';
 import { useSEO } from '../../hooks/useSEO';
 
-import './aboutCgKin.css';
+import './about.css';
 
-export default function AboutCgKin() {
+export default function About() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { isBootLoaderComplete } = useAppBootstrap();
   const [showTerminal, setShowTerminal] = useState(false);

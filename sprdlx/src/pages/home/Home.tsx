@@ -1,9 +1,9 @@
 import { useLayoutEffect, useRef, Suspense, useCallback } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
-import { useSEO } from '../hooks/useSEO';
-import { MagneticLink } from '../components/ui/MagneticLink';
-import SplineHero from '../components/Canvas/SplineHero';
+import { useSEO } from '../../hooks/useSEO';
+import { MagneticLink } from '../../components/ui/MagneticLink';
+import SplineHero from '../../components/canvas/SplineHero';
 
 const HOME_SCHEMA = {
   '@context': 'https://schema.org',

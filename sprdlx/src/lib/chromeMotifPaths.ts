@@ -4,6 +4,6 @@ export function isChromeMotifPath(pathname: string): boolean {
     pathname === '/about' ||
     pathname === '/projects' ||
     pathname === '/contact' ||
-    pathname.startsWith('/project/')
+    pathname.startsWith('/projects/')
   );
 }

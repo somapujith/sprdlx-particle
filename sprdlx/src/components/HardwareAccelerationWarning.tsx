@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useHardwareAcceleration } from '../hooks/useHardwareAcceleration';
-import './HardwareAccelerationWarning.css';
+import './hardware-acceleration-warning.css';
 
 export function HardwareAccelerationWarning() {
   const isAccelerationAvailable = useHardwareAcceleration();
