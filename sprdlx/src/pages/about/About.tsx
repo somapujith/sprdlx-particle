@@ -167,10 +167,10 @@ export default function About() {
         })
         .to('.word h1, .nav-item p, .line p, .site-info h2 .line span', {
           y: 0,
-          duration: 3,
+          duration: 1.5,
           ease: 'hop2',
           stagger: 0.1,
-          delay: 1.25,
+          delay: 1,
         })
         .to('.team-img', {
           clipPath: 'polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)',

@@ -63,7 +63,7 @@ export default function ProjectDetail() {
       ? `${project.title} — SPRDLX Project | ${project.industry} ${project.subIndustry ?? ''}`
       : 'Project Not Found — SPRDLX',
     description: project
-      ? `${project.about} Deliverables: ${project.deliverables.join(', ')}.`
+      ? `${project.about}${project.deliverables ? ` Deliverables: ${project.deliverables.join(', ')}.` : ''}`
       : 'The requested project could not be found.',
     canonical: project ? `/projects/${project.id}` : undefined,
     ogType: 'article',
