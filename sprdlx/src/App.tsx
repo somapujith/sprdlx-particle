@@ -1,26 +1,25 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Home from './pages/home/Home';
+import NotFound from './pages/NotFound';
 import LoadingScreen from './components/common/LoadingScreen';
 import ScrollToTop from './components/common/ScrollToTop';
 import { PageTransition } from './components/common/PageTransition';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { AppBootstrapProvider } from './context/AppBootstrapContext';
 
-const About = lazy(() =>
-  import(/* webpackChunkName: "about" */ './pages/about/About'),
-);
+const About = lazy(() => import('./pages/about/About'));
 const InfiniteParallax = lazy(() =>
-  import(/* webpackChunkName: "infinite-parallax" */ './pages/projects/parallax/InfiniteParallax'),
+  import('./pages/projects/parallax/InfiniteParallax'),
 );
-const Projects = lazy(() => import(/* webpackChunkName: "projects" */ './pages/projects/Projects'));
-const Teams = lazy(() => import(/* webpackChunkName: "teams" */ './pages/teams/Teams'));
-const ProjectDetail = lazy(() => import(/* webpackChunkName: "project-detail" */ './pages/projects/ProjectDetail'));
-const Contact = lazy(() => import(/* webpackChunkName: "contact" */ './pages/contact/Contact'));
+const Projects = lazy(() => import('./pages/projects/Projects'));
+const Teams = lazy(() => import('./pages/teams/Teams'));
+const ProjectDetail = lazy(() => import('./pages/projects/ProjectDetail'));
+const Contact = lazy(() => import('./pages/contact/Contact'));
 
 declare global {
   interface Window {
@@ -61,17 +60,25 @@ export default function App() {
 
   return (
     <>
-      <AnimatePresence mode="wait">
-        {isLoading && (
-          <LoadingScreen key="app-loader" onComplete={() => setIsLoading(false)} />
-        )}
-      </AnimatePresence>
+      <motion.div>
+        <AnimatePresence mode="wait">
+          {isLoading && (
+            <LoadingScreen key="app-loader" onComplete={() => setIsLoading(false)} />
+          )}
+        </AnimatePresence>
+      </motion.div>
       <AppBootstrapProvider isBootLoaderComplete={!isLoading}>
         <Router>
           <ScrollToTop />
           <PageTransition />
           <ErrorBoundary>
-            <Suspense fallback={<div className="fixed inset-0 bg-black z-50" />}>
+            <Suspense
+              fallback={
+                <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+                  <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                </div>
+              }
+            >
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
@@ -81,6 +88,7 @@ export default function App() {
                 <Route path="/teams" element={<Teams />} />
                 <Route path="/projects/:id" element={<ProjectDetail />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
           </ErrorBoundary>

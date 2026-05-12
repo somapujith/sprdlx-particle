@@ -203,7 +203,7 @@ export default function ProjectDetail() {
                     <span className="shrink-0 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-zinc-500">
                       Deliverables
                     </span>
-                    {project.id !== 'pulp' && (
+                    {project.id !== 'pulp' && project.deliverables && (
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-left font-bold text-base sm:justify-end sm:text-right text-white/90">
                         {project.deliverables.map((d, i) => (
                           <React.Fragment key={i}>

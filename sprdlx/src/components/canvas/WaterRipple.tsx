@@ -120,7 +120,9 @@ function WaterRipple() {
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
-    containerRef.current.appendChild(renderer.domElement);
+    if (containerRef.current) {
+      containerRef.current.appendChild(renderer.domElement);
+    }
 
     const mouse = new Vector2();
     let frame = 0;

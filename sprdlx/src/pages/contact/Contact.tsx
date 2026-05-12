@@ -12,7 +12,7 @@ const CONTACT_SCHEMA = {
   '@type': 'ContactPage',
   name: 'Contact SPRDLX',
   description: 'Get in touch with SPRDLX to discuss your next immersive web project, design system, or digital product.',
-  url: 'https://sprdlx.com/contact',
+  url: 'https://sprdlx.co/contact',
   mainEntity: {
     '@type': 'Organization',
     name: 'SPRDLX',

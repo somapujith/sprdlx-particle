@@ -32,7 +32,7 @@ export default function About() {
     title: 'About — Studio layout | SPRDLX',
     description:
       'Full-viewport landing concept: Super Deluxe Studios–style typography, stacked image choreography, and studio details.',
-    canonical: '/about/kin',
+    canonical: '/about',
   });
 
   useEffect(() => {
@@ -219,14 +219,14 @@ export default function About() {
           </div>
 
           <div className="images relative z-10">
-            <div className="img"><img src="/projects/pulp/cosmic-dew.png" alt="" /></div>
-            <div className="img"><img src="/projects/esthetic-insights/gallery-2.png" alt="" /></div>
-            <div className="img"><img src="/projects/assets/anthill1.png" alt="" /></div>
-            <div className="img"><img src="/projects/assets/anthill4.png" alt="" /></div>
-            <div className="img"><img src="/projects/esthetic-insights/gallery-1.png" alt="" /></div>
-            <div className="img main"><img src="/projects/esthetic-insights/gallery-2.png" alt="" /></div>
-            <div className="img main"><img src="/projects/assets/anthill1.png" alt="" /></div>
-            <div className="img main"><img src="/projects/pulp/cosmic-dew.png" alt="" /></div>
+            <div className="img"><img src="/projects/pulp/cosmic-dew.png" alt="Pulp creative storytelling platform" /></div>
+            <div className="img"><img src="/projects/esthetic-insights/gallery-2.png" alt="Esthetic Insights beauty analytics interface" /></div>
+            <div className="img"><img src="/projects/assets/anthill1.png" alt="Anthill AI venture capital platform" /></div>
+            <div className="img"><img src="/projects/assets/anthill4.png" alt="Anthill portfolio management dashboard" /></div>
+            <div className="img"><img src="/projects/esthetic-insights/gallery-1.png" alt="Esthetic Insights design tools" /></div>
+            <div className="img main"><img src="/projects/esthetic-insights/gallery-2.png" alt="Esthetic Insights platform showcase" /></div>
+            <div className="img main"><img src="/projects/assets/anthill1.png" alt="Anthill platform showcase" /></div>
+            <div className="img main"><img src="/projects/pulp/cosmic-dew.png" alt="Pulp platform showcase" /></div>
           </div>
 
           <div className="hero-content relative z-10">

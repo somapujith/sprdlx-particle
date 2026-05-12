@@ -7,9 +7,6 @@ export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
     plugins: [react(), tailwindcss()],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
@@ -31,7 +28,7 @@ export default defineConfig(({mode}) => {
         output: {
           manualChunks: {
             'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
-            'animation-vendor': ['gsap', 'framer-motion'],
+            'animation-vendor': ['gsap', 'motion'],
             'spline-vendor': ['@splinetool/react-spline'],
           },
           chunkFileNames: 'assets/[name]-[hash].js',

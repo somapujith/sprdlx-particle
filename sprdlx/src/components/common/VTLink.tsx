@@ -1,10 +1,17 @@
 import { Link, useNavigate, type LinkProps } from 'react-router-dom';
 import { forwardRef, useCallback } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type Lenis from 'lenis';
 
 declare global {
   interface Document {
-    startViewTransition(callbackOptions?: any): any;
+    startViewTransition(callback: () => void): {
+      finished: Promise<void>;
+      ready: Promise<void>;
+    };
+  }
+  interface Window {
+    lenisInstance?: Lenis;
   }
 }
 
@@ -69,7 +76,7 @@ const VTLink = forwardRef<HTMLAnchorElement, LinkProps>(function VTLink(
           prefetchPath(to.split('#')[0] || '/');
         }
 
-        (window as any).lenisInstance?.stop();
+        window.lenisInstance?.stop();
         const run = () => navigate(to, { replace, state });
 
         if (typeof document !== 'undefined' && typeof document.startViewTransition === 'function') {

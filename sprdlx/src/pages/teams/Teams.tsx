@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import type Lenis from 'lenis';
 import { useSEO } from '../../hooks/useSEO';
 import MenuOverlay from '../../components/canvas/MenuOverlay';
 import TeamsParallax from './TeamsParallax';
@@ -13,12 +14,12 @@ export default function Teams() {
   });
 
   useEffect(() => {
-    const lenis = (window as any).lenisInstance;
+    const lenis = window.lenisInstance;
     if (!lenis) return;
 
     let isJumping = false;
 
-    const handleScroll = ({ scroll }: any) => {
+    const handleScroll = ({ scroll }: { scroll: number }) => {
       if (scroll > 5 && scroll < window.innerHeight * 0.1 && !isJumping) {
         isJumping = true;
         lenis.scrollTo(window.innerHeight, {

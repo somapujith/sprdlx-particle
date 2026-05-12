@@ -10,7 +10,7 @@ interface SEOProps {
   schema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const BASE_URL = 'https://sprdlx.com';
+const BASE_URL = 'https://sprdlx.co';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 export function useSEO({

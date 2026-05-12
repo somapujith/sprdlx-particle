@@ -50,7 +50,7 @@ export default function Copy({
 
       splitRefsRef.current.push(split);
 
-      split.lines.forEach((line: HTMLElement) => {
+      split.lines.forEach((line) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'block-line-wrapper';
         wrapper.style.overflow = 'hidden';
@@ -71,7 +71,7 @@ export default function Copy({
         wrapper.style.position = 'relative';
         wrapper.appendChild(block);
 
-        linesRef.current.push(line);
+        linesRef.current.push(line as HTMLElement);
         blocksRef.current.push(block);
       });
     });
