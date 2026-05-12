@@ -30,8 +30,8 @@ const projectData: Project[] = [
     year: '2024',
     projectId: 'esthetic-insights',
   },
-  { title: 'Volery', image: '/projects/Upcoming.png', category: 'Upcoming', year: '2024', projectId: 'volery', isAvailable: false },
-  { title: 'Jay', image: '/projects/Upcoming.png', category: 'Upcoming', year: '2024', projectId: 'jay', isAvailable: false },
+  { title: 'Volery', image: '/projects/upcoming.png', category: 'Upcoming', year: '2024', projectId: 'volery', isAvailable: false },
+  { title: 'Jay', image: '/projects/upcoming.png', category: 'Upcoming', year: '2024', projectId: 'jay', isAvailable: false },
 ];
 
 const config = {

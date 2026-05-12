@@ -5,12 +5,12 @@ import SplitText from 'gsap/SplitText';
 gsap.registerPlugin(SplitText);
 
 const teamMembers = [
-  { name: 'Goutham', img: 'Goutham.png' },
-  { name: 'Dhruv', img: 'Dhruv.png' },
-  { name: 'Nithin', img: 'Nithin.PNG' },
-  { name: 'Pujith', img: 'Pujith.png' },
-  { name: 'Rakesh', img: 'Rakesh.png' },
-  { name: 'Udit', img: 'Udit.png' },
+  { name: 'Goutham', img: 'goutham.png' },
+  { name: 'Dhruv', img: 'dhruv.png' },
+  { name: 'Nithin', img: 'nithin.png' },
+  { name: 'Pujith', img: 'pujith.png' },
+  { name: 'Rakesh', img: 'rakesh.png' },
+  { name: 'Udit', img: 'udit.png' },
 ];
 
 export default function InteractiveTeamSection() {
@@ -134,7 +134,7 @@ export default function InteractiveTeamSection() {
             style={{ willChange: 'width, height' }}
           >
             <img
-              src={`/codegrid-team/${member.img}`}
+              src={`/team/${member.img}`}
               alt={member.name}
               className="h-full w-full rounded-lg object-cover"
             />

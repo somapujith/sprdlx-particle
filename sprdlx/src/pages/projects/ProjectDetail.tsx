@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { projects } from './projects-data';
+import { projects } from './projectsData';
 import Footer from '../../components/common/Footer';
 import VTLink from '../../components/common/VTLink';
 import MenuOverlay from '../../components/canvas/MenuOverlay';
@@ -35,7 +35,7 @@ export default function ProjectDetail() {
       'esthetic-insights': 'ei-logo',
       'pulp': 'slazzer-preview-kr0d8',
     };
-    return `/Logos/${logoMap[projectId] || projectId}.png`;
+    return `/logos/${logoMap[projectId] || projectId}.png`;
   };
 
   const projectSchema = useMemo(() => {

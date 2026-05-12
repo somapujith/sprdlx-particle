@@ -1,4 +1,4 @@
-import { TEAM_MEMBERS } from '../about-data';
+import { TEAM_MEMBERS } from '../aboutData';
 
 export default function AboutTeamShowcase() {
   return (

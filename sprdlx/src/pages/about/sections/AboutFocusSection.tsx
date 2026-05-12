@@ -1,6 +1,6 @@
 import FocusAreaFluid from '../../../components/canvas/FocusAreaFluid';
 import Copy from '../../../components/common/Copy';
-import { FOCUS_AREAS, FOCUS_IMAGES } from '../about-data';
+import { FOCUS_AREAS, FOCUS_IMAGES } from '../aboutData';
 
 type Props = {
   activeTopicIndex: number;

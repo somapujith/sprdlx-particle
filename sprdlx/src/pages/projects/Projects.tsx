@@ -6,7 +6,7 @@ import { Scene, PerspectiveCamera, WebGLRenderer, CatmullRomCurve3, BufferGeomet
 import './projects.css';
 import { useSEO } from '../../hooks/useSEO';
 import { useMotif } from '../../hooks/useMotif';
-import { projects } from './projects-data';
+import { projects } from './projectsData';
 import { HardwareAccelerationWarning } from '../../components/HardwareAccelerationWarning';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -290,7 +290,7 @@ export default function Projects() {
             </div>
           </div>
           <div className="card" style={{ cursor: 'default' }}>
-            <div className="card-img"><img src="/projects/Upcoming.png" alt="Volery project upcoming" width={300} height={300} loading="lazy" /></div>
+            <div className="card-img"><img src="/projects/upcoming.png" alt="Volery project upcoming" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Volery</p>
               <p>2024</p>
@@ -304,7 +304,7 @@ export default function Projects() {
             </div>
           </div>
           <div className="card" style={{ cursor: 'default' }}>
-            <div className="card-img"><img src="/projects/Upcoming.png" alt="Jay project upcoming" width={300} height={300} loading="lazy" /></div>
+            <div className="card-img"><img src="/projects/upcoming.png" alt="Jay project upcoming" width={300} height={300} loading="lazy" /></div>
             <div className="card-copy">
               <p>Jay</p>
               <p>2026</p>
